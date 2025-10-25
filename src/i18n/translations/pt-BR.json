@@ -1,408 +1,81 @@
 {
-    "menu": {
-        "link_home": "Início",
-        "link_sessions": "Minhas sessões",
-        "link_sheets": "Minhas fichas",
-        "theme_switch": {
-            "title": "Modo escuro",
-            "label_on": "LIG",
-            "label_off": "DES"
-        },
-        "ghostbusters": {
-            "main": "Ghostbusters",
-            "ecto_one": "Ecto one",
-            "ecto_one_upgrades": "Upgrades do Ecto one",
-            "equipment": "Equipamento",
-            "equipment_upgrades": "Upgrades de equipamento",
-            "talents": "Talentos",
-            "headquarters": "Quartel general"
-        }
-    },
-    "deleteModal": {
-        "title": "Excluir recurso",
-        "delete_confirm": "Deseja realmente excluir o recurso {resource}?",
-        "this_action_cant_be_undone": "Essa ação é permanente e não pode ser desfeita!",
-        "cancel": "Cancelar",
-        "confirm": "Confirmar"
-    },
-    "home": {
-        "next_session": {
-            "title": "Próxima sessão",
-            "no_data": "Não existem próximas sessões com data definida"
-        },
-        "calendar": {
-            "title": "Calendário",
-            "button_prev": "Anterior",
-            "button_next": "Próximo",
-            "schedule_details": {
-                "label": "Detalhes do agendamento",
-                "date": "Data",
-                "view_session": "Ver sessão",
-                "delete": {
-                    "label": "Remover agendamento",
-                    "confirm_msg": "Deseja realmente remover o agendamento?",
-                    "cancel": "Cancelar",
-                    "confirm": "Confirmar"
-                }
-            },
-            "notifications": {
-                "delete_schedule": {
-                    "success": "Agendamento removido!",
-                    "error": "Não foi possível remover o agendamento!"
-                }
-            }
-        }
-    },
-    "sessions": {
-        "list": {
-            "title": "Minhas sessões",
-            "no_data": "Nenhuma sessão encontrada"
-        },
-        "detail": {
-            "session": "Mesa",
-            "sheets": "Fichas",
-            "my_sheet": "Minha ficha",
-            "set_in_play": "Jogando",
-            "forbidden": "Você não tem permissão para visualizar essa mesa!",
-            "playing": "Sessão iniciada!",
-            "not_playing": "Sessão encerrada!",
-            "schedule_session": "Agendar sessão",
-            "scheduled_session": "Sessão agendada!",
-            "scheduled_session_error": "Não foi possível agendar a sessão!",
-            "data_cant_be_null": "A data do agendamento não pode ser vazia!",
-            "date_need_to_be_after_today": "A data/hora de agendamento deve ser maior que a data/hora atual!",
-            "schedule_valid_datetime": "Informe uma data/hora de agendamento valida!",
-            "schedule": "Agendar",
-            "schedule_datetime": "Data/hora",
-            "gb": {
-                "has_headquarters": "Tem quartel general",
-                "no_headquarters": "Sem quartel general",
-                "team_savings": {
-                    "label": "Saldo do time",
-                    "update": "Atualizar saldo do time",
-                    "new_value": {
-                        "label": "Novo valor",
-                        "must_be_number": "O novo valor deve ser um número!",
-                        "min_value": "O novo valor deve ser 0 ou maior!",
-                        "required": "O novo valor não pode ser vazio!",
-                        "submit": "Atualizar"
-                    },
-                    "notifications": {
-                        "success": "Saldo to time atualizado!",
-                        "error": "Não foi possível atualizar o saldo do time"
-                    }
-                }
-            }
-        }
-    },
-    "sheets": {
-        "list": {
-            "title": "Minhas fichas",
-            "no_data": "Nenhuma ficha encontrada"
-        },
-        "detail": {
-            "basic_info": "Informações básicas",
-            "character_name": "Nome do personagem",
-            "refetch_sheet_data": "Recarregar ficha",
-            "forbidden": "Você não tem permissão para visualizar essa ficha!",
-            "gb" : {
-                "personal_info": "Informações pessoais",
-                "goal": "Meta",
-                "residence": "Residência",
-                "phone": "Telefone",
-                "talents": "Talentos",
-                "brains": "Brains",
-                "muscle": "Muscle",
-                "moves": "Moves",
-                "cool": "Cool",
-                "brownie_points": "Pontos de brownie"
-            }
-        }
-    },
-    "ghostbusters": {
-        "add_upgrade": {
-            "label": "Adicionar upgrade",
-            "save": "Salvar",
-            "placeholder": "Escolha um valor",
-            "loading": "Carregando...",
-            "success": "Upgrade adicionado ao recurso!",
-            "error": "Erro ao adicionar upgrade ao recurso!"
-        },
-        "delete_upgrade": {
-            "title": "Deslinkar upgrade",
-            "unlink_confirm": "Deseja realmente deslinkar o upgrade {upgrade} do recurso {resource}?",
-            "this_action_cant_be_undone": "Essa ação é permanente e não pode ser desfeita!",
-            "cancel": "Cancelar",
-            "confirm": "Confirmar",
-            "delete": {
-                "success": "Upgrade deslinkado com sucesso!",
-                "error": "Não foi possível deslinkar o upgrade!"
-            }
-        },
-        "ecto_one": {
-            "title": "Ecto one",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "description": "Descrição",
-                "carryWeight": "Capacidade de carga",
-                "seats": "Nº Assentos",
-                "cost": "Custo",
-                "units": "{count, plural, =1 {unidade} =0 {Sem capacidade} other {unidades}}",
-                "available_upgrades": "Upgrades disponíveis",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Ecto one excluído com sucesso!",
-                    "error": "Falha ao excluir ecto one!"
-                }
-            },
-            "form": {
-                "title": "Novo ecto one",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "description": {
-                    "label": "Descrição",
-                    "required": "A descrição não pode ser vazia!"
-                },
-                "carryWeight": {
-                    "label": "Capacidade de carga",
-                    "units": "{count, plural, =1 {unidade} other {unidades}}",
-                    "required": "A capacidade de carga não pode ser vazio!",
-                    "must_be_number": "A capacidade de carga deve ser um número!",
-                    "min_value": "A capacidade de carga deve ser maior que 0!"
-                },
-                "seats": {
-                    "label": "Nº assentos",
-                    "required": "O número de assentos não pode ser vazio!",
-                    "must_be_number": "O número de assentos deve ser um número!",
-                    "min_value": "O número de assentos deve ser maior que 0!"
-                },
-                "cost": {
-                    "label": "Custo",
-                    "required": "O custo não pode ser vazio!",
-                    "must_be_number": "O custo deve ser um número!",
-                    "min_value": "O custo deve ser maior que 0!"
-                },
-                "notifications": {
-                    "success": "Ecto one salvo com sucesso!",
-                    "error": "Erro ao salvar ecto one"
-                }
-            }
-        },
-        "ecto_one_upgrades": {
-            "title": "Upgrades do Ecto one",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "cost": "Custo",
-                "description": "Descrição",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Upgrade do ecto one excluído com sucesso!",
-                    "error": "Falha ao excluir upgrade ecto one!"
-                }
-            },
-            "form": {
-                "title": "Novo upgrade do ecto one",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "description": {
-                    "label": "Descrição",
-                    "required": "A descrição não pode ser vazia!"
-                },
-                "cost": {
-                    "label": "Custo",
-                    "required": "O custo não pode ser vazio!",
-                    "must_be_number": "O custo deve ser um número!",
-                    "min_value": "O custo deve ser maior que 0!"
-                },
-                "notifications": {
-                    "success": "Upgrade do ecto one salvo com sucesso!",
-                    "error": "Erro ao salvar upgrade do ecto one"
-                }
-            }
-        },
-        "equipment": {
-            "title": "Equipamentos",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "weight": "Peso",
-                "cost": "Custo",
-                "description": "Descrição",
-                "units": "{count, plural, =1 {unidade} other {unidades}}",
-                "available_upgrades": "Upgrades disponíveis",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Equipamento excluído com sucesso!",
-                    "error": "Falha ao excluir equipamento!"
-                }
-            },
-            "form": {
-                "title": "Novo equipamento",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "weight": {
-                    "label": "Peso",
-                    "units": "{count, plural, =1 {unidade} other {unidades}}",
-                    "required": "O peso não pode ser vazio!",
-                    "must_be_number": "O peso deve ser um número!",
-                    "min_value": "O peso deve ser maior que 0!"
-                },
-                "cost": {
-                    "label": "Custo",
-                    "required": "O custo não pode ser vazio!",
-                    "must_be_number": "O custo deve ser um número!",
-                    "min_value": "O custo deve ser maior que 0!"
-                },
-                "description": {
-                    "label": "Descrição",
-                    "required": "A descrição não pode ser vazia!"
-                },
-                "notifications": {
-                    "success": "Equipamento salvo com sucesso!",
-                    "error": "Erro ao salvar equipamento"
-                }
-            }
-        },
-        "equipment_upgrades": {
-            "title": "Upgrades de equipamento",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "cost": "Custo",
-                "description": "Descrição",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Upgrade de equipamento excluído com sucesso!",
-                    "error": "Falha ao excluir upgrade de equipamento!"
-                }
-            },
-            "form": {
-                "title": "Novo upgrade de equipamento",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "description": {
-                    "label": "Descrição",
-                    "required": "A descrição não pode ser vazia!"
-                },
-                "cost": {
-                    "label": "Custo",
-                    "required": "O custo não pode ser vazio!",
-                    "must_be_number": "O custo deve ser um número!",
-                    "min_value": "O custo deve ser maior que 0!"
-                },
-                "notifications": {
-                    "success": "Upgrade de equipamento salvo com sucesso!",
-                    "error": "Erro ao salvar upgrade de equipamento"
-                }
-            }
-        },
-        "talents": {
-            "title": "Talentos",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "trait": "Traço",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Talento excluído com sucesso!",
-                    "error": "Falha ao excluir talento!"
-                }
-            },
-            "form": {
-                "title": "Novo talento",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "trait": {
-                    "label": "Traço",
-                    "required": "O traço não pode ser vazio!"
-                },
-                "notifications": {
-                    "success": "Talento salvo com sucesso!",
-                    "error": "Erro ao salvar talento"
-                }
-            }
-        },
-        "headquarters": {
-            "title": "Quartel general",
-            "no_data": "Sem dados!",
-            "new": "Adicionar",
-            "details": {
-                "name": "Nome",
-                "description": "Descrição",
-                "inventorySize": "Capacidade de inventário",
-                "containmentGridCapacity": "Capacidade da grade de contenção",
-                "cost": "Custo",
-                "units": "{count, plural, =1 {unidade} other {unidades}}",
-                "garageSize": "Tamanho da garagem",
-                "delete": {
-                    "button": "Excluir",
-                    "success": "Quartel general excluído com sucesso!",
-                    "error": "Falha ao excluir quartel general!"
-                }
-            },
-            "form": {
-                "title": "Novo quartel general",
-                "submit": "Salvar",
-                "name": {
-                    "label": "Nome",
-                    "required": "O nome não pode ser vazio!"
-                },
-                "description": {
-                    "label": "Descrição",
-                    "required": "A descrição não pode ser vazia!"
-                },
-                "inventorySize": {
-                    "label": "Capacidade de inventário",
-                    "units": "{count, plural, =1 {unidade} other {unidades}}",
-                    "required": "A capacidade de inventário não pode ser vazia!",
-                    "must_be_number": "A capacidade de inventário deve ser um número!",
-                    "min_value": "A capacidade de inventário de ve ser maior que 0!"
-                },
-                "containmentGridCapacity": {
-                    "label": "Capacidade da grade de contenção",
-                    "required": "A capacidade da grade de contenção não pode ser vazia!",
-                    "must_be_number": "A capacidade da grade de contenção deve ser um número!",
-                    "min_value": "A capacidade da grade de contenção deve ser 0 ou maior!"
-                },
-                "cost": {
-                    "label": "Custo",
-                    "required": "O custo não pode ser vazio!",
-                    "must_be_number": "O custo deve ser um número!",
-                    "min_value": "O custo deve ser maior que 0!"
-                },
-                "garageSize": {
-                    "label": "Tamanho da garagem",
-                    "required": "O tamanho da garagem não pode ser vazio!",
-                    "must_be_number": "O tamanho da garagem deve ser um número!",
-                    "min_value": "O tamanho da garagem deve ser maior que 0!"
-                },
-                "notifications": {
-                    "success": "Quartel general salvo com sucesso!",
-                    "error": "Erro ao salvar quartel general"
-                }
-            }
-        }
+  "home": {
+    "calendario": "Calendário",
+    "proximaSessao": "Próxima sessão",
+    "ver": "Ver",
+    "empty": {
+      "title": "Sem próximas sessões",
+      "cta": "Agende sua próxima sessão e começe sua aventura!",
+      "button": "Agendar sessão"
     }
+  },
+  "sessions": {
+    "title": "Campanhas",
+    "ver": "Ver",
+    "empty": {
+      "title": "Sem campanhas ainda",
+      "cta": "Crie sua primeira campanha para começar a aventura!",
+      "button": "Nova campanha"
+    },
+    "create": {
+      "title": "Nova campanha",
+      "name": {
+        "label": "Nome",
+        "required": "Informe o nome da campanha!"
+      },
+      "description": {
+        "label": "Resumo"
+      },
+      "system": {
+        "label": "Sistema"
+      },
+      "submit": "Criar campanha",
+      "notifications": {
+        "success": "Campanha criada!",
+        "error": "Erro ao criar campanha!"
+      }
+    }
+  },
+  "session": {
+    "characters": {
+      "title": "Personagens",
+      "empty": {
+        "title": "Nenhum aventureiro ainda",
+        "cta": "Convide seus amigos e começe agora sua aventura",
+        "button": "Convidar jogadores"
+      }
+    },
+    "in_play": "Jogando",
+    "notifications": {
+      "playing": "Sessão iniciada!",
+      "not_playing": "Sessão finalizada!"
+    }
+  },
+  "character-sheets": {
+    "title": "Personagens",
+    "ver": "Ver",
+    "empty": {
+      "title": "Sem personagens ainda",
+      "cta": "Crie seu primeiro personagem para começar a aventura!",
+      "button": "Novo personagem"
+    },
+    "create": {
+      "title": "Novo personagem",
+      "name": {
+        "label": "Nome",
+        "required": "Informe o nome do personagem!"
+      },
+      "maxHp": {
+        "label": "Pontos de vida (HP)"
+      },
+      "system": {
+        "label": "Sistema"
+      },
+      "submit": "Criar personagem",
+      "notifications": {
+        "success": "Personagem criado!",
+        "error": "Erro ao criar presonagem!"
+      }
+    }
+  }
 }

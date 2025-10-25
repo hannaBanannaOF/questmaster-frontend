@@ -1,8 +1,12 @@
-import { Divider } from "@mantine/core";
-import { NextSession } from "./nextsession";
-import { Calendar } from "./calendar";
-import { Home } from "./home";
+import { Container, Stack } from "@mantine/core";
+import { Calendar } from "./_ui/calendar";
+import { Upcoming } from "./_ui/upcoming";
 
 export default function HomePage() {
-  return <Home />
+  return <Container>
+    <Stack>
+      <Calendar />
+      <Upcoming />
+    </Stack>
+  </Container>
 }

@@ -1,18 +1,21 @@
 
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
-import { Provider } from "./provider";
 import { ColorSchemeScript } from "@mantine/core";
-import {NextIntlClientProvider} from 'next-intl';
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import locallizedFormat from "dayjs/plugin/localizedFormat";
+import type { Metadata } from "next";
+import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from "next-intl/server";
+import { Provider } from "./provider";
 
-const inter = Inter({ subsets: ["latin"] });
+dayjs.extend(customParseFormat);
+dayjs.extend(locallizedFormat);
 
 export const metadata: Metadata = {
-  title: "Rpgtracker"
+  title: "QuestMaster"
 };
 
   const locale = await getLocale();
@@ -28,8 +31,11 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <ColorSchemeScript defaultColorScheme="dark"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" />
       </head>
-      <body className={inter.className}>
+      <body>
         <NextIntlClientProvider messages={messages} formats={{
           dateTime: {
             long: {

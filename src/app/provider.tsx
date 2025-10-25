@@ -1,15 +1,16 @@
 'use client';
 
-import { createTheme, MantineColorsTuple, MantineProvider, useMantineColorScheme } from "@mantine/core";
-import { QueryClient, QueryClientProvider, isServer } from "@tanstack/react-query";
+import { createTheme, MantineColorsTuple, MantineProvider } from "@mantine/core";
+import { DatesProvider } from "@mantine/dates";
+import { Notifications } from '@mantine/notifications';
+import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
-import { Shell } from "../components/shell/shell";
-import { Notifications } from '@mantine/notifications';
-import { DatesProvider } from "@mantine/dates";
-import { useLocale } from "next-intl";
+import dayjs from "dayjs";
 import 'dayjs/locale/en';
-import 'dayjs/locale/pt-BR';
+import 'dayjs/locale/pt-br';
+import { useLocale } from "next-intl";
+import { Shell } from "../components/shell/shell";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -44,33 +45,35 @@ export function Provider({children} : {children: React.ReactNode}) {
   const client = getQueryClient();
 
   const myColor: MantineColorsTuple = [
-    '#e2fff9',
-    '#d1f9f1',
-    '#a7f1e1',
-    '#7aead1',
-    '#54e3c3',
-    '#3ddfba',
-    '#2bddb6',
-    '#17c4a0',
-    '#00af8d',
-    '#009779'
+    "#fff4e1",
+    "#ffe8cc",
+    "#fed09b",
+    "#fdb766",
+    "#fca13a",
+    "#fc931d",
+    "#fc8c0c",
+    "#e17800",
+    "#c86a00",
+    "#af5a00"
   ];
 
   const theme = createTheme({
-    primaryColor: 'rpgtracker-teal',
+    primaryColor: 'questmaster',
     cursorType: 'pointer',
     colors: {
-      'rpgtracker-teal': myColor,
-    }
+      'questmaster': myColor,
+    },
+    fontFamily: 'Newsreader, serif'
   });
 
-  const locale = useLocale();
+  const locale = useLocale().toLocaleLowerCase();
+  dayjs.locale(locale)
 
   return (
       <QueryClientProvider client={client}>
         <ReactQueryStreamedHydration>
           <MantineProvider theme={theme} defaultColorScheme="dark">
-            <DatesProvider settings={{ locale: locale }}>
+            <DatesProvider settings={{ locale: locale, firstDayOfWeek: 0 }}>
               <Notifications limit={5} />
               <Shell>
                 {children}
