@@ -1,5 +1,6 @@
 'use client';
 
+import { Shell } from "@/src/shared/ui/shell";
 import { createTheme, MantineColorsTuple, MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { Notifications } from '@mantine/notifications';
@@ -9,8 +10,9 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 import dayjs from "dayjs";
 import 'dayjs/locale/en';
 import 'dayjs/locale/pt-br';
+import isToday from 'dayjs/plugin/isToday';
+import locallizedFormat from 'dayjs/plugin/localizedFormat';
 import { useLocale } from "next-intl";
-import { Shell } from "../components/shell/shell";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -67,7 +69,9 @@ export function Provider({children} : {children: React.ReactNode}) {
   });
 
   const locale = useLocale().toLocaleLowerCase();
-  dayjs.locale(locale)
+  dayjs.locale(locale);
+  dayjs.extend(isToday);
+  dayjs.extend(locallizedFormat);
 
   return (
       <QueryClientProvider client={client}>

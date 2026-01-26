@@ -9,5 +9,7 @@
         "source.organizeImports": "always"
     },
     "editor.tabSize": 2,
-    "i18n-ally.keystyle": "flat",
+    "i18n-ally.extract.ignored": [
+        "MMMM, YYYY"
+    ],
 }

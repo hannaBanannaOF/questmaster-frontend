@@ -4,9 +4,9 @@ import { Upcoming } from "./_ui/upcoming";
 
 export default function HomePage() {
   return <Container>
-    <Stack>
-      <Calendar />
+    <Stack gap={"xl"}>
       <Upcoming />
+      <Calendar />
     </Stack>
   </Container>
 }

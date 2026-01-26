@@ -1,8 +1,8 @@
 import { Container } from "@mantine/core";
-import { MySheets } from "./_ui/my-sheets";
+import { MyCampaings } from "./_ui/my-campaings";
 
 export default function HomePage() {
   return <Container>
-    <MySheets/>
+    <MyCampaings />
   </Container>
 }

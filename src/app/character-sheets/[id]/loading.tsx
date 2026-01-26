@@ -1,4 +1,4 @@
-import { Loader } from "@/src/components/loader/loader";
+import { Loader } from "@/src/shared/ui/loader";
 
 export default function Loading() {
   // Or a custom loading skeleton component

@@ -1,6 +1,6 @@
-import { CharacterSheetDetails } from "./_ui/character-sheet-details";
+import { CampaingDetail } from "./_ui/campaing-detail";
 
 export default async function HomePage({params} : {params : Promise<{ id : number }>}) {
   const {id} = await params;
-  return <CharacterSheetDetails id={id}/>
+  return <CampaingDetail id={id}/>
 }

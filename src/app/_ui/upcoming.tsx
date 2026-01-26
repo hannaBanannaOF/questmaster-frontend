@@ -1,13 +1,18 @@
 'use client'
 
-import { Microservices, TRpgKind } from "@/src/shared/enums";
-import { useHttpClient } from "@/src/shared/useHttpClient";
-import { Avatar, Box, Button, Card, Group, Indicator, Skeleton, Stack, Text, Title } from "@mantine/core";
+import { CalendarItem } from "@/src/domain/calendar";
+import { useHttpClient } from "@/src/shared/hooks/useHttpClient";
+import { Microservices } from "@/src/shared/types/services";
+import { EmptyStateCard } from "@/src/shared/ui/empty-state-card";
+import { getRpgKindIcon, getRpgKindLabel } from "@/src/shared/ui/rpg-kind.ui";
+import { Avatar, Badge, Button, Card, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CalendarItem } from "../types";
+import { TbChevronRight } from "react-icons/tb";
+import { ScheduleSessionController } from "../../shared/ui/schedule-session-modal";
 
 export function Upcoming() {
 
@@ -18,44 +23,72 @@ export function Upcoming() {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  const t = useTranslations("home");
+  const t = useTranslations("upcoming");
   const router = useRouter();
   const client = useHttpClient(Microservices.core);
   const { data, isFetching } = useQuery({
     queryKey: ['upcoming'],
     queryFn: async () => {
-      return await client.get(`/me/sessions/upcoming`) as CalendarItem;
+      let data = await client.get(`/me/upcoming`);
+      if (data != undefined) {
+        return data as CalendarItem;
+      }
+      return null;
     },
   });
 
   return <Stack>
-    <Title order={3}>{t("proximaSessao")}</Title>
     <Skeleton visible={!data && isFetching}>
-      {data && <Card>
-        <Group justify="space-between">
-          <Group gap={"xl"}>
-            <Indicator disabled={!data.dmed} label="DM" size={16} inline>
-              <Avatar>
-                {TRpgKind.getIcon(data.system)}
-              </Avatar>
-            </Indicator>
-            <div style={{ flex: 1 }}>
-              <Title order={4}>{capitalize(dayjs(data.date).format("dddd, DD/MM/YYYY HH:mm:ss"))}</Title>
-              <Text c="dimmed">{TRpgKind.getLabel(data.system)} | {data.name}</Text>
-            </div>
+      {data && <Stack>
+        <Title order={2}>{t('title')}</Title>
+        <Card<typeof Link>
+          key={data.slug}
+          component={Link}
+          href={`/campaings/${data.slug}`}
+          px="lg"
+          withBorder
+        >
+          <Group justify="space-between" align="center" wrap="nowrap">
+            {/* Esquerda: ícone + conteúdo */}
+            <Group align="flex-start" gap="md" wrap="nowrap">
+              {/* Ícone do sistema */}
+              <Avatar size={44} variant="light">{getRpgKindIcon(data.system)}</Avatar>
+              {/* Conteúdo */}
+              <Stack gap="md">
+                <div>
+                  {/* Título */}
+                  <Title order={4}>{data.name}</Title>
+                  {/* Subtítulo */}
+                  <Text size="sm" c="dimmed">{getRpgKindLabel(data.system)}</Text>
+                </div>
+                <div>
+                  <Text fs={"italic"} c="dimmed">{dayjs(data.date).format("llll")}</Text>
+                </div>
+                {/* Badges */}
+                <Group gap="xs" mt={4}>
+                  {/* {data.inPlay && <Badge variant="light" color="green" size="sm">{t('status.inPlay')}</Badge>} */}
+                  {data.dmed && <Badge variant="light" color="questmaster" size="sm">{t('status.dm')}</Badge>}
+                </Group>
+              </Stack>
+            </Group>
+
+            {/* Direita: affordance */}
+            <TbChevronRight size={24}/>
           </Group>
-          <Button onClick={() => {
-                router.push(`/sessions/${data.slug}`)
-              }}>{t('ver')}</Button>
-          </Group>
-      </Card>} 
-      {!data && <Box bd="3px dashed questmaster" bdrs={8} p={"md"}>
-        <Stack align="center">
+        </Card>
+      </Stack>} 
+      {!data && <EmptyStateCard>
+        <Stack align="center" gap="xs">
           <Title order={2}>{t('empty.title')}</Title>
-          <Text>{t("empty.cta")}</Text>
-          <Button variant="light">{t("empty.button")}</Button>
+          <Text>{t('empty.cta')}</Text>
+          <ScheduleSessionController>
+            {(open) => <Button variant="light" onClick={open}>
+            {t('empty.button')}
+          </Button>}
+          </ScheduleSessionController>
         </Stack>
-      </Box>}
+        <Text mt="sm" c="dimmed" fs="italic" size="sm">{t('empty.footer')}</Text>
+      </EmptyStateCard>}
     </Skeleton>
   </Stack>
 }
