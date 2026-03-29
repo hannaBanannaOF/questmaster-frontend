@@ -1,19 +1,21 @@
 import { getRequestConfig } from 'next-intl/server';
- 
-export default getRequestConfig(async () => {
-  const defaultLocale = 'pt-BR';
-  const suportedLocales = ['pt-BR'];
 
-  let locale = navigator.language;
-  if (!suportedLocales.includes(locale)) {
-    locale = locale.split('-')[0];
-    if (!suportedLocales.includes(locale)) {
-      locale = defaultLocale;
-    }
-  }
- 
+export default getRequestConfig(async ({ requestLocale }) => {
+  const locale = (await requestLocale) ?? 'pt-BR';
+
+  const namespaces = ['common', 'campaign', 'character'];
+
+  const messages = Object.fromEntries(
+    await Promise.all(
+      namespaces.map(async (ns) => [
+        ns,
+        (await import(`./translations/${locale}/${ns}.json`)).default,
+      ]),
+    ),
+  );
+
   return {
     locale,
-    messages: (await import(`./translations/${locale}.json`)).default
+    messages,
   };
 });

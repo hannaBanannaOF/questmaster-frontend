@@ -1,0 +1,19 @@
+{
+  "list": {
+    "title": "Campanhas",
+    "loading": "Buscando campanhas...",
+    "empty": {
+      "title": "Sem missões ainda",
+      "message": "Seu livro de aventura está vazio. Crie sua primeira campanha para começar a sua jornada.",
+      "create": "Criar campanha"
+    },
+    "new": "Nova campanha"
+  },
+  "dm": "DM",
+  "status": {
+    "draft": "Rascunho",
+    "archived": "Arquivada",
+    "paused": "Pausada",
+    "active": "Jogando"
+  }
+}

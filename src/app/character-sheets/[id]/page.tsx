@@ -1,6 +1,0 @@
-import { CharacterSheetDetails } from "./_ui/character-sheet-details";
-
-export default async function HomePage({params} : {params : Promise<{ id : number }>}) {
-  const {id} = await params;
-  return <CharacterSheetDetails id={id}/>
-}

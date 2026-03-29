@@ -1,0 +1,11 @@
+:root {
+  --base-value: 0.25rem;
+  --spacing-xxs: calc(var(--base-value) * 1);
+  --spacing-xs: calc(var(--base-value) * 2);
+  --spacing-sm: calc(var(--base-value) * 3);
+  --spacing-md: calc(var(--base-value) * 4);
+  --spacing-lg: calc(var(--base-value) * 6);
+  --spacing-xl: calc(var(--base-value) * 8);
+  --spacing-xxl: calc(var(--base-value) * 10);
+  --spacing-xxxl: calc(var(--base-value) * 12);
+}

@@ -1,56 +1,72 @@
+import '../design/styles/index.css';
 
-import { ColorSchemeScript } from "@mantine/core";
-import '@mantine/core/styles.css';
-import '@mantine/dates/styles.css';
-import '@mantine/notifications/styles.css';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import locallizedFormat from "dayjs/plugin/localizedFormat";
-import type { Metadata } from "next";
+import isToday from 'dayjs/plugin/isToday';
+import locallizedFormat from 'dayjs/plugin/localizedFormat';
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from "next-intl/server";
-import { Provider } from "./provider";
+import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 
-dayjs.extend(customParseFormat);
-dayjs.extend(locallizedFormat);
+import { Header, Main, Nav, NavItem, Title } from '../design/design-system';
+import { cinzel, nunito } from '../design/theme/styles/typography.style';
+import { ThemeProvider } from '../design/theme/theme.provider';
+import { QueryProvider } from '../lib/query/query.provider';
 
 export const metadata: Metadata = {
-  title: "QuestMaster"
+  title: 'QuestMaster',
 };
-
-  const locale = await getLocale();
- 
-  const messages = await getMessages();
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const t = await getTranslations('common.header');
+  const locale = await getLocale();
+  const messages = await getMessages();
+
+  dayjs.locale(locale);
+  dayjs.extend(isToday);
+  dayjs.extend(customParseFormat);
+  dayjs.extend(locallizedFormat);
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <ColorSchemeScript defaultColorScheme="dark"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Quicksand:wght@300..700&display=swap" rel="stylesheet" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function() {
+              try {
+                const stored = localStorage.getItem('QUESTMASTER_THEME');
+                const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = stored === 'dark' || stored === 'light'
+                  ? stored
+                  : (system ? 'dark' : 'light');
+
+                document.documentElement.setAttribute('data-theme', theme);
+              } catch (e) {}
+            })();
+            `,
+          }}
+        />
       </head>
-      <body>
-        <NextIntlClientProvider messages={messages} formats={{
-          dateTime: {
-            long: {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-              hour: 'numeric',
-              minute: 'numeric'
-            }
-          }
-        }}>
-          <Provider>
-            {children}
-          </Provider>
-        </NextIntlClientProvider>
+      <body className={`${cinzel.variable} ${nunito.variable}`}>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
+            <QueryProvider>
+              <Header brand={<Title order={2}>Questmaster</Title>}>
+                <Nav>
+                  <NavItem label={t('dashboard')} href="/" />
+                  <NavItem label={t('campaigns')} href="/campaigns" />
+                  <NavItem label={t('characters')} href="/characters" />
+                </Nav>
+              </Header>
+              <Main>{children}</Main>
+            </QueryProvider>
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

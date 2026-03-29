@@ -1,0 +1,41 @@
+:root {
+  --primary-h: 38;
+  --primary-s: 80%;
+  --primary-l: 45%;
+  --color-bg-primary: hsl(35 20% 95%);
+  --color-text-primary: hsl(30 15% 15%);
+  --color-text-muted: hsl(30 10% 45%);
+  --color-card-bg: hsl(35 20% 98%);
+  --color-card-fg: hsl(35 12% 90%);
+  --color-card-border: hsl(35 15% 85%);
+  --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
+  --color-primary-soft: hsl(
+    var(--primary-h) var(--primary-s) var(--primary-l) / 0.2
+  );
+  --color-text-contrast: hsl(30 15% 10%);
+  /* Proprietary colors */
+  --color-status-playing: hsl(142 60% 45%);
+  --color-status-playing-soft: hsl(142 60% 45% / 0.2);
+  --color-status-draft: hsl(220 15% 50%);
+  --color-status-draft-soft: hsl(220 15% 50% / 0.2);
+  --color-status-archived: hsl(0 0% 45%);
+  --color-status-archived-soft: hsl(0 0% 45% / 0.2);
+  --color-status-paused: var(--color-primary);
+  --color-status-paused-soft: var(--color-primary-soft);
+  --color-system-dnd: hsl(0, 90.6%, 70.8%);
+  --color-system-coc: hsl(141.9, 69.2%, 58%);
+  --color-system-cpr: hsl(187.9, 85.7%, 53.3%);
+  --color-system-op: hsl(27, 96%, 61%);
+}
+
+:root[data-theme='dark'] {
+  --primary-h: 30;
+  --primary-s: 80%;
+  --primary-l: 55%;
+  --color-bg-primary: hsl(30 15% 10%);
+  --color-text-primary: hsl(40 20% 90%);
+  --color-text-muted: hsl(30 10% 55%);
+  --color-card-bg: hsl(30 12% 14%);
+  --color-card-fg: hsl(30 8% 18%);
+  --color-card-border: hsl(30 10% 22%);
+}

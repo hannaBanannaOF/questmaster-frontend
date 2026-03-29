@@ -1,8 +1,0 @@
-import { Container } from "@mantine/core";
-import { MySheets } from "./_ui/my-sheets";
-
-export default function HomePage() {
-  return <Container>
-    <MySheets/>
-  </Container>
-}

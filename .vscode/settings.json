@@ -1,15 +1,36 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "i18n-ally.localesPaths": [
-        "src/i18n/translations"
-    ],
-    "i18n-ally.sourceLanguage": "pt-BR",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.organizeImports": "always"
-    },
-    "editor.tabSize": 2,
-    "i18n-ally.extract.ignored": [
-        "MMMM, YYYY"
-    ],
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "i18n-ally.enabledParsers": ["json"],
+  "i18n-ally.enabledFrameworks": ["next-intl"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.namespace": true,
+  "i18n-ally.pathMatcher": "{locale}/{namespace}.json",
+  "i18n-ally.localesPaths": ["src/i18n/translations"],
+  "i18n-ally.sourceLanguage": "pt-BR",
+  "i18n-ally.displayLanguage": "pt-BR",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnType": false, // required
+  "editor.formatOnPaste": false, // optional
+  "editor.formatOnSave": true, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+  "files.autoSave": "onFocusChange", // optional but recommended
+  "eslint.useFlatConfig": true,
+  "eslint.run": "onType",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

@@ -1,0 +1,4 @@
+:root {
+  --font-heading: var(--font-heading), serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+}

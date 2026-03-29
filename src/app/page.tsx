@@ -1,12 +1,12 @@
-import { Container, Stack } from "@mantine/core";
-import { Calendar } from "./_ui/calendar";
-import { Upcoming } from "./_ui/upcoming";
+'use client';
+
+import { Container, Text, Title } from '../design/design-system';
 
 export default function HomePage() {
-  return <Container>
-    <Stack gap={"xl"}>
-      <Upcoming />
-      <Calendar />
-    </Stack>
-  </Container>
+  return (
+    <Container direction="column" align="center">
+      <Title>Welcome to QUestmaster</Title>
+      <Text muted>Your RPG campaign management hub.</Text>
+    </Container>
+  );
 }

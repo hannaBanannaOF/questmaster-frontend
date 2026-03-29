@@ -1,0 +1,12 @@
+{
+  "list": {
+    "title": "Personagens",
+    "new": "Novo personagem",
+    "loading": "Carregando personagens...",
+    "empty": {
+      "title": "Ainda sem heróis",
+      "message": "Sua party está vazia. Crie seu primeiro personagem para começar a aventura",
+      "create": "Criar personagem"
+    }
+  }
+}

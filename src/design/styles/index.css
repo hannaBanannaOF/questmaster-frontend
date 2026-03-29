@@ -1,0 +1,46 @@
+@import './tokens/colors.token.css';
+@import './tokens/typography.token.css';
+@import './tokens/radius.token.css';
+@import './tokens/spacing.token.css';
+
+html:not([data-theme]) {
+  visibility: hidden;
+}
+
+html,
+body {
+  color-scheme: light dark;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}

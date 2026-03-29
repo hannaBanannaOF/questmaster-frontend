@@ -1,4 +1,0 @@
-export enum RpgKind {
-  CALL_OF_CTHULHU = 'CALL_OF_CTHULHU',
-  GHOSTBUSTERS = 'GHOSTBUSTERS'
-}
