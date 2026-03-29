@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# QuestMaster Frontend
 
-## Getting Started
+QuestMaster Frontend is the web client for the QuestMaster RPG management app. It currently focuses on browsing campaigns and characters, with a small dashboard, a shared design system, and data fetching wired through the QuestMaster Gateway.
 
-First, run the development server:
+## What is in the app today
+
+- `/` shows the dashboard welcome screen.
+- `/campaigns` lists campaigns from the backend.
+- `/characters` lists characters from the backend.
+- The UI is loaded with `next-intl` and currently ships `pt-BR` translations.
+- Theme state is handled client-side and persisted in `localStorage`.
+
+## Tech stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- styled-components
+- TanStack Query
+- next-intl
+- dayjs
+
+## Prerequisites
+
+Before starting the frontend, make sure you have:
+
+- Node.js installed
+- Yarn available on your machine
+- The QuestMaster Gateway running on `http://localhost:8081`
+
+The frontend currently uses a hardcoded Gateway base URL in `src/lib/http/http.client.ts`, so the Gateway must be available at that address unless the code is changed.
+
+## Getting started
+
+Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+yarn install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start the development server with the TypeScript watcher:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+If you only want the Next.js dev server without the parallel typecheck watcher:
 
-## Learn More
+```bash
+yarn dev:light
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open `http://localhost:3000` in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- `yarn dev` runs Next.js and `tsc --watch` together
+- `yarn dev:light` runs only the Next.js dev server
+- `yarn typecheck` runs TypeScript without emitting files
+- `yarn typecheck:watch` runs TypeScript in watch mode
+- `yarn lint` runs ESLint
+- `yarn lint:watch` reruns ESLint on file changes
+- `yarn format` formats the repo with Prettier
+- `yarn format:check` checks formatting without changing files
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+src/
+  app/         Next.js routes and root layout
+  design/      Design tokens, theme setup, and shared UI components
+  i18n/        Locale loading and translation files
+  lib/         Shared HTTP and query client setup
+  modules/     Feature modules such as campaign, character, and RPG metadata
+  proxy.tsx    Request proxy logic for slug resolution
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Notes for contributors
+
+- Data fetching is handled through TanStack Query providers in the root layout.
+- The app uses `styled-components` with global design tokens under `src/design/styles`.
+- The frontend only needs to know about the Gateway. Backend services can run on any ports as long as the Gateway is updated to route requests correctly.
+- Authentication is handled by the Gateway through a session cookie. That flow is infrastructure-level behavior, not something most frontend work in this repo needs to worry about.
+- Some UI actions are still placeholder-only right now. For example, the "new" buttons do not create records yet, and list cards currently link to `/`.
+- There is no environment-based API configuration yet. If you want different Gateway URLs per environment, the next step is to move the base URL out of `src/lib/http/http.client.ts`.
+
+## License
+
+This project is licensed under the terms of the [LICENSE](./LICENSE) file.
