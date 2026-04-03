@@ -5,10 +5,16 @@ import * as S from './text.styles';
 
 export default function Text({
   muted,
+  small,
   children,
 }: {
   muted?: boolean;
+  small?: boolean;
   children?: ReactNode;
 }) {
-  return <S.Text $muted={muted}>{children}</S.Text>;
+  return (
+    <S.Text $muted={muted} $small={small}>
+      {children}
+    </S.Text>
+  );
 }

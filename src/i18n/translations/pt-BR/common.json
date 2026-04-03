@@ -3,5 +3,9 @@
     "dashboard": "Dashboard",
     "campaigns": "Campanhas",
     "characters": "Personagens"
+  },
+  "user": {
+    "greeting": "Olá, {name}",
+    "greeting_default": "Olá, Aventureiro!"
   }
 }

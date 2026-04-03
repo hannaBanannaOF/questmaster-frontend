@@ -1,25 +1,25 @@
 import styled, { DefaultTheme } from 'styled-components';
 
-import { RpgKind } from '../domain/rpg-kind.types';
+import { GameSystem } from '../domain/game-system.types';
 
-const kindStyles = (theme: DefaultTheme) => ({
-  [RpgKind.DUNGEONS_AND_DRAGONS]: `
+const gameSystemStyles = (theme: DefaultTheme) => ({
+  [GameSystem.DUNGEONS_AND_DRAGONS]: `
     color: ${theme.colors.gameSystem.dnd};
   `,
-  [RpgKind.CALL_OF_CTHULHU]: `
+  [GameSystem.CALL_OF_CTHULHU]: `
     color: ${theme.colors.gameSystem.coc};
   `,
-  [RpgKind.CYBERPUNK_RED]: `
+  [GameSystem.CYBERPUNK_RED]: `
     color: ${theme.colors.gameSystem.cpr};
   `,
-  [RpgKind.ORDEM_PARANORMAL]: `
+  [GameSystem.ORDEM_PARANORMAL]: `
     color: ${theme.colors.gameSystem.op};
   `,
 });
 
-export const IconContainer = styled.div<{ $kind: RpgKind }>`
+export const IconContainer = styled.div<{ $system: GameSystem }>`
   padding: ${({ theme }) => theme.spacing.sm};
   background-color: ${({ theme }) => theme.colors.card.foreground};
   border-radius: ${({ theme }) => theme.radius.md};
-  ${({ $kind, theme }) => kindStyles(theme)[$kind]}
+  ${({ $system, theme }) => gameSystemStyles(theme)[$system]}
 `;

@@ -16,6 +16,9 @@ export type ThemeColors = {
     default: string;
     soft: string;
   };
+  destructive: {
+    default: string;
+  };
   gameSystem: {
     dnd: string;
     coc: string;
@@ -54,6 +57,9 @@ export const themeColors: ThemeColors = {
   primary: {
     default: 'var(--color-primary)',
     soft: 'var(--color-primary-soft)',
+  },
+  destructive: {
+    default: 'var(--color-destructive)',
   },
   card: {
     background: 'var(--color-card-bg)',

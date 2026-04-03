@@ -12,6 +12,7 @@
   --color-primary-soft: hsl(
     var(--primary-h) var(--primary-s) var(--primary-l) / 0.2
   );
+  --color-destructive: hsl(0 70% 50%);
   --color-text-contrast: hsl(30 15% 10%);
   /* Proprietary colors */
   --color-status-playing: hsl(142 60% 45%);
@@ -22,10 +23,10 @@
   --color-status-archived-soft: hsl(0 0% 45% / 0.2);
   --color-status-paused: var(--color-primary);
   --color-status-paused-soft: var(--color-primary-soft);
-  --color-system-dnd: hsl(0, 90.6%, 70.8%);
-  --color-system-coc: hsl(141.9, 69.2%, 58%);
-  --color-system-cpr: hsl(187.9, 85.7%, 53.3%);
-  --color-system-op: hsl(27, 96%, 61%);
+  --color-system-dnd: hsl(0, 90%, 70%);
+  --color-system-coc: hsl(141, 69%, 58%);
+  --color-system-cpr: hsl(187, 85%, 53%);
+  --color-system-op: hsl(43, 96%, 56%);
 }
 
 :root[data-theme='dark'] {

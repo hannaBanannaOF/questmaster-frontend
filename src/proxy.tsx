@@ -1,86 +1,78 @@
+import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { getEnv } from './lib/env';
+import { createHttpClient } from './lib/http/http.client';
+import { isHttpError } from './lib/http/http.types';
+import { Microservices } from './lib/http/services.types';
+
+type CoreSlugResolve = {
+  id: number;
+};
+
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
-
-  // Exemplo: intercepta URLs do tipo /sessions/:slug
-  const matchCampaings = url.pathname.match(/^\/campaings\/([^\/]+)$/);
+  const matchCampaings = url.pathname.match(/^\/campaings\/([^/]+)$/);
   if (matchCampaings) {
     const slug = matchCampaings[1];
 
-    const sessionCookie = req.cookies.get('QUESTMASTER_SESSION')?.value || '';
+    const cookieStore = await cookies();
 
-    const headers: Record<string, string> = {
-      'Original-Url': url.pathname + url.search,
-    };
-    if (sessionCookie) {
-      headers['Cookie'] = `QUESTMASTER_SESSION=${sessionCookie}`;
-    }
-
-    // Chama o backend para resolver o slug para core_id
-    const res = await fetch(
-      `http://localhost:8081/core/api/v1/campaing/resolve/${slug}`,
-      {
-        headers,
-      },
+    const sessionToken = cookieStore.get(
+      getEnv('SESSION_COOKIE_NAME') ?? '',
+    )?.value;
+    const client = createHttpClient(
+      Microservices.core,
+      sessionToken,
+      url.pathname + url.search,
     );
-    if (res.status == 401) {
-      var { redirectUrl } = await res.json();
-      return NextResponse.redirect(redirectUrl);
+    try {
+      const resolved = await client.get<CoreSlugResolve>(
+        `campaing/resolve/${slug}`,
+      );
+      url.pathname = `/campaings/${resolved.id}`;
+      return NextResponse.rewrite(url);
+    } catch (error) {
+      if (isHttpError<string>(error) && error.data) {
+        return NextResponse.redirect(error.data);
+      }
+      url.pathname = '/campaigns';
+      return NextResponse.redirect(url);
     }
-    if (!res.ok) {
-      return NextResponse.rewrite(new URL('/404', req.url));
-    }
-
-    const { coreId } = await res.json();
-
-    // Redireciona internamente para a rota que renderiza pelo core_id
-    url.pathname = `/campaings/${coreId}`;
-    return NextResponse.rewrite(url);
   }
 
-  const matchCharacterSheet = url.pathname.match(
-    /^\/character-sheets\/([^\/]+)$/,
-  );
+  const matchCharacterSheet = url.pathname.match(/^\/characters\/([^/]+)$/);
   if (matchCharacterSheet) {
     const slug = matchCharacterSheet[1];
+    const cookieStore = await cookies();
 
-    const sessionCookie = req.cookies.get('QUESTMASTER_SESSION')?.value || '';
-
-    const headers: Record<string, string> = {
-      'Original-Url': url.pathname + url.search,
-    };
-    if (sessionCookie) {
-      headers['Cookie'] = `QUESTMASTER_SESSION=${sessionCookie}`;
-    }
-
-    // Chama o backend para resolver o slug para core_id
-    const res = await fetch(
-      `http://localhost:8081/core/api/v1/character-sheet/resolve/${slug}`,
-      {
-        headers,
-      },
+    const sessionToken = cookieStore.get(
+      getEnv('SESSION_COOKIE_NAME') ?? '',
+    )?.value;
+    const client = createHttpClient(
+      Microservices.core,
+      sessionToken,
+      url.pathname + url.search,
     );
-    if (res.status == 401) {
-      var { redirectUrl } = await res.json();
-      return NextResponse.redirect(redirectUrl);
+    try {
+      const resolved = await client.get<CoreSlugResolve>(
+        `character/resolve/${slug}`,
+      );
+      url.pathname = `/characters/${resolved.id}`;
+      return NextResponse.rewrite(url);
+    } catch (error) {
+      if (isHttpError<string>(error) && error.status === 401 && error.data) {
+        return NextResponse.redirect(error.data);
+      }
+      url.pathname = '/characters';
+      return NextResponse.redirect(url);
     }
-    if (!res.ok) {
-      return NextResponse.rewrite(new URL('/404', req.url));
-    }
-
-    const { coreId } = await res.json();
-
-    // Redireciona internamente para a rota que renderiza pelo core_id
-    url.pathname = `/character-sheets/${coreId}`;
-    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();
 }
 
-// Aplica o middleware apenas para /fichas/*
 export const config = {
-  matcher: ['/campaings/:path*', '/character-sheets/:path*'],
+  matcher: ['/campaings/:path*', '/characters/:path*'],
 };

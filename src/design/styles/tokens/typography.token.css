@@ -1,4 +1,12 @@
 :root {
   --font-heading: var(--font-heading), serif;
   --font-body: var(--font-body), system-ui, sans-serif;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
 }

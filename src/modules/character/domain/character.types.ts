@@ -1,7 +1,9 @@
-import { RpgKind } from '../../rpg/domain/rpg-kind.types';
+import { GameSystem } from '../../rpg/domain/game-system.types';
 
 export type Character = {
   slug: string;
   name: string;
-  system: RpgKind;
+  system: GameSystem;
+  currentHp?: number;
+  maxHp?: number;
 };

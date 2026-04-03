@@ -1,5 +1,5 @@
-import { getCampaigns } from '../infra/campaign.api';
+import { getCampaignsAPI } from '../infra/campaign.api';
 
 export async function getCampaignsUseCase() {
-  return await getCampaigns();
+  return await getCampaignsAPI();
 }

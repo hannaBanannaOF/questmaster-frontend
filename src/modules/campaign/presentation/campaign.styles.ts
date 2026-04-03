@@ -2,13 +2,6 @@ import styled, { DefaultTheme } from 'styled-components';
 
 import { CampaignStatus } from '../domain/campaign-status.types';
 
-export const DmSpan = styled.span`
-  display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.primary.default};
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
 const statusStyles = (theme: DefaultTheme) => ({
   [CampaignStatus.DRAFT]: `
     background-color: ${theme.colors.status.draft.soft};

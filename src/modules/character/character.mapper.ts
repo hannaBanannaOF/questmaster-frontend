@@ -1,15 +1,32 @@
-import { RpgKind } from '../rpg/domain/rpg-kind.types';
+import { GameSystem } from '../rpg/domain/game-system.types';
 import { Character } from './domain/character.types';
-import { CharacterResponse } from './infra/dto.types';
+import {
+  CharacterDetailResponse,
+  CharacterListResponse,
+} from './infra/dto.types';
 
-export function mapCharacter(response: CharacterResponse): Character {
-  return {
-    slug: response.slug,
-    name: response.name,
-    system: RpgKind[response.system as keyof typeof RpgKind],
-  };
+export function mapCharacterList(
+  response: CharacterListResponse[],
+): Character[] {
+  return response.map((character) => {
+    return {
+      slug: character.slug,
+      name: character.name,
+      system: GameSystem[character.system as keyof typeof GameSystem],
+      currentHp: character.current_hp,
+      maxHp: character.max_hp,
+    };
+  });
 }
 
-export function mapCharacterList(response: CharacterResponse[]): Character[] {
-  return response.map(mapCharacter);
+export function mapCharacterDetail(
+  response: CharacterDetailResponse,
+): Character {
+  return {
+    name: response.name,
+    slug: '',
+    system: GameSystem[response.system as keyof typeof GameSystem],
+    currentHp: response.current_hp,
+    maxHp: response.max_hp,
+  };
 }

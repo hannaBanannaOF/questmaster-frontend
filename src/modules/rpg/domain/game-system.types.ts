@@ -1,4 +1,4 @@
-export enum RpgKind {
+export enum GameSystem {
   CALL_OF_CTHULHU = 'CALL_OF_CTHULHU',
   DUNGEONS_AND_DRAGONS = 'DUNGEONS_AND_DRAGONS',
   CYBERPUNK_RED = 'CYBERPUNK_RED',

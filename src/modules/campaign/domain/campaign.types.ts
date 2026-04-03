@@ -1,11 +1,12 @@
-import { RpgKind } from '@/src/modules/rpg/domain/rpg-kind.types';
+import { GameSystem } from '@/src/modules/rpg/domain/game-system.types';
 
 import { CampaignStatus } from './campaign-status.types';
 
 export type Campaign = {
   slug: string;
   name: string;
-  system: RpgKind;
+  system: GameSystem;
   dmed: boolean;
   status: CampaignStatus;
+  playerCount: number;
 };

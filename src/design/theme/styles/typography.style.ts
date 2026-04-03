@@ -18,6 +18,12 @@ export type ThemeTypography = {
   };
   body: {
     fontFamily: string;
+    fontSize: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+    };
   };
 };
 
@@ -27,5 +33,11 @@ export const themeTypography: ThemeTypography = {
   },
   body: {
     fontFamily: 'var(--font-body)',
+    fontSize: {
+      xs: 'var(--font-size-xs)',
+      sm: 'var(--font-size-sm)',
+      md: 'var(--font-size-md)',
+      lg: 'var(--font-size-lg)',
+    },
   },
 };

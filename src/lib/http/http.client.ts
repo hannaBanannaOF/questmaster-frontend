@@ -1,3 +1,4 @@
+import { getEnv } from '../env';
 import { HttpError } from './http.types';
 import { Microservices } from './services.types';
 
@@ -8,46 +9,57 @@ async function parseResponse(response: Response) {
   return json;
 }
 
-function buildHeaders(useData?: boolean) {
-  let originMap = {};
-  let dataMap = {};
+function buildHeaders({
+  useData,
+  sessionToken,
+  originalUrl,
+}: {
+  useData?: boolean;
+  sessionToken?: string;
+  originalUrl?: string;
+}) {
+  const headers: Record<string, string> = {};
 
-  console.log('teste');
-
-  if (typeof window !== 'undefined') {
-    originMap = {
-      'Original-Url': window.location.pathname + window.location.search,
-    };
+  if (sessionToken) {
+    headers['Cookie'] =
+      `${getEnv('SESSION_COOKIE_NAME') ?? ''}=${sessionToken}`;
   }
 
   if (useData) {
-    dataMap = {
-      'Content-Type': 'application/json;charset=UTF-8',
-    };
+    headers['Content-Type'] = 'application/json;charset=UTF-8';
   }
 
-  return {
-    ...dataMap,
-    ...originMap,
-  };
+  // Optional: forward original URL (client only)
+  if (typeof window !== 'undefined') {
+    headers['Original-Url'] = window.location.pathname + window.location.search;
+  } else if (originalUrl) {
+    headers['Original-Url'] = originalUrl;
+  }
+
+  return headers;
 }
 
 async function handleAuth(response: Response) {
   if (response.status !== 401) return;
 
+  const { redirectUrl } = await response.json();
   if (typeof window !== 'undefined') {
-    const { redirectUrl } = await response.json();
     window.location.replace(redirectUrl);
   }
 
   throw {
     status: 401,
     message: 'Unauthorized',
-  } satisfies HttpError<undefined>;
+    data: redirectUrl,
+  } satisfies HttpError<string | undefined>;
 }
 
-export function createHttpClient(ms: Microservices) {
-  const baseUrl = 'http://localhost:8081';
+export function createHttpClient(
+  ms: Microservices,
+  sessionToken?: string,
+  originalUrl?: string,
+) {
+  const baseUrl = getEnv('CORE_API_URL');
 
   const request = async <T, J>(
     input: RequestInfo,
@@ -79,27 +91,41 @@ export function createHttpClient(ms: Microservices) {
   return {
     get: <T>(uri: string, v = 1) =>
       request<T, undefined>(buildUrl(uri, v), {
-        headers: buildHeaders(),
+        headers: buildHeaders({
+          sessionToken: sessionToken,
+          originalUrl: originalUrl,
+        }),
       }),
 
     post: <T, J>(uri: string, data?: J, v = 1) =>
       request<T, J>(buildUrl(uri, v), {
         method: 'POST',
-        headers: buildHeaders(data !== undefined),
+        headers: buildHeaders({
+          useData: data !== undefined,
+          sessionToken: sessionToken,
+          originalUrl: originalUrl,
+        }),
         body: data ? JSON.stringify(data) : undefined,
       }),
 
     patch: <T, J>(uri: string, data?: J, v = 1) =>
       request<T, J>(buildUrl(uri, v), {
         method: 'PATCH',
-        headers: buildHeaders(data !== undefined),
+        headers: buildHeaders({
+          useData: data !== undefined,
+          sessionToken: sessionToken,
+          originalUrl: originalUrl,
+        }),
         body: data ? JSON.stringify(data) : undefined,
       }),
 
     delete: <T>(uri: string, v = 1) =>
       request<T, undefined>(buildUrl(uri, v), {
         method: 'DELETE',
-        headers: buildHeaders(),
+        headers: buildHeaders({
+          sessionToken: sessionToken,
+          originalUrl: originalUrl,
+        }),
       }),
   };
 }

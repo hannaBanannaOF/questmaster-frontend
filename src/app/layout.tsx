@@ -4,17 +4,36 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isToday from 'dayjs/plugin/isToday';
 import locallizedFormat from 'dayjs/plugin/localizedFormat';
+import { ScrollText } from 'lucide-react';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 
-import { Header, Main, Nav, NavItem, Title } from '../design/design-system';
+import {
+  Brand,
+  Container,
+  Header,
+  Main,
+  Nav,
+  NavItem,
+} from '../design/design-system';
 import { cinzel, nunito } from '../design/theme/styles/typography.style';
 import { ThemeProvider } from '../design/theme/theme.provider';
 import { QueryProvider } from '../lib/query/query.provider';
+import { UserTag } from '../modules/user/presentation/user.ui';
 
 export const metadata: Metadata = {
   title: 'QuestMaster',
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default async function RootLayout({
@@ -34,12 +53,13 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <Script src="/env-config.js" strategy="beforeInteractive" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
             (function() {
               try {
-                const stored = localStorage.getItem('QUESTMASTER_THEME');
+                const stored = localStorage.getItem('theme');
                 const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const theme = stored === 'dark' || stored === 'light'
                   ? stored
@@ -56,12 +76,23 @@ export default async function RootLayout({
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <QueryProvider>
-              <Header brand={<Title order={2}>Questmaster</Title>}>
+              <Header
+                brand={
+                  <Brand
+                    brandName="Questmaster"
+                    subtitle="MANAGEMENT HUB"
+                    icon={<ScrollText display="flex" />}
+                  />
+                }
+              >
                 <Nav>
                   <NavItem label={t('dashboard')} href="/" />
                   <NavItem label={t('campaigns')} href="/campaigns" />
                   <NavItem label={t('characters')} href="/characters" />
                 </Nav>
+                <Container>
+                  <UserTag />
+                </Container>
               </Header>
               <Main>{children}</Main>
             </QueryProvider>
