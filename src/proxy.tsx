@@ -13,7 +13,7 @@ type CoreSlugResolve = {
 
 export async function proxy(req: NextRequest) {
   const url = req.nextUrl.clone();
-  const matchCampaings = url.pathname.match(/^\/campaings\/([^/]+)$/);
+  const matchCampaings = url.pathname.match(/^\/campaigns\/([^/]+)$/);
   if (matchCampaings) {
     const slug = matchCampaings[1];
 
@@ -29,9 +29,9 @@ export async function proxy(req: NextRequest) {
     );
     try {
       const resolved = await client.get<CoreSlugResolve>(
-        `campaing/resolve/${slug}`,
+        `campaign/resolve/${slug}`,
       );
-      url.pathname = `/campaings/${resolved.id}`;
+      url.pathname = `/campaigns/${resolved.id}`;
       return NextResponse.rewrite(url);
     } catch (error) {
       if (isHttpError<string>(error) && error.data) {
@@ -74,5 +74,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/campaings/:path*', '/characters/:path*'],
+  matcher: ['/campaigns/:path*', '/characters/:path*'],
 };

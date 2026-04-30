@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Card = styled.div<{ $hover: boolean }>`
+export const Card = styled.div<{ $hover: boolean; $hero?: boolean }>`
   display: block;
   border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme }) => theme.colors.card.background};
@@ -18,4 +18,10 @@ export const Card = styled.div<{ $hover: boolean }>`
         border: 1px solid ${theme.colors.primary.default};
       }
     `}
+
+  ${({ $hero, theme }) =>
+    $hero &&
+    `
+    border-top: 5px solid ${theme.colors.primary.default}
+  `}
 `;

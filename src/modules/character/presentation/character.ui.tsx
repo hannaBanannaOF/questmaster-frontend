@@ -1,8 +1,10 @@
 import { ChevronRight, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'styled-components';
 
 import {
+  Breadcrumb,
   Card,
   Container,
   IconSpan,
@@ -71,29 +73,40 @@ export function CharacterDetailContainer({
   character: Character;
   loading?: boolean;
 }) {
+  const t = useTranslations('character');
   const systemMeta = getGameSystemMeta(character.system);
   return (
     <Container direction="column" align="stretch">
-      <Container align="center">
-        <Skeleton loading={loading}>
-          <GameSystemIcon system={character.system} />
-        </Skeleton>
-        <Container direction="column" compact>
+      <Skeleton loading={loading}>
+        <Breadcrumb
+          segments={[
+            { label: t('list.title'), href: '/characters' },
+            { label: character.name },
+          ]}
+        />
+      </Skeleton>
+      <Card hover={false} hero>
+        <Container direction="column" align="stretch">
+          <Container align="center">
+            <Skeleton loading={loading}>
+              <GameSystemIcon system={character.system} />
+            </Skeleton>
+            <Container direction="column" compact>
+              <Skeleton loading={loading}>
+                <Title order={2}>{character.name}</Title>
+              </Skeleton>
+              <Skeleton loading={loading}>
+                <Text muted>{systemMeta.label}</Text>
+              </Skeleton>
+            </Container>
+          </Container>
           <Skeleton loading={loading}>
-            <Title order={2}>{character.name}</Title>
-          </Skeleton>
-          <Skeleton loading={loading}>
-            <Text muted>{systemMeta.label}</Text>
+            <HPBar
+              value={character.currentHp ?? 0}
+              max={character.maxHp ?? 100}
+            />
           </Skeleton>
         </Container>
-      </Container>
-      <Card hover={false}>
-        <Skeleton loading={loading}>
-          <HPBar
-            value={character.currentHp ?? 0}
-            max={character.maxHp ?? 100}
-          />
-        </Skeleton>
       </Card>
     </Container>
   );

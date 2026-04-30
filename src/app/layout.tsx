@@ -9,6 +9,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import NextTopLoader from 'nextjs-toploader';
 
 import {
   Brand,
@@ -73,6 +74,15 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${cinzel.variable} ${nunito.variable}`}>
+        <NextTopLoader
+          color="var(--color-primary)" // Cor do seu design system
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+        />
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <QueryProvider>

@@ -4,7 +4,7 @@
     "loading": "Buscando campanhas...",
     "empty": {
       "title": "Sem missões ainda",
-      "message": "Seu livro de aventura está vazio. Crie sua primeira campanha para começar a sua jornada.",
+      "message": "Seu livro de aventuras está vazio. Crie sua primeira campanha para começar a sua jornada.",
       "create": "Criar campanha"
     },
     "new": "Nova campanha"
@@ -15,5 +15,18 @@
     "archived": "Arquivada",
     "paused": "Pausada",
     "active": "Jogando"
-  }
+  },
+  "actions": {
+    "start": "Iniciar campanha",
+    "pause": "Pausar campanha",
+    "resume": "Resumir campanha",
+    "end": "Encerrar campanha",
+    "archive": "Arquivar campanha"
+  },
+  "invite": {
+    "create": "Criar convite",
+    "copy": "Copiar",
+    "copied": "Copiado"
+  },
+  "characters": "Personagens"
 }

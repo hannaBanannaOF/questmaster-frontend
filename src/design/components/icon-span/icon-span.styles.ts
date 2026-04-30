@@ -5,4 +5,5 @@ export const IconSpan = styled.span<{ $color?: string }>`
   align-items: center;
   color: ${({ $color, theme }) => $color ?? theme.colors.text.primary};
   gap: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.body.fontSize.sm};
 `;

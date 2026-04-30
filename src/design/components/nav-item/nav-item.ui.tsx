@@ -6,9 +6,11 @@ import * as S from './nav-item.styles';
 export default function NavItem({
   label,
   href,
+  notActive,
 }: {
   label: string;
   href: string;
+  notActive?: boolean;
 }) {
   const pathname = usePathname();
 
@@ -16,7 +18,7 @@ export default function NavItem({
   return (
     <S.NavItem
       href={href}
-      $active={isActive}
+      $active={!notActive && isActive}
       aria-current={isActive ? 'page' : undefined}
     >
       {label}

@@ -10,3 +10,13 @@ export type Campaign = {
   status: CampaignStatus;
   playerCount: number;
 };
+
+export type CampaignDetails = Campaign & {
+  id: number;
+  overview?: string;
+  characters: {
+    id: number;
+    name: string;
+  }[];
+  inviteHash?: string;
+};
