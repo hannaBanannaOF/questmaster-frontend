@@ -1,7 +1,7 @@
-@import './tokens/colors.token.css';
-@import './tokens/typography.token.css';
-@import './tokens/radius.token.css';
-@import './tokens/spacing.token.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/radius.css';
+@import './tokens/spacing.css';
 
 html:not([data-theme]) {
   visibility: hidden;

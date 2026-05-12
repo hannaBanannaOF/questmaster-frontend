@@ -1,14 +1,32 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+
+import { useToast } from '@/src/design';
 
 import { GameSystem } from '../../rpg/domain/game-system.types';
-import { getCharacterDetailUseCase } from '../application/get-character-detail.usecase';
-import { getCharactersUseCase } from '../application/get-characters.usecase';
+import { createCharacterUseCase, deleteCharacterUseCase, getCharacterDetailUseCase, getCharactersUseCase, updateCharacterHpUseCase } from '../application';
+import { CharacterCreateFormData } from '../domain/character.schema';
+import { Character } from '../domain/character.types';
 
-export function useCharacter() {
-  return useQuery({
+export function useCharacters() {
+  const t = useTranslations('character.toast');
+  const { addToast } = useToast();
+  
+  const query = useQuery({
     queryKey: ['characters'],
     queryFn: getCharactersUseCase,
   });
+
+  const { data, error, isSuccess, isError } = query;
+
+  useEffect(() => {
+    if (isError) {
+      addToast(t('error.list'), error.message, 'error');
+    }
+  }, [isSuccess, isError, data, error, addToast, t]);
+
+  return query;
 }
 
 export function useCharacterDetail(id: number) {
@@ -17,11 +35,100 @@ export function useCharacterDetail(id: number) {
     queryFn: () => getCharacterDetailUseCase(id),
     placeholderData: (prev) =>
       prev ?? {
+        id: 0,
         slug: 'placeholder',
         name: 'Placeholder',
         system: GameSystem.CALL_OF_CTHULHU,
         currentHp: 0,
         maxHp: 0,
       },
+  });
+}
+
+export function useCreateCharacter() {
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  const t = useTranslations('character.toast');
+  return useMutation({
+    mutationFn: (data: CharacterCreateFormData) => createCharacterUseCase(data),
+    onSuccess: async (data, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ['characters'] });
+      addToast(t('success.create.title'), t('success.create.message', { name: variables.name }), 'success');
+    },
+    onError: (error) => {
+      addToast(t('error.create'), error.message, 'error');
+    }
+  });
+}
+
+export function useDeleteCharacter() {
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  const t = useTranslations('character.toast');
+
+  return useMutation({
+    mutationFn: ({id}: {id: number, name: string}) => deleteCharacterUseCase(id),
+    onSuccess: async (_, variables) => {
+      const id = Number(variables.id);
+      queryClient.removeQueries({ queryKey: ['characters', id] });
+      await queryClient.invalidateQueries({ queryKey: ['characters'] });
+      addToast(t('success.delete.title'), t('success.delete.message', { name: variables.name }), 'success');
+    },
+    onError: (error) => {
+      addToast(t('error.delete'), error.message, 'error');
+    }
+  });
+}
+
+export function useUpdateHP() {
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  const t = useTranslations('character.toast');
+
+  return useMutation({
+    mutationFn: ({newHp, id}: {newHp: number, id: number}) => updateCharacterHpUseCase(newHp, id),
+    onMutate: async ({newHp, id}) => {
+      await queryClient.cancelQueries({ queryKey: ['characters', id] });
+      await queryClient.cancelQueries({ queryKey: ['characters'] });
+
+      const previousCharacter = queryClient.getQueryData<Character>(['characters', id]);
+      const previousList = queryClient.getQueryData<Character[]>(['characters']);
+
+      let currentSlug: string | undefined;
+      
+      queryClient.setQueryData(['characters', id], (oldCharacter: Character) => {
+        if (!oldCharacter) return undefined;
+
+        currentSlug = oldCharacter.slug;
+
+        return {
+          ...oldCharacter,
+          currentHp: newHp
+        };
+      });
+      
+      if (currentSlug !== undefined)
+      queryClient.setQueryData(['characters'], (oldList: Character[]) => {
+        if (!Array.isArray(oldList)) return oldList;
+        return oldList.map((char: Character) => 
+          char.slug === currentSlug ? { ...char, currentHp: newHp } : char
+        );
+      });
+
+      return { previousCharacter, previousList };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousCharacter) {
+        queryClient.setQueryData(['characters', variables.id], context.previousCharacter);
+      }
+      if (context?.previousList) {
+        queryClient.setQueryData(['characters'], context.previousList);
+      }
+      addToast(t('error.update'), error.message, 'error');
+    },
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['characters', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    },
   });
 }

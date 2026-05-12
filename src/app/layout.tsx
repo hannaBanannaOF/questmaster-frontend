@@ -16,11 +16,13 @@ import {
   Container,
   Header,
   Main,
+  ModalProvider,
   Nav,
   NavItem,
-} from '../design/design-system';
-import { cinzel, nunito } from '../design/theme/styles/typography.style';
-import { ThemeProvider } from '../design/theme/theme.provider';
+  ThemeProvider,
+  ToastProvider,
+} from '../design';
+import { cinzel, nunito } from '../design/theme/styles/typography';
 import { QueryProvider } from '../lib/query/query.provider';
 import { UserTag } from '../modules/user/presentation/user.ui';
 
@@ -86,25 +88,29 @@ export default async function RootLayout({
         <ThemeProvider>
           <NextIntlClientProvider messages={messages}>
             <QueryProvider>
-              <Header
-                brand={
-                  <Brand
-                    brandName="Questmaster"
-                    subtitle="MANAGEMENT HUB"
-                    icon={<ScrollText display="flex" />}
-                  />
-                }
-              >
-                <Nav>
-                  <NavItem label={t('dashboard')} href="/" />
-                  <NavItem label={t('campaigns')} href="/campaigns" />
-                  <NavItem label={t('characters')} href="/characters" />
-                </Nav>
-                <Container>
-                  <UserTag />
-                </Container>
-              </Header>
-              <Main>{children}</Main>
+              <ToastProvider>
+                <ModalProvider>
+                  <Header
+                    brand={
+                      <Brand
+                        brandName="Questmaster"
+                        subtitle="MANAGEMENT HUB"
+                        icon={<ScrollText display="flex" />}
+                      />
+                    }
+                  >
+                    <Nav>
+                      <NavItem label={t('dashboard')} href="/" />
+                      <NavItem label={t('campaigns')} href="/campaigns" />
+                      <NavItem label={t('characters')} href="/characters" />
+                    </Nav>
+                    <Container>
+                      <UserTag />
+                    </Container>
+                  </Header>
+                  <Main>{children}</Main>
+                </ModalProvider>
+              </ToastProvider>
             </QueryProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

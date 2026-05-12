@@ -66,6 +66,9 @@ export async function proxy(req: NextRequest) {
         return NextResponse.redirect(error.data);
       }
       url.pathname = '/characters';
+      if (isHttpError<string>(error)) {
+        url.searchParams.set('errorMsg', error.message ?? 'Unexpected error!');
+      }
       return NextResponse.redirect(url);
     }
   }

@@ -35,7 +35,6 @@ function buildHeaders({
   } else if (originalUrl) {
     headers['Original-Url'] = originalUrl;
   }
-  headers['bypass-tunnel-reminder'] = 'true';
 
   return headers;
 }

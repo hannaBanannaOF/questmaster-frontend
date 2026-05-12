@@ -1,6 +1,6 @@
 import { CampaignStatus } from '../domain/campaign-status.types';
 
-export const CAMPAIGN_STATUS_META = {
+const CAMPAIGN_STATUS_META = {
   [CampaignStatus.DRAFT]: {
     translationLabel: 'status.draft',
   },

@@ -8,5 +8,66 @@
       "message": "Sua party está vazia. Crie seu primeiro personagem para começar a aventura",
       "create": "Criar personagem"
     }
+  },
+  "create": {
+    "title": "Novo personagem",
+    "subtitle": "Dê vida a um novo herói. Preencha os detalhes abaixo.",
+    "form": {
+      "name": {
+        "label": "Nome do personagem",
+        "placeholder": "Ex.: Aelar  Windwalker",
+        "errors": {
+          "required": "Campo \"Nome do personagem\" é obrigatório!"
+        }
+      },
+      "hp": {
+        "label": "Pontos de vida (PV)",
+        "placeholder": "Ex.: 45",
+        "errors": {
+          "required": "Campo \"Pontos de vida (PV)\" é obrigatório!",
+          "type": "O valor informado deve ser um número!",
+          "min": "O valor informado deve ser maior que 0!"
+        }
+      },
+      "game_system": {
+        "label": "Sistema de jogo",
+        "errors": {
+          "required": "Campo \"Sistema de jogo\" é obrigatório!"
+        }
+      },
+      "submit": "Criar",
+      "cancel": "Cancelar"
+    }
+  },
+  "delete": {
+    "title": "Excluir personagem",
+    "confirm": "Isso removerá permanentemente <bold>{name}</bold> e todos os seus dados. Essa ação não pode ser desfeita.",
+    "cancel": "Cancelar",
+    "submit": "Excluir personagem"
+  },
+  "controls": {
+    "hp": "Pontos de vida (PV)"
+  },
+  "actions": {
+    "delete": "Excluir"
+  },
+  "toast": {
+    "error": {
+      "list": "Não foi possível buscar personagens!",
+      "create": "Não foi possível criar personagem!",
+      "delete": "Não foi possível excluir personagem!",
+      "update": "Não foi possível atualizar personagem!",
+      "detail": "Não foi possível acessar personagem!"
+    },
+    "success": {
+      "create": {
+        "title": "Novo personagem!",
+        "message": "\"{name}\" se junta a aventura."
+      },
+      "delete": {
+        "title": "Personagem excluido!",
+        "message": "\"{name}\" foi excluído com sucesso."
+      }
+    }
   }
 }

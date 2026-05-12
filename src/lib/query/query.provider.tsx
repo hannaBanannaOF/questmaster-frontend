@@ -2,6 +2,7 @@
 import 'dayjs/locale/en';
 import 'dayjs/locale/pt-br';
 
+import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental';
 import {
   isServer,
   QueryClient,
@@ -35,6 +36,10 @@ function getQueryClient() {
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const client = getQueryClient();
+  broadcastQueryClient({
+    queryClient: client,
+    broadcastChannel: 'questmaster-sync'
+  });
 
   return (
     <QueryClientProvider client={client}>

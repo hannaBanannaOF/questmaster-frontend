@@ -25,7 +25,7 @@ import {
   Skeleton,
   Text,
   Title,
-} from '@/src/design/design-system';
+} from '@/src/design';
 
 import { getGameSystemMeta } from '../../rpg/presentation/game-system.meta';
 import { GameSystemIcon } from '../../rpg/presentation/game-system.ui';
@@ -65,7 +65,7 @@ export function CampaignListCard({ campaign }: { campaign: Campaign }) {
                   <Title order={3}>{campaign.name}</Title>
                   {campaign.dmed && <DmBadge />}
                 </Container>
-                <Text muted>{systemMeta.label}</Text>
+                <Text variant='muted'>{systemMeta.label}</Text>
               </Container>
               <Container align="center">
                 <S.StatusBadge $status={campaign.status}>
@@ -229,7 +229,7 @@ export function CampaignDetailsContainer({
                 )}
               </Container>
               <Skeleton loading={loading}>
-                <Text muted>{systemMeta.label}</Text>
+                <Text variant='muted'>{systemMeta.label}</Text>
               </Skeleton>
             </Container>
           </Container>

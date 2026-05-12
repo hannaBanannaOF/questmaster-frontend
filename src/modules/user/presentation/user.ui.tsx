@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 
-import { Container, Skeleton, Text } from '@/src/design/design-system';
+import { Container, Skeleton, Text } from '@/src/design';
 
 import { useUserInfo } from './user.hooks';
 
@@ -12,7 +12,7 @@ export function UserTag() {
   return (
     <Container>
       <Skeleton loading={isFetching}>
-        <Text muted>
+        <Text variant='muted'>
           {data?.name || data?.username
             ? t('greeting', { name: data?.name ?? data?.username })
             : t('greeting_default')}

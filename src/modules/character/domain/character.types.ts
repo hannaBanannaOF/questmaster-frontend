@@ -1,6 +1,7 @@
-import { GameSystem } from '../../rpg/domain/game-system.types';
+import { GameSystem } from '../../rpg';
 
 export type Character = {
+  id?: number;
   slug: string;
   name: string;
   system: GameSystem;

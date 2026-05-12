@@ -6,10 +6,20 @@ export type CharacterListResponse = {
   max_hp?: number;
 };
 
-export type CharacterDetailResponse = {
+export type CharacterDetailResponse = CharacterListResponse & {
   id: number;
+};
+
+export type CharacterCreateRequest = {
+  hp: number;
   name: string;
   system: string;
-  max_hp?: number;
-  current_hp?: number;
-};
+}
+
+export type CharacterUpdateHpRequest = {
+  new_hp: number;
+}
+
+export type CharacterCurrentHpResponse = {
+  current_hp: number;
+}

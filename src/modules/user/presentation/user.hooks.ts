@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getUserInfoUseCase } from '../application/get-user-info.usecase';
+import { getUserInfoUseCase } from '../application';
 
 export function useUserInfo() {
   return useQuery({

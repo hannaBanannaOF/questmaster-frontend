@@ -10,7 +10,7 @@ import {
   List,
   Loader,
   Title,
-} from '@/src/design/design-system';
+} from '@/src/design';
 import { useCampaigns } from '@/src/modules/campaign/presentation/campaign.hooks';
 import { CampaignListCard } from '@/src/modules/campaign/presentation/campaign.ui';
 
