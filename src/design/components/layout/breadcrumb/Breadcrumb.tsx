@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
+import React from 'react';
 import { useTheme } from 'styled-components';
 
 import { Text } from '../../typography/text/Text';
@@ -11,14 +12,14 @@ interface BreadcrumbProps {
   segments: { href?: string; label: string }[];
 }
 
-export function Breadcrumb(props: BreadcrumbProps) {
+export const Breadcrumb: React.FC<BreadcrumbProps> = ({ segments }) => {
   const theme = useTheme();
 
   return (
     <Container align="center">
-      {props.segments &&
-        props.segments.map((segment, index) => {
-          const isLast = index === props.segments.length - 1;
+      {segments &&
+        segments.map((segment, index) => {
+          const isLast = index === segments.length - 1;
 
           return (
             <Container key={index} align="center">
@@ -39,4 +40,4 @@ export function Breadcrumb(props: BreadcrumbProps) {
         })}
     </Container>
   );
-}
+};

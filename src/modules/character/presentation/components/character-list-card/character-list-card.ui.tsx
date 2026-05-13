@@ -12,14 +12,14 @@ export function CharacterListCard({ character }: { character: Character }) {
   const theme = useTheme();
   return (
     <Link href={`/characters/${character.slug}`}>
-      <Card>
+      <Card hover>
         <Container align="center" justify="space-between">
           <Container>
             <GameSystemIcon system={character.system} />
             <Container direction="column">
               <Container direction="column" compact>
                 <Title order={3}>{character.name}</Title>
-                <Text variant='muted'>{systemMeta.label}</Text>
+                <Text variant="muted">{systemMeta.label}</Text>
               </Container>
               {character.currentHp !== undefined && (
                 <IconSpan

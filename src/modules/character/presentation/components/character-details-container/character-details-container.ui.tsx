@@ -1,36 +1,58 @@
 import { Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useCallback } from 'react';
 
-import { Breadcrumb, Button, Card, Container, Skeleton, Text, Title, useModal } from '@/src/design';
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Container,
+  Skeleton,
+  Text,
+  Title,
+  useModal,
+} from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
 
-import { Character } from '../../../domain/character.types';
+import { CharacterDetail } from '../../../domain/character.types';
 import { useUpdateHP } from '../../character.hooks';
-import { useDeleteModal } from '../delete-character-modal/delete-character-modal.ui';
+import { getDeleteModalConfig } from '../delete-character-modal/delete-character-modal.ui';
 import { StatusBar } from '../status-bar/satus-bar.ui';
+
+interface CharacterDetailContainerProps {
+  character: CharacterDetail;
+  loading?: boolean;
+}
 
 export function CharacterDetailContainer({
   character,
   loading,
-}: {
-  character: Character;
-  loading?: boolean;
-}) {
+}: CharacterDetailContainerProps) {
   const t = useTranslations('character');
-  const { openModal } = useModal();
-  const { mutate, isPending } = useUpdateHP();
-  
+  const { openModal, closeModal } = useModal();
+  const { mutate: updateHP, isPending } = useUpdateHP();
+
   const systemMeta = getGameSystemMeta(character.system);
-  const deleteModalData = useDeleteModal(character.name, character.id);
+  const tDelete = useTranslations('character.delete');
+  const deleteModal = getDeleteModalConfig(
+    tDelete,
+    character.name,
+    character.id,
+    closeModal,
+  );
 
-  const handleUpdateHP = (newValue: number) => {
-    if (!character.id) return;
-    mutate({ newHp: newValue, id: character.id });
-  };
+  const handleUpdateHP = useCallback(
+    (newValue: number) => {
+      if (character.id) {
+        updateHP({ newHp: newValue, id: character.id });
+      }
+    },
+    [character.id, updateHP],
+  );
 
-  const handleDeleteClick = () => {
-    openModal(deleteModalData);
-  };
+  const handleDeleteClick = useCallback(() => {
+    openModal(deleteModal);
+  }, [openModal, deleteModal]);
 
   return (
     <Container direction="column" align="stretch">
@@ -43,17 +65,17 @@ export function CharacterDetailContainer({
         />
       </Skeleton>
 
-      <Card hover={false} hero>
+      <Card hero>
         <Container direction="column" align="stretch">
           <Container align="start" justify="space-between">
-            <Container>
+            <Container align="center">
               <Skeleton loading={loading}>
                 <GameSystemIcon system={character.system} />
               </Skeleton>
-              
+
               <Container direction="column" compact>
                 <Skeleton loading={loading}>
-                  <Title order={2}>{character.name}</Title>
+                  <Title order={3}>{character.name}</Title>
                 </Skeleton>
                 <Skeleton loading={loading}>
                   <Text variant="muted">{systemMeta.label}</Text>
@@ -61,12 +83,12 @@ export function CharacterDetailContainer({
               </Container>
             </Container>
 
-            {!loading && (
-              <Button 
+            {!loading && character.isPlayer && (
+              <Button
                 text={t('actions.delete')}
-                icon={<Trash2 size={14} />} 
-                variant="outline" 
-                buttonColor="danger" 
+                icon={<Trash2 size={12} display="flex" />}
+                variant="outline"
+                buttonColor="danger"
                 onClick={handleDeleteClick}
               />
             )}
@@ -79,6 +101,7 @@ export function CharacterDetailContainer({
               max={character.maxHp ?? 100}
               onUpdate={handleUpdateHP}
               isUpdating={isPending}
+              showControls={character.isPlayer}
             />
           </Skeleton>
         </Container>

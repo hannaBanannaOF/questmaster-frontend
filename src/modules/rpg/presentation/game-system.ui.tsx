@@ -2,7 +2,11 @@ import { GameSystem } from '../domain/game-system.types';
 import { getGameSystemMeta } from './game-system.meta';
 import * as S from './game-system.styles';
 
-export function GameSystemIcon({ system }: { system: GameSystem }) {
+interface GameSystemIconProps {
+  system: GameSystem;
+}
+
+export function GameSystemIcon({ system }: GameSystemIconProps) {
   const Icon = getGameSystemMeta(system).icon;
   return (
     <S.IconContainer $system={system}>

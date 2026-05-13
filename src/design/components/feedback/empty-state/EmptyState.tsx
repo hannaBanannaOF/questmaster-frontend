@@ -13,14 +13,23 @@ interface EmptyStateProps {
   extra?: ReactNode;
 }
 
-export function EmptyState(props: EmptyStateProps) {
+export const EmptyState: React.FC<EmptyStateProps> = ({
+  title,
+  message,
+  icon,
+  extra,
+}) => {
   return (
     <Container align="center" direction="column">
-      {props.icon && <S.IconWrapper>{props.icon}</S.IconWrapper>}
-      {typeof props.title === 'string' ? <Title order={2}>{props.title}</Title> : props.title}
-      {props.message &&
-        (typeof props.message === 'string' ? <Text variant='muted'>{props.message}</Text> : props.message)}
-      {props.extra}
+      {icon && <S.IconWrapper>{icon}</S.IconWrapper>}
+      {typeof title === 'string' ? <Title order={2}>{title}</Title> : title}
+      {message &&
+        (typeof message === 'string' ? (
+          <Text variant="muted">{message}</Text>
+        ) : (
+          message
+        ))}
+      {extra}
     </Container>
   );
-}
+};

@@ -1,35 +1,41 @@
 import { createHttpClient, Microservices } from '@/src/lib/http';
 
-import { mapCharacterDetail, mapCharacterFormData, mapCharacterList, mapCurrentHpResponse, mapHpRequest } from '../character.mapper';
+import {
+  mapCharacterDetail,
+  mapCharacterFormData,
+  mapCharacterList,
+  mapHpRequest,
+} from '../character.mapper';
 import { CharacterCreateFormData } from '../domain/character.schema';
-import { CharacterCreateRequest, CharacterCurrentHpResponse, CharacterDetailResponse, CharacterListResponse, CharacterUpdateHpRequest } from './dto.types';
+import {
+  CharacterCreateRequest,
+  CharacterCurrentHpResponse,
+  CharacterDetailResponse,
+  CharacterListResponse,
+  CharacterUpdateHpRequest,
+} from './dto.types';
 
-export async function getCharactersAPI() {
-  const client = createHttpClient(Microservices.core);
-  const data = await client.get<CharacterListResponse[]>('character');
-  return mapCharacterList(data);
-}
+const client = createHttpClient(Microservices.core);
 
-export async function getCharacterDetailAPI(id: number) {
-  const client = createHttpClient(Microservices.core);
-  const data = await client.get<CharacterDetailResponse>(`character/${id}`);
-  return mapCharacterDetail(data);
-}
+export const getCharactersAPI = async () =>
+  mapCharacterList(await client.get<CharacterListResponse[]>('character'));
 
-export async function createCreateAPI(data: CharacterCreateFormData) {
-  const parsedData = mapCharacterFormData(data);
-  const client = createHttpClient(Microservices.core);
-  await client.post<undefined, CharacterCreateRequest>('character', parsedData);
-}
+export const getCharacterDetailAPI = async (id: number) =>
+  mapCharacterDetail(
+    await client.get<CharacterDetailResponse>(`character/${id}`),
+  );
 
-export async function deleteCharacterAPI(id: number) {
-  const client = createHttpClient(Microservices.core);
-  await client.delete(`character/${id}`);
-}
+export const createCharacterAPI = async (data: CharacterCreateFormData) =>
+  client.post<undefined, CharacterCreateRequest>(
+    'character',
+    mapCharacterFormData(data),
+  );
 
-export async function updateCharacterHpAPI(newHp: number, id: number) {
-  const parsedData = mapHpRequest(newHp);
-  const client = createHttpClient(Microservices.core);
-  const data = await client.patch<CharacterCurrentHpResponse, CharacterUpdateHpRequest>(`character/${id}/hp`, parsedData);
-  return mapCurrentHpResponse(data);
-}
+export const deleteCharacterAPI = async (id: number) =>
+  client.delete(`character/${id}`);
+
+export const updateCharacterHpAPI = async (newHp: number, id: number) =>
+  client.patch<CharacterCurrentHpResponse, CharacterUpdateHpRequest>(
+    `character/${id}/hp`,
+    mapHpRequest(newHp),
+  );

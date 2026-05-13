@@ -8,11 +8,11 @@ interface IconSpanProps {
   color?: string;
 }
 
-export function IconSpan(props: IconSpanProps) {
+export const IconSpan: React.FC<IconSpanProps> = ({ icon, data, color }) => {
   return (
-    <S.IconSpan $color={props.color}>
-      {props.icon}
-      {props.data}
+    <S.IconSpan $color={color}>
+      {icon}
+      {data}
     </S.IconSpan>
   );
-}
+};

@@ -1,5 +1,4 @@
 import { deleteCharacterAPI } from '../infra/character.api';
 
-export async function deleteCharacterUseCase(id: number) {
-  await deleteCharacterAPI(id);
-}
+export const deleteCharacterUseCase = async (id: number) =>
+  deleteCharacterAPI(id);

@@ -1,37 +1,50 @@
 import { createHttpClient } from '@/src/lib/http/http.client';
 import { Microservices } from '@/src/lib/http/services.types';
 
-import { mapCampaignDetails, mapCampaignList } from '../campaign.mapper';
+import {
+  mapCampaignDetails,
+  mapCampaignFormData,
+  mapCampaignList,
+} from '../campaign.mapper';
+import { CampaignCreateFormData } from '../domain/campaign.schema';
 import { CampaignStatus } from '../domain/campaign-status.types';
 import {
+  CampaignCreateRequest,
   CampaignDetailsResponse,
   CampaignListResponse,
   UpdateCampaignStatusRequest,
   UpdateCampaignStatusResponse,
 } from './dto.types';
 
-export async function getCampaignsAPI() {
-  const client = createHttpClient(Microservices.core);
-  const data = await client.get<CampaignListResponse[]>('campaign');
-  return mapCampaignList(data);
-}
+const client = createHttpClient(Microservices.core);
 
-export async function getCampaignDetailsAPI(id: number) {
-  const client = createHttpClient(Microservices.core);
-  const data = await client.get<CampaignDetailsResponse>(`campaign/${id}`);
-  return mapCampaignDetails(data);
-}
+export const getCampaignsAPI = async () =>
+  mapCampaignList(await client.get<CampaignListResponse[]>('campaign'));
 
-export async function updateCampaignStatusAPI(
+export const getCampaignDetailsAPI = async (id: number) =>
+  mapCampaignDetails(
+    await client.get<CampaignDetailsResponse>(`campaign/${id}`),
+  );
+
+export const createCampaignAPI = (data: CampaignCreateFormData) =>
+  client.post<undefined, CampaignCreateRequest>(
+    'campaign',
+    mapCampaignFormData(data),
+  );
+
+export const deleteCampaignAPI = (id: number) =>
+  client.delete(`campaign/${id}`);
+
+export const updateCampaignStatusAPI = async (
   id: number,
   newStatus: CampaignStatus,
-) {
-  const client = createHttpClient(Microservices.core);
+) => {
   const data = await client.patch<
     UpdateCampaignStatusResponse,
     UpdateCampaignStatusRequest
   >(`campaign/${id}/status`, {
     status: newStatus.toString(),
   });
+
   return CampaignStatus[data.status as keyof typeof CampaignStatus];
-}
+};

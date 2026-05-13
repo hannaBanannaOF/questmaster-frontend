@@ -25,8 +25,11 @@ export const InputBase = styled.input`
     color: ${({ theme }) => theme.colors.text.muted};
   }
 
-  &:focus-visible, &:focus {
-    box-shadow: 0px 0px 0px 2px ${({ theme }) => theme.colors.background.primary}, 0px 0px 0px 4px ${({ theme }) => theme.colors.primary.default};
+  &:focus-visible,
+  &:focus {
+    box-shadow:
+      0px 0px 0px 2px ${({ theme }) => theme.colors.background.primary},
+      0px 0px 0px 4px ${({ theme }) => theme.colors.primary.default};
     outline: 2px solid transparent;
     outline-offset: 2px;
   }
@@ -37,13 +40,11 @@ export const InputLabel = styled.label`
 `;
 
 export const Required = styled.span`
-
   color: ${({ theme }) => theme.colors.destructive.default};
 
   &::after {
-    content: " *";
+    content: ' *';
   }
-
 `;
 
 export const Error = styled(Text)`

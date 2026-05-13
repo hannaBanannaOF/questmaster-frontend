@@ -21,6 +21,6 @@ const variantStyles = (theme: DefaultTheme) => ({
 });
 
 export const ToastItem = styled(Card)<{ $type: ToastType }>`
-  pointer-events: auto; 
+  pointer-events: auto;
   border-left: 2px solid ${({ theme, $type }) => variantStyles(theme)[$type]};
 `;

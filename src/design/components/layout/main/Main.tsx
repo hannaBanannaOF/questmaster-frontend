@@ -3,6 +3,6 @@ import { PropsWithChildren } from 'react';
 
 import * as S from './styles';
 
-export function Main(props: PropsWithChildren) {
-  return <S.Main>{props.children}</S.Main>;
-}
+export const Main: React.FC<PropsWithChildren> = ({ children }) => {
+  return <S.Main>{children}</S.Main>;
+};

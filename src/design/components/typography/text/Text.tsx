@@ -9,10 +9,10 @@ interface TextProps extends PropsWithChildren {
   small?: boolean;
 }
 
-export function Text(props: TextProps) {
+export const Text: React.FC<TextProps> = ({ variant, small, children }) => {
   return (
-    <S.Text $variant={props.variant} $small={props.small}>
-      {props.children}
+    <S.Text $variant={variant} $small={small}>
+      {children}
     </S.Text>
   );
-}
+};

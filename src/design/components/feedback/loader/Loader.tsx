@@ -11,18 +11,22 @@ interface LoaderProps {
   message?: string | ReactNode;
 }
 
-export function Loader(props: LoaderProps) {
+export const Loader: React.FC<LoaderProps> = ({ size, message }) => {
   return (
     <S.Wrapper>
       <S.IconWrapper>
         <Dices
-          size={props.size === 'sm' ? 21 : props.size === 'lg' ? 84 : 42}
+          size={size === 'sm' ? 21 : size === 'lg' ? 84 : 42}
           display="flex"
         />
       </S.IconWrapper>
 
-      {props.message &&
-        (typeof props.message === 'string' ? <Text variant='muted'>{props.message}</Text> : props.message)}
+      {message &&
+        (typeof message === 'string' ? (
+          <Text variant="muted">{message}</Text>
+        ) : (
+          message
+        ))}
     </S.Wrapper>
   );
-}
+};

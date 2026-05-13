@@ -34,10 +34,13 @@ export async function proxy(req: NextRequest) {
       url.pathname = `/campaigns/${resolved.id}`;
       return NextResponse.rewrite(url);
     } catch (error) {
-      if (isHttpError<string>(error) && error.data) {
+      if (isHttpError<string>(error) && error.data && error.status === 401) {
         return NextResponse.redirect(error.data);
       }
       url.pathname = '/campaigns';
+      if (isHttpError<string>(error)) {
+        url.searchParams.set('errorMsg', error.message ?? 'Unexpected error!');
+      }
       return NextResponse.redirect(url);
     }
   }

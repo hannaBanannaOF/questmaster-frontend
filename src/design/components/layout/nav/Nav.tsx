@@ -3,7 +3,6 @@ import { PropsWithChildren } from 'react';
 
 import * as S from './nav.styles';
 
-export function Nav(props: PropsWithChildren) {
-  return <S.Nav>{props.children}</S.Nav>;
-}
-
+export const Nav: React.FC<PropsWithChildren> = ({ children }) => {
+  return <S.Nav>{children}</S.Nav>;
+};

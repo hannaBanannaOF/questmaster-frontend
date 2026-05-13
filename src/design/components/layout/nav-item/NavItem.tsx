@@ -9,18 +9,17 @@ interface NavItemProps {
   notActive?: boolean;
 }
 
-
-export function NavItem(props: NavItemProps) {
+export const NavItem: React.FC<NavItemProps> = ({ label, href, notActive }) => {
   const pathname = usePathname();
 
-  const isActive = pathname === props.href || pathname.startsWith(`${props.href}/`);
+  const isActive = pathname === href || pathname.startsWith(`${href}/`);
   return (
     <S.NavItem
-      href={props.href}
-      $active={!props.notActive && isActive}
+      href={href}
+      $active={!notActive && isActive}
       aria-current={isActive ? 'page' : undefined}
     >
-      {props.label}
+      {label}
     </S.NavItem>
   );
-}
+};

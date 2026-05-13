@@ -1,37 +1,47 @@
 import { GameSystem } from '../rpg/domain/game-system.types';
+import { CampaignCreateFormData } from './domain/campaign.schema';
 import { Campaign, CampaignDetails } from './domain/campaign.types';
 import { CampaignStatus } from './domain/campaign-status.types';
 import {
+  CampaignCreateRequest,
   CampaignDetailsResponse,
   CampaignListResponse,
 } from './infra/dto.types';
 
-export function mapCampaignList(response: CampaignListResponse[]): Campaign[] {
-  return response.map((campaign) => {
-    return {
-      slug: campaign.slug,
-      name: campaign.name,
-      system: GameSystem[campaign.system as keyof typeof GameSystem],
-      dmed: campaign.is_dm,
-      status: CampaignStatus[campaign.status as keyof typeof CampaignStatus],
-      playerCount: campaign.player_count,
-    };
-  });
-}
+const toGameSystem = (val: string) =>
+  GameSystem[val as keyof typeof GameSystem];
+const toCampaignStatus = (val: string) =>
+  CampaignStatus[val as keyof typeof CampaignStatus];
 
-export function mapCampaignDetails(
+export const mapCampaignList = (response: CampaignListResponse[]): Campaign[] =>
+  response.map((campaign) => ({
+    slug: campaign.slug,
+    name: campaign.name,
+    system: toGameSystem(campaign.system),
+    dmed: campaign.is_dm,
+    status: toCampaignStatus(campaign.status),
+    playerCount: campaign.player_count,
+  }));
+
+export const mapCampaignDetails = (
   response: CampaignDetailsResponse,
-): CampaignDetails {
-  return {
-    id: response.id,
-    dmed: response.is_dm,
-    name: response.name,
-    playerCount: response.characters.length,
-    slug: response.slug,
-    status: CampaignStatus[response.status as keyof typeof CampaignStatus],
-    system: GameSystem[response.system as keyof typeof GameSystem],
-    overview: response.overview,
-    characters: response.characters,
-    inviteHash: response.invite_hash,
-  };
-}
+): CampaignDetails => ({
+  id: response.id,
+  dmed: response.is_dm,
+  name: response.name,
+  playerCount: response.characters.length,
+  slug: response.slug,
+  status: toCampaignStatus(response.status),
+  system: toGameSystem(response.system),
+  overview: response.overview,
+  characters: response.characters,
+  inviteHash: response.invite_hash,
+});
+
+export const mapCampaignFormData = (
+  data: CampaignCreateFormData,
+): CampaignCreateRequest => ({
+  name: data.name,
+  system: data.game_system,
+  overview: data.overview,
+});

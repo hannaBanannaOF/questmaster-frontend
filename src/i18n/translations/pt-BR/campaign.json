@@ -17,16 +17,67 @@
     "active": "Jogando"
   },
   "actions": {
-    "start": "Iniciar campanha",
-    "pause": "Pausar campanha",
-    "resume": "Resumir campanha",
-    "end": "Encerrar campanha",
-    "archive": "Arquivar campanha"
+    "start": "Iniciar",
+    "pause": "Pausar",
+    "resume": "Resumir",
+    "end": "Encerrar",
+    "archive": "Arquivar",
+    "delete": "Excluir"
   },
   "invite": {
     "create": "Criar convite",
     "copy": "Copiar",
     "copied": "Copiado"
   },
-  "characters": "Personagens"
+  "characters": "Personagens",
+  "create": {
+    "title": "Nova campanha",
+    "subtitle": "Comece uma nova jornada. Preencha os detalhes abaixo.",
+    "form": {
+      "name": {
+        "label": "Nome da campanha",
+        "placeholder": "Ex.: Curse of Strahd",
+        "errors": {
+          "required": "Campo \"Nome da campanha\" é obrigatório!"
+        }
+      },
+      "overview": {
+        "label": "Descrição",
+        "placeholder": "Uma breve descrição da sua campanha..."
+      },
+      "game_system": {
+        "label": "Sistema de jogo",
+        "errors": {
+          "required": "Campo \"Sistema de jogo\" é obrigatório!"
+        }
+      },
+      "submit": "Criar",
+      "cancel": "Cancelar"
+    }
+  },
+  "delete": {
+    "title": "Excluir campanha",
+    "confirm": "Isso removerá permanentemente <bold>{name}</bold> e todos os seus dados. Essa ação não pode ser desfeita.",
+    "cancel": "Cancelar",
+    "submit": "Excluir campanha"
+  },
+  "toast": {
+    "error": {
+      "list": "Não foi possível buscar campanhas!",
+      "create": "Não foi possível criar campanha!",
+      "delete": "Não foi possível excluir campanha!",
+      "update": "Não foi possível atualizar campanha!",
+      "detail": "Não foi possível acessar campanha!"
+    },
+    "success": {
+      "create": {
+        "title": "Nova campanha!",
+        "message": "\"{name}\" está pronta para aventura."
+      },
+      "delete": {
+        "title": "Campanha excluida!",
+        "message": "\"{name}\" foi excluída com sucesso."
+      }
+    }
+  }
 }

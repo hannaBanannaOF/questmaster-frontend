@@ -4,18 +4,18 @@ import { Shimmer } from 'shimmer-from-structure';
 import { useTheme } from 'styled-components';
 
 interface SkeletonProps extends PropsWithChildren {
-  loading?: boolean
+  loading?: boolean;
 }
 
-export function Skeleton(props: SkeletonProps) {
+export const Skeleton: React.FC<SkeletonProps> = ({ loading, children }) => {
   const theme = useTheme();
   return (
     <Shimmer
       backgroundColor={theme.colors.card.background}
-      loading={props.loading}
+      loading={loading}
       fallbackBorderRadius={8}
     >
-      {props.children}
+      {children}
     </Shimmer>
   );
-}
+};

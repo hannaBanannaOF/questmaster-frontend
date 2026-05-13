@@ -7,9 +7,11 @@ export interface ModalData {
   content: ReactNode;
 }
 
-interface ModalContextType {
+export interface ModalContextData {
   openModal: (data: ModalData) => void;
   closeModal: () => void;
 }
 
-export const ModalContext = createContext<ModalContextType | undefined>(undefined);
+export const ModalContext = createContext<ModalContextData>(
+  {} as ModalContextData,
+);

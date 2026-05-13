@@ -9,10 +9,15 @@ interface CardProps extends ComponentProps<'div'>, PropsWithChildren {
   compact?: boolean;
 }
 
-export function Card(props: CardProps) {
+export const Card: React.FC<CardProps> = ({
+  hover = false,
+  hero,
+  compact,
+  children,
+}) => {
   return (
-    <S.Card $hover={props.hover ?? true} $hero={props.hero} $compact={props.compact}>
-      {props.children}
+    <S.Card $hover={hover} $hero={hero} $compact={compact}>
+      {children}
     </S.Card>
   );
-}
+};

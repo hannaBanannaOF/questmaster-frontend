@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 
-export const Card = styled.div<{ $hover: boolean; $hero?: boolean; $compact?: boolean }>`
+export const Card = styled.div<{
+  $hover: boolean;
+  $hero?: boolean;
+  $compact?: boolean;
+}>`
   display: block;
   border-radius: ${({ theme }) => theme.radius.md};
   background-color: ${({ theme }) => theme.colors.card.background};
-  padding: ${({ theme, $compact }) => $compact ? theme.spacing.md : theme.spacing.lg};
+  padding: ${({ theme, $compact }) =>
+    $compact ? theme.spacing.md : theme.spacing.lg};
   border: 1px solid ${({ theme }) => theme.colors.card.border};
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

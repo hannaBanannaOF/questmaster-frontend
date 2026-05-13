@@ -8,18 +8,19 @@ export type CharacterListResponse = {
 
 export type CharacterDetailResponse = CharacterListResponse & {
   id: number;
+  is_player: boolean;
 };
 
 export type CharacterCreateRequest = {
   hp: number;
   name: string;
   system: string;
-}
+};
 
 export type CharacterUpdateHpRequest = {
   new_hp: number;
-}
+};
 
 export type CharacterCurrentHpResponse = {
   current_hp: number;
-}
+};

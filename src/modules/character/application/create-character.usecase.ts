@@ -1,6 +1,5 @@
 import { CharacterCreateFormData } from '../domain/character.schema';
-import { createCreateAPI } from '../infra/character.api';
+import { createCharacterAPI } from '../infra/character.api';
 
-export async function createCharacterUseCase(data: CharacterCreateFormData) {
-  await createCreateAPI(data);
-}
+export const createCharacterUseCase = (data: CharacterCreateFormData) =>
+  createCharacterAPI(data);

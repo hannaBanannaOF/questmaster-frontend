@@ -4,7 +4,7 @@ import { PropsWithChildren, useState } from 'react';
 import { Modal } from './Modal';
 import { ModalContext, ModalData } from './ModalContext';
 
-export function ModalProvider(props: PropsWithChildren) {
+export const ModalProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalData | null>(null);
 
@@ -17,13 +17,12 @@ export function ModalProvider(props: PropsWithChildren) {
 
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
-      {props.children}
-      {/* O componente Modal fica aqui para estar sempre disponível */}
+      {children}
       {modalData && (
-        <Modal 
-          isOpen={isOpen} 
-          onClose={closeModal} 
-          title={modalData.title} 
+        <Modal
+          isOpen={isOpen}
+          onClose={closeModal}
+          title={modalData.title}
           subtitle={modalData.subtitle}
         >
           {modalData.content}

@@ -10,14 +10,14 @@ interface HeaderProps extends PropsWithChildren {
   brand?: ReactNode;
 }
 
-export function Header(props: HeaderProps) {
+export const Header: React.FC<HeaderProps> = ({ brand, children }) => {
   return (
     <S.Header>
-      {props.brand}
-      {props.children}
+      {brand}
+      {children}
     </S.Header>
   );
-}
+};
 
 interface BrandProps {
   brandName: string | ReactNode;
@@ -25,24 +25,24 @@ interface BrandProps {
   icon?: ReactNode;
 }
 
-export function Brand(props: BrandProps) {
+export const Brand: React.FC<BrandProps> = ({ brandName, subtitle, icon }) => {
   return (
     <Container align="center">
-      {props.icon && <S.IconWrapper>{props.icon}</S.IconWrapper>}
+      {icon && <S.IconWrapper>{icon}</S.IconWrapper>}
       <Container direction="column" compact>
-        {typeof props.brandName === 'string' ? (
-          <Title order={2}>{props.brandName}</Title>
+        {typeof brandName === 'string' ? (
+          <Title order={2}>{brandName}</Title>
         ) : (
-          props.brandName
+          brandName
         )}
-        {typeof props.subtitle === 'string' ? (
-          <Text variant='muted' small>
-            {props.subtitle}
+        {typeof subtitle === 'string' ? (
+          <Text variant="muted" small>
+            {subtitle}
           </Text>
         ) : (
-          props.subtitle
+          subtitle
         )}
       </Container>
     </Container>
   );
-}
+};

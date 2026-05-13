@@ -4,6 +4,6 @@ interface DividerProps {
   vertical?: boolean;
 }
 
-export function Divider(props: DividerProps) {
-  return <S.StylesLine $vertical={props.vertical} />;
-}
+export const Divider: React.FC<DividerProps> = ({ vertical }) => {
+  return <S.StylesLine $vertical={vertical} />;
+};

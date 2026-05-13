@@ -1,6 +1,5 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+  "ts.tsserver.experimental.enableProjectDiagnostics": true,
   "i18n-ally.enabledParsers": ["json"],
   "i18n-ally.enabledFrameworks": ["next-intl"],
   "i18n-ally.keystyle": "nested",

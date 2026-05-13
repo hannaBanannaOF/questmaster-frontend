@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import { theme } from './styles/theme';
 import { ThemeContext } from './ThemeContext';
-import StyledComponentsRegistry from './ThemeRegistry';
+import { StyledComponentsRegistry } from './ThemeRegistry';
 import { BrightnessMode } from './types';
 
 function getInitialMode(): BrightnessMode {
@@ -14,10 +14,9 @@ function getInitialMode(): BrightnessMode {
   return attr === 'light' ? 'light' : 'dark';
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [mode, setMode] = useState<BrightnessMode>(getInitialMode);
 
-  // sincroniza HTML + storage
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', mode);
     localStorage.setItem('theme', mode);
@@ -34,4 +33,4 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       </StyledComponentsRegistry>
     </ThemeContext.Provider>
   );
-}
+};

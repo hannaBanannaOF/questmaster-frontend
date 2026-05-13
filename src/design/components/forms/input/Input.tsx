@@ -8,20 +8,23 @@ interface InputProps extends ComponentProps<'input'> {
   error?: string;
 }
 
-
-export function Input(props: InputProps ) {
-
-  const {label, ...inputProps} = props;
-  const fieldId = props.id ?? props.name;
+export const Input: React.FC<InputProps> = ({
+  label,
+  error,
+  ...inputProps
+}) => {
+  const fieldId = inputProps.id ?? inputProps.name;
 
   return (
     <Container compact direction="column" align="stretch">
-      { label && <S.InputLabel htmlFor={fieldId}>
-        {label}
-        {inputProps.required && <S.Required />}
-      </S.InputLabel>}
+      {label && (
+        <S.InputLabel htmlFor={fieldId}>
+          {label}
+          {inputProps.required && <S.Required />}
+        </S.InputLabel>
+      )}
       <S.InputBase id={fieldId} {...inputProps}></S.InputBase>
-      {props.error && <S.Error $small>{props.error}</S.Error>}
+      {error && <S.Error $small>{error}</S.Error>}
     </Container>
   );
-}
+};

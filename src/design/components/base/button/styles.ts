@@ -4,9 +4,11 @@ import styled, { css, DefaultTheme } from 'styled-components';
 import { ButtonColor, ButtonVariant } from './types';
 
 const getThemeColor = (theme: DefaultTheme, color: ButtonColor) => {
-  switch(color) {
-    case 'danger': return theme.colors.destructive;
-    default: return theme.colors.primary;
+  switch (color) {
+    case 'danger':
+      return theme.colors.destructive;
+    default:
+      return theme.colors.primary;
   }
 };
 
@@ -16,7 +18,9 @@ const variantStyles = (theme: DefaultTheme, color: ButtonColor) => ({
     color: ${theme.colors.text.primary};
     border: none;
     box-shadow: 0 4px 6px hsla(0 0% 0% / 0.1);
-    &:not(:disabled):hover { filter: brightness(1.2); }
+    &:not(:disabled):hover {
+      filter: brightness(1.2);
+    }
   `,
   outline: css`
     background-color: transparent;
@@ -33,14 +37,18 @@ const variantStyles = (theme: DefaultTheme, color: ButtonColor) => ({
     border: 0;
     color: ${theme.colors.text.contrast};
     box-shadow: 0 4px 6px hsla(0 0% 0% / 0.1);
-    &:hover { filter: brightness(1.1); }
+    &:hover {
+      filter: brightness(1.1);
+    }
   `,
   text: css`
     background-color: transparent;
     border: 0;
     font-weight: 600;
     color: ${theme.colors.text.muted};
-    &:not(:disabled):hover { color: ${theme.colors.text.primary}; }
+    &:not(:disabled):hover {
+      color: ${theme.colors.text.primary};
+    }
   `,
 });
 
@@ -72,19 +80,25 @@ export const Button = styled.button<{
     opacity: 0.6;
     filter: grayscale(0.5);
     box-shadow: none;
-    pointer-events: none; 
+    pointer-events: none;
   }
 
-  ${({ $loading }) => $loading && css`
-    cursor: wait;
-    opacity: 0.8;
-  `}
+  ${({ $loading }) =>
+    $loading &&
+    css`
+      cursor: wait;
+      opacity: 0.8;
+    `}
 `;
 
 export const LoadingIcon = styled(Loader)`
   @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   animation: spin 1s linear infinite;

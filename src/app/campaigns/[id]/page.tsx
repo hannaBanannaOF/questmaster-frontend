@@ -1,9 +1,14 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
-import { useCampaignDetails } from '@/src/modules/campaign/presentation/campaign.hooks';
-import { CampaignDetailsContainer } from '@/src/modules/campaign/presentation/campaign.ui';
+import { useToast } from '@/src/design';
+import {
+  CampaignDetailsContainer,
+  useCampaignDetails,
+} from '@/src/modules/campaign';
 
 export default function CampaignDetailPage() {
   const params = useParams();
@@ -19,8 +24,18 @@ export default function CampaignDetailPage() {
     throw new Error('Id must be a number');
   }
 
-  const { data, isFetching } = useCampaignDetails(id);
+  const { data, isPending, isError, error } = useCampaignDetails(id);
+  const router = useRouter();
+  const { addToast } = useToast();
+  const t = useTranslations('campaign.toast');
+
+  useEffect(() => {
+    if (isError) {
+      addToast(t('error.detail'), error.message, 'error');
+      router.replace('/campaigns');
+    }
+  }, [isError, router, error, addToast, t]);
   return (
-    data && <CampaignDetailsContainer campaign={data} loading={isFetching} />
+    data && <CampaignDetailsContainer campaign={data} loading={isPending} />
   );
 }

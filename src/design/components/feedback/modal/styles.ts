@@ -1,4 +1,4 @@
-import styled, { css,keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 const slideDown = keyframes`
   from { opacity: 0; transform: translateY(-30px); }
@@ -22,18 +22,23 @@ export const ModalOverlay = styled.div<{ $isLeaving: boolean }>`
   padding: ${({ theme }) => theme.spacing.lg};
   justify-content: center;
   z-index: 1000;
-  
+
   transition: opacity 0.3s ease;
-  ${({ $isLeaving }) => $isLeaving && css`opacity: 0;`}
+  ${({ $isLeaving }) =>
+    $isLeaving &&
+    css`
+      opacity: 0;
+    `}
 `;
 
 export const ModalCardWrapper = styled.div<{ $isLeaving: boolean }>`
   width: 100%;
   max-width: 500px;
   cursor: default;
-  
+
   /* Alterna a animação baseada no estado de saída */
-  animation: ${({ $isLeaving }) => ($isLeaving ? slideUp : slideDown)} 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: ${({ $isLeaving }) => ($isLeaving ? slideUp : slideDown)} 0.3s
+    cubic-bezier(0.4, 0, 0.2, 1) forwards;
 `;
 
 export const ModalCloseButton = styled.button`

@@ -2,7 +2,7 @@
 import { PropsWithChildren } from 'react';
 
 import * as S from './styles';
-import { ContainerAlign,ContainerDirection, ContainerJustify } from './types';
+import { ContainerAlign, ContainerDirection, ContainerJustify } from './types';
 
 interface ContainerProps extends PropsWithChildren {
   direction?: ContainerDirection;
@@ -11,15 +11,21 @@ interface ContainerProps extends PropsWithChildren {
   compact?: boolean;
 }
 
-export function Container(props: ContainerProps) {
+export const Container: React.FC<ContainerProps> = ({
+  direction,
+  align,
+  justify,
+  compact,
+  children,
+}) => {
   return (
     <S.Container
-      $compact={props.compact}
-      $align={props.align}
-      $direction={props.direction}
-      $justify={props.justify}
+      $compact={compact}
+      $align={align}
+      $direction={direction}
+      $justify={justify}
     >
-      {props.children}
+      {children}
     </S.Container>
   );
-}
+};

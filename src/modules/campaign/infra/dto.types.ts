@@ -22,6 +22,12 @@ export type CampaignDetailsResponse = {
   }[];
 };
 
+export type CampaignCreateRequest = {
+  name: string;
+  system: string;
+  overview?: string;
+};
+
 export type UpdateCampaignStatusRequest = {
   status: string;
 };

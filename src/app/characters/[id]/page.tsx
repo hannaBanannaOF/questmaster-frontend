@@ -5,8 +5,10 @@ import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 import { useToast } from '@/src/design';
-import { CharacterDetailContainer, useCharacterDetail } from '@/src/modules/character';
-
+import {
+  CharacterDetailContainer,
+  useCharacterDetail,
+} from '@/src/modules/character';
 
 export default function CharacterDetailPage() {
   const params = useParams();
@@ -27,7 +29,7 @@ export default function CharacterDetailPage() {
   const t = useTranslations('character.toast');
 
   useEffect(() => {
-    if (isError){
+    if (isError) {
       addToast(t('error.detail'), error.message, 'error');
       router.replace('/characters');
     }
