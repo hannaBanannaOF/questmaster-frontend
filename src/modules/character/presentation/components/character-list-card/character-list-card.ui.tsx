@@ -1,5 +1,6 @@
 import { ChevronRight, Heart } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'styled-components';
 
 import { Card, Container, IconSpan, Text, Title } from '@/src/design';
@@ -9,6 +10,7 @@ import { Character } from '../../../domain/character.types';
 
 export function CharacterListCard({ character }: { character: Character }) {
   const systemMeta = getGameSystemMeta(character.system);
+  const t = useTranslations('character.list');
   const theme = useTheme();
   return (
     <Link href={`/characters/${character.slug}`}>
@@ -25,7 +27,7 @@ export function CharacterListCard({ character }: { character: Character }) {
                 <IconSpan
                   color={theme.colors.destructive.default}
                   icon={<Heart size={16} display="flex" />}
-                  data={`${character.currentHp} HP`}
+                  data={t('hp', { value: character.currentHp })}
                 />
               )}
             </Container>

@@ -7,6 +7,7 @@ interface CardProps extends ComponentProps<'div'>, PropsWithChildren {
   hover?: boolean;
   hero?: boolean;
   compact?: boolean;
+  selected?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -14,9 +15,10 @@ export const Card: React.FC<CardProps> = ({
   hero,
   compact,
   children,
+  ...divProps
 }) => {
   return (
-    <S.Card $hover={hover} $hero={hero} $compact={compact}>
+    <S.Card $hover={hover} $hero={hero} $compact={compact} {...divProps}>
       {children}
     </S.Card>
   );

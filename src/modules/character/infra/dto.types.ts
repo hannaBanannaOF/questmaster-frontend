@@ -24,3 +24,8 @@ export type CharacterUpdateHpRequest = {
 export type CharacterCurrentHpResponse = {
   current_hp: number;
 };
+
+export type CharacterListFilters = {
+  game_system?: string;
+  without_campaign?: boolean;
+};

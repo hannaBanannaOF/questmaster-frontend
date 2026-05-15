@@ -1,6 +1,6 @@
 import styled, { DefaultTheme } from 'styled-components';
 
-import { CampaignStatus } from '../../domain';
+import { CampaignStatus } from '../../../domain';
 
 const statusStyles = (theme: DefaultTheme) => ({
   [CampaignStatus.DRAFT]: `

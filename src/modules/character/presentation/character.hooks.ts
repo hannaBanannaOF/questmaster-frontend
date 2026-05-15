@@ -13,14 +13,15 @@ import {
   updateCharacterHpUseCase,
 } from '../application';
 import { Character } from '../domain/character.types';
+import { CharacterListFilters } from '../infra/dto.types';
 
-export function useCharacters() {
+export function useCharacters(filters?: CharacterListFilters) {
   const t = useTranslations('character.toast');
   const { addToast } = useToast();
 
   const query = useQuery({
-    queryKey: ['characters'],
-    queryFn: getCharactersUseCase,
+    queryKey: filters ? ['characters', filters] : ['characters'],
+    queryFn: async () => getCharactersUseCase(filters),
   });
 
   const { error, isError } = query;
@@ -83,6 +84,7 @@ export function useDeleteCharacter() {
       const { id } = variables;
       queryClient.removeQueries({ queryKey: ['characters', id] });
       await queryClient.invalidateQueries({ queryKey: ['characters'] });
+      await queryClient.invalidateQueries({ queryKey: ['campaigns'] });
       addToast(
         t('success.delete.title'),
         t('success.delete.message', { name: variables.name }),
@@ -125,14 +127,17 @@ export function useUpdateHP() {
       );
 
       if (previousCharacter?.slug) {
-        queryClient.setQueryData(['characters'], (oldList?: Character[]) => {
-          if (!Array.isArray(oldList)) return oldList;
-          return oldList.map((char: Character) =>
-            char.slug === previousCharacter.slug
-              ? { ...char, currentHp: newHp }
-              : char,
-          );
-        });
+        queryClient.setQueriesData(
+          { queryKey: ['characters'] },
+          (oldList?: Character[]) => {
+            if (!Array.isArray(oldList)) return oldList;
+            return oldList.map((char: Character) =>
+              char.slug === previousCharacter.slug
+                ? { ...char, currentHp: newHp }
+                : char,
+            );
+          },
+        );
       }
 
       return { previousCharacter, previousList };
@@ -149,8 +154,7 @@ export function useUpdateHP() {
       }
       addToast(t('error.update'), error.message, 'error');
     },
-    onSettled: (data, error, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['characters', variables.id] });
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['characters'] });
     },
   });

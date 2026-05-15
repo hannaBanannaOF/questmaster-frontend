@@ -61,10 +61,10 @@ export function createHttpClient(
 ) {
   const baseUrl = getEnv('CORE_API_URL');
 
-  const request = async <T, J>(
+  const request = async <Response, RequestBody>(
     input: RequestInfo,
     init?: RequestInit,
-  ): Promise<T> => {
+  ): Promise<Response> => {
     const response = await fetch(input, {
       credentials: 'include',
       ...init,
@@ -77,28 +77,58 @@ export function createHttpClient(
 
       throw {
         status: response.status,
-        message: data?.message ?? 'Request failed',
+        message:
+          response.status === 500
+            ? 'Internal Server Error'
+            : (data?.message ?? 'Request failed'),
         data,
-      } satisfies HttpError<J>;
+      } satisfies HttpError<RequestBody>;
     }
 
     return await parseResponse(response);
   };
 
-  const buildUrl = (uri: string, apiVersion = 1) =>
-    `${baseUrl}/${ms}/api/v${apiVersion}/${uri}`;
+  const buildUrl = <QueryParams>(
+    uri: string,
+    params?: QueryParams,
+    apiVersion = 1,
+  ) => {
+    let url = `${baseUrl}/${ms}/api/v${apiVersion}/${uri}`;
+    if (params) {
+      const queryParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, String(value));
+        }
+      });
+      const queryString = queryParams.toString();
+      if (queryString) {
+        url += `?${queryString}`;
+      }
+    }
+    return url;
+  };
 
   return {
-    get: <T>(uri: string, v = 1) =>
-      request<T, undefined>(buildUrl(uri, v), {
+    get: <Response, QueryParams = undefined>(
+      uri: string,
+      params?: QueryParams,
+      v = 1,
+    ) =>
+      request<Response, undefined>(buildUrl<QueryParams>(uri, params, v), {
         headers: buildHeaders({
           sessionToken: sessionToken,
           originalUrl: originalUrl,
         }),
       }),
 
-    post: <T, J>(uri: string, data?: J, v = 1) =>
-      request<T, J>(buildUrl(uri, v), {
+    post: <Response, RequestBody, QueryParams = undefined>(
+      uri: string,
+      data?: RequestBody,
+      params?: QueryParams,
+      v = 1,
+    ) =>
+      request<Response, RequestBody>(buildUrl<QueryParams>(uri, params, v), {
         method: 'POST',
         headers: buildHeaders({
           useData: data !== undefined,
@@ -108,8 +138,13 @@ export function createHttpClient(
         body: data ? JSON.stringify(data) : undefined,
       }),
 
-    patch: <T, J>(uri: string, data?: J, v = 1) =>
-      request<T, J>(buildUrl(uri, v), {
+    patch: <Response, RequestBody, QueryParams = undefined>(
+      uri: string,
+      data?: RequestBody,
+      params?: QueryParams,
+      v = 1,
+    ) =>
+      request<Response, RequestBody>(buildUrl<QueryParams>(uri, params, v), {
         method: 'PATCH',
         headers: buildHeaders({
           useData: data !== undefined,
@@ -119,8 +154,12 @@ export function createHttpClient(
         body: data ? JSON.stringify(data) : undefined,
       }),
 
-    delete: <T>(uri: string, v = 1) =>
-      request<T, undefined>(buildUrl(uri, v), {
+    delete: <Response, QueryParams = undefined>(
+      uri: string,
+      params?: QueryParams,
+      v = 1,
+    ) =>
+      request<Response, undefined>(buildUrl<QueryParams>(uri, params, v), {
         method: 'DELETE',
         headers: buildHeaders({
           sessionToken: sessionToken,

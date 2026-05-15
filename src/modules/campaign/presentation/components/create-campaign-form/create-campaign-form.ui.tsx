@@ -11,8 +11,8 @@ import { getGameSystemSelectValues } from '@/src/modules/rpg';
 import {
   CampaignCreateFormData,
   campaignCreateSchema,
-} from '../../domain/campaign.schema';
-import { useCreateCampaign } from '../campaign.hooks';
+} from '../../../domain/campaign.schema';
+import { useCreateCampaign } from '../../campaign.hooks';
 
 interface CreateCampaignFormProps {
   onSuccess: () => void;

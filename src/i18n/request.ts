@@ -3,7 +3,7 @@ import { getRequestConfig } from 'next-intl/server';
 export default getRequestConfig(async ({ requestLocale }) => {
   const locale = (await requestLocale) ?? 'pt-BR';
 
-  const namespaces = ['common', 'campaign', 'character'];
+  const namespaces = ['common', 'campaign', 'character', 'invite'];
 
   const messages = Object.fromEntries(
     await Promise.all(

@@ -24,11 +24,6 @@
     "archive": "Arquivar",
     "delete": "Excluir"
   },
-  "invite": {
-    "create": "Criar convite",
-    "copy": "Copiar",
-    "copied": "Copiado"
-  },
   "characters": "Personagens",
   "create": {
     "title": "Nova campanha",

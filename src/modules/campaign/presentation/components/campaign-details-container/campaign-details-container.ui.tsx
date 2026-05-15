@@ -1,4 +1,4 @@
-import { Archive, Link2, Pause, Play, Trash2, Users } from 'lucide-react';
+import { Archive, Pause, Play, Trash2, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ReactNode, useCallback, useMemo } from 'react';
 import { useTheme } from 'styled-components';
@@ -15,10 +15,11 @@ import {
   Title,
   useModal,
 } from '@/src/design';
+import { InviteContainer } from '@/src/modules/invite';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
 
-import { CampaignDetails, CampaignStatus } from '../../domain';
-import { useUpdateCampaignStatus } from '../campaign.hooks';
+import { CampaignDetails, CampaignStatus } from '../../../domain';
+import { useUpdateCampaignStatus } from '../../campaign.hooks';
 import { getDeleteModalConfig } from '../delete-campaign-modal/delete-campaign-modal.ui';
 import { DmBadge } from '../dm-badge/dm-badge.ui';
 import { StatusBadge } from '../status-badge/status-badge.ui';
@@ -88,7 +89,7 @@ export function CampaignDetailsContainer({
   const t = useTranslations('campaign');
   const theme = useTheme();
   const systemMeta = getGameSystemMeta(campaign.system);
-  const { mutate: updateCampaignStatus } = useUpdateCampaignStatus();
+  const { mutate: updateCampaignStatus, isPending } = useUpdateCampaignStatus();
 
   const actions = useMemo(
     () => getAvailableStatusActions(campaign),
@@ -173,14 +174,16 @@ export function CampaignDetailsContainer({
                     text={t(action.label)}
                     icon={action.icon}
                     onClick={() => handleUpdateStatusClick(action.nextStatus)}
+                    loading={isPending}
                   />
                 ))}
                 {actions.length > 0 && <Divider vertical />}
-                {!campaign.inviteHash && (
-                  <Button
-                    icon={<Link2 size={12} display="flex" />}
-                    variant="outline"
-                    text={t('invite.create')}
+                {![CampaignStatus.PAUSED, CampaignStatus.ARCHIVED].includes(
+                  campaign.status,
+                ) && (
+                  <InviteContainer
+                    campaignId={campaign.id}
+                    hash={campaign.inviteHash}
                   />
                 )}
               </Container>

@@ -1,0 +1,27 @@
+{
+  "copy": "Copiar",
+  "copied": "Copiado!",
+  "create": "Criar convite",
+  "invited": "Você foi convidado para",
+  "toast": {
+    "success": {
+      "create": {
+        "title": "Convite criado!",
+        "message": "Copie o link de convite e envie para a sua party."
+      },
+      "join": {
+        "title": "Convite aceito!",
+        "message": "Você se juntou a campanha \"{name}\""
+      }
+    },
+    "error": {
+      "create": "Não foi possível criar o convite!",
+      "detail": "Não foi possível acessar o convite!",
+      "join": "Não foi possível se juntar a campanha!"
+    }
+  },
+  "character": {
+    "choose": "Escolha seu personagem"
+  },
+  "join": "Juntar-se a campanha"
+}

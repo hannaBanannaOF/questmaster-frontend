@@ -15,6 +15,7 @@ const variantStyles = (theme: DefaultTheme) => ({
 export const Text = styled.p<{
   $variant?: TextVariant;
   $small?: boolean;
+  $uppercase?: boolean;
 }>`
   ${({ $variant, theme }) => $variant && variantStyles(theme)[$variant]};
 
@@ -22,5 +23,11 @@ export const Text = styled.p<{
     $small &&
     css`
       font-size: ${theme.typography.body.fontSize.sm};
+    `}
+
+  ${({ $uppercase }) =>
+    $uppercase &&
+    css`
+      text-transform: uppercase;
     `}
 `;

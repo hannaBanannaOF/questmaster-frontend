@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 
 import { Button, Container, Text } from '@/src/design';
 
-import { useDeleteCampaign } from '../campaign.hooks';
+import { useDeleteCampaign } from '../../campaign.hooks';
 
 interface DeleteCampaignConfirmationProps {
   id: number;

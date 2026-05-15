@@ -20,7 +20,7 @@ function DeleteCharacterConfirmation({
   onSuccess,
   onCancel,
 }: DeleteCharacterConfirmationProps) {
-  const t = useTranslations('campaign.delete');
+  const t = useTranslations('character.delete');
   const router = useRouter();
   const { mutate: deleteCharacter, isPending } = useDeleteCharacter();
 

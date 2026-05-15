@@ -65,14 +65,14 @@ export function StatusBar({
             text=""
             icon={<Minus display="flex" size={14} />}
             disabled={current <= 0}
-            onClick={increaseValue}
+            onClick={decreaseValue}
           />
           <Button
             variant="muted"
             text=""
             icon={<Plus display="flex" size={14} />}
             disabled={current == max}
-            onClick={decreaseValue}
+            onClick={increaseValue}
           />
         </Container>
       )}

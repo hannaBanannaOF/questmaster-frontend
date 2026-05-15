@@ -11,14 +11,20 @@ import {
   CharacterCreateRequest,
   CharacterCurrentHpResponse,
   CharacterDetailResponse,
+  CharacterListFilters,
   CharacterListResponse,
   CharacterUpdateHpRequest,
 } from './dto.types';
 
 const client = createHttpClient(Microservices.core);
 
-export const getCharactersAPI = async () =>
-  mapCharacterList(await client.get<CharacterListResponse[]>('character'));
+export const getCharactersAPI = async (filters?: CharacterListFilters) =>
+  mapCharacterList(
+    await client.get<CharacterListResponse[], CharacterListFilters>(
+      'character',
+      filters,
+    ),
+  );
 
 export const getCharacterDetailAPI = async (id: number) =>
   mapCharacterDetail(
@@ -34,8 +40,10 @@ export const createCharacterAPI = async (data: CharacterCreateFormData) =>
 export const deleteCharacterAPI = async (id: number) =>
   client.delete(`character/${id}`);
 
-export const updateCharacterHpAPI = async (newHp: number, id: number) =>
-  client.patch<CharacterCurrentHpResponse, CharacterUpdateHpRequest>(
-    `character/${id}/hp`,
-    mapHpRequest(newHp),
-  );
+export const updateCharacterHpAPI = async (newHp: number, id: number) => {
+  const data = await client.patch<
+    CharacterCurrentHpResponse,
+    CharacterUpdateHpRequest
+  >(`character/${id}/hp`, mapHpRequest(newHp));
+  return data.current_hp;
+};

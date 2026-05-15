@@ -5,7 +5,7 @@ import { useTheme } from 'styled-components';
 import { Card, Container, IconSpan, Text, Title } from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
 
-import { Campaign } from '../../domain';
+import { Campaign } from '../../../domain';
 import { DmBadge } from '../dm-badge/dm-badge.ui';
 import { StatusBadge } from '../status-badge/status-badge.ui';
 

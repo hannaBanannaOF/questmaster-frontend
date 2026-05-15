@@ -3,6 +3,7 @@
     "title": "Personagens",
     "new": "Novo personagem",
     "loading": "Carregando personagens...",
+    "hp": "{value} PV",
     "empty": {
       "title": "Ainda sem heróis",
       "message": "Sua party está vazia. Crie seu primeiro personagem para começar a aventura",
