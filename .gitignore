@@ -36,3 +36,11 @@ yarn-error.log*
 next-env.d.ts
 
 /src/old_app
+
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+!.vscode/extensions.json
+
+.env

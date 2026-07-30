@@ -1,4 +1,3 @@
-import { getEnv } from '../env';
 import { HttpError } from './http.types';
 import { Microservices } from './services.types';
 
@@ -22,7 +21,7 @@ function buildHeaders({
 
   if (sessionToken) {
     headers['Cookie'] =
-      `${getEnv('SESSION_COOKIE_NAME') ?? ''}=${sessionToken}`;
+      `${process.env.SESSION_COOKIE_NAME ?? ''}=${sessionToken}`;
   }
 
   if (useData) {
@@ -59,7 +58,7 @@ export function createHttpClient(
   sessionToken?: string,
   originalUrl?: string,
 ) {
-  const baseUrl = getEnv('CORE_API_URL');
+  const baseUrl = process.env.CORE_API_URL ?? '';
 
   const request = async <Response, RequestBody>(
     input: RequestInfo,

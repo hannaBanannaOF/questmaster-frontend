@@ -2,7 +2,6 @@ import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { getEnv } from './lib/env';
 import { createHttpClient } from './lib/http/http.client';
 import { isHttpError } from './lib/http/http.types';
 import { Microservices } from './lib/http/services.types';
@@ -20,7 +19,7 @@ export async function proxy(req: NextRequest) {
     const cookieStore = await cookies();
 
     const sessionToken = cookieStore.get(
-      getEnv('SESSION_COOKIE_NAME') ?? '',
+      process.env.SESSION_COOKIE_NAME ?? '',
     )?.value;
     const client = createHttpClient(
       Microservices.core,
@@ -51,7 +50,7 @@ export async function proxy(req: NextRequest) {
     const cookieStore = await cookies();
 
     const sessionToken = cookieStore.get(
-      getEnv('SESSION_COOKIE_NAME') ?? '',
+      process.env.SESSION_COOKIE_NAME ?? '',
     )?.value;
     const client = createHttpClient(
       Microservices.core,
