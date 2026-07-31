@@ -21,10 +21,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@tanstack/query-broadcast-client-experimental": "5.52.1",
-    "@tanstack/react-query": "5.52.1",
-    "@tanstack/react-query-devtools": "5.52.2",
-    "@tanstack/react-query-next-experimental": "5.52.2",
+    "@tanstack/query-broadcast-client-experimental": "5.67.1",
+    "@tanstack/react-query": "5.67.1",
+    "@tanstack/react-query-devtools": "5.67.1",
+    "@tanstack/react-query-next-experimental": "5.67.1",
     "dayjs": "1.11.13",
     "lucide-react": "^1.7.0",
     "next": "16.0.0",
@@ -38,14 +38,12 @@
     "yup": "1.7.1"
   },
   "resolutions": {
-    "@tanstack/query-core": "5.52.1",
-    "@tanstack/react-query": "5.52.1",
-    "@tanstack/query-broadcast-client-experimental": "5.52.1"
+    "@tanstack/query-core": "5.67.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^10.0.1",
-    "@tanstack/eslint-plugin-query": "^5.95.2",
+    "@tanstack/eslint-plugin-query": "^5.67.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
