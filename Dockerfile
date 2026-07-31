@@ -21,15 +21,14 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
+ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Criar a pasta public e dar permissão ao usuário nextjs
-RUN mkdir -p public && chown nextjs:nodejs public
-
-# Copiar os arquivos gerados pelo standalone do Next.js
-COPY --from=builder /app/public ./public
+# Copiar os arquivos estáticos e o build standalone garantindo a permissão do usuário não-root
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -38,7 +37,5 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT=3000
-
-# Executar diretamente o servidor Node gerado pelo Next.js
+# Executar o servidor Node gerado pelo Next.js
 CMD ["node", "server.js"]
