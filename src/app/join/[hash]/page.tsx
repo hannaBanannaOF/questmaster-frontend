@@ -33,5 +33,7 @@ export default function JoinCampaignPage() {
     }
   }, [isError, router, error, addToast, t]);
 
-  return data && <InviteDetailsContainer invite={data} loading={isFetching} />;
+  if (!data) return null;
+
+  return <InviteDetailsContainer invite={data} loading={isFetching} />;
 }
