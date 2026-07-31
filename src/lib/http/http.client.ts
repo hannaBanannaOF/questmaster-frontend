@@ -59,7 +59,7 @@ export function createHttpClient(
   originalUrl?: string,
 ) {
   const baseUrl = process.env.CORE_API_URL ?? '';
-
+  console.log(baseUrl);
   const request = async <Response, RequestBody>(
     input: RequestInfo,
     init?: RequestInit,
