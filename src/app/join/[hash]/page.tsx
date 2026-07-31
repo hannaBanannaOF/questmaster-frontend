@@ -33,7 +33,7 @@ export default function JoinCampaignPage() {
     }
   }, [isError, router, error, addToast, t]);
 
-  if (!data) return null;
+  if (!data || !('inviteHash' in data)) return null;
 
   return <InviteDetailsContainer invite={data} loading={isFetching} />;
 }
