@@ -17,7 +17,8 @@
   "overrides": {
     "@tanstack/eslint-plugin-query": {
       "eslint": "$eslint"
-    }
+    },
+    "@shimmer-from-structure/solid": "$npm_package_version"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -38,7 +39,8 @@
     "yup": "1.7.1"
   },
   "resolutions": {
-    "@tanstack/query-core": "5.67.1"
+    "@tanstack/query-core": "5.67.1",
+    "shimmer-from-structure/**/@shimmer-from-structure/solid": "2.4.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
