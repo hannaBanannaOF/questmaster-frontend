@@ -40,7 +40,7 @@ export function useInviteDetails(hash: string) {
     placeholderData: (prev) =>
       prev ?? {
         inviteHash: 'placeholder',
-        campaignId: 0,
+        campaignSlug: 'placeholder',
         campaignName: 'Placeholder',
         campaignPlayerCount: 0,
         campaignSystem: GameSystem.CALL_OF_CTHULHU,
