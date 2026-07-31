@@ -58,7 +58,7 @@ export function createHttpClient(
   sessionToken?: string,
   originalUrl?: string,
 ) {
-  const baseUrl = process.env.CORE_API_URL ?? '';
+  const baseUrl = '/api/proxy';
   const request = async <Response, RequestBody>(
     input: RequestInfo,
     init?: RequestInit,
