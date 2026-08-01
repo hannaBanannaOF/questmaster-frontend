@@ -1,3 +1,5 @@
+'use client';
+
 import { Crown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'styled-components';

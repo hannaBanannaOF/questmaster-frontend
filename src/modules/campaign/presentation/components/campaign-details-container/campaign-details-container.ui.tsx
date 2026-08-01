@@ -1,3 +1,5 @@
+'use client';
+
 import { Archive, Pause, Play, Trash2, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ReactNode, useCallback, useMemo } from 'react';

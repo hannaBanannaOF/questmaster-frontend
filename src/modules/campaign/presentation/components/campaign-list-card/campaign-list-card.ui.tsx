@@ -1,3 +1,5 @@
+'use client';
+
 import { ChevronRight, Users } from 'lucide-react';
 import Link from 'next/link';
 import { useTheme } from 'styled-components';
