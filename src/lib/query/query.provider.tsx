@@ -10,6 +10,8 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
+import { useEffect, useState } from 'react';
+import { loadRuntimeConfig } from '../config/env';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -40,6 +42,14 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
     queryClient: client,
     broadcastChannel: 'questmaster-sync'
   });
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    loadRuntimeConfig().finally(() => setIsLoaded(true));
+  }, []);
+
+  if (!isLoaded) return null;
 
   return (
     <QueryClientProvider client={client}>

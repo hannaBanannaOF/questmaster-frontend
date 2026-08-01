@@ -1,5 +1,6 @@
 import { HttpError } from './http.types';
 import { Microservices } from './services.types';
+import { getRuntimeConfig } from '@/src/lib/config/env';
 
 async function parseResponse(response: Response) {
   if (response.status === 204) return null;
@@ -19,9 +20,11 @@ function buildHeaders({
 }) {
   const headers: Record<string, string> = {};
 
+  const config = typeof window !== 'undefined' ? getRuntimeConfig() : process.env;
+
   if (sessionToken) {
     headers['Cookie'] =
-      `${process.env.SESSION_COOKIE_NAME ?? ''}=${sessionToken}`;
+      `${config.SESSION_COOKIE_NAME ?? ''}=${sessionToken}`;
   }
 
   if (useData) {
@@ -58,7 +61,8 @@ export function createHttpClient(
   sessionToken?: string,
   originalUrl?: string,
 ) {
-  const baseUrl = '/api/proxy';
+  const config = typeof window !== 'undefined' ? getRuntimeConfig() : process.env;
+  const baseUrl = config.CORE_API_URL;
   const request = async <Response, RequestBody>(
     input: RequestInfo,
     init?: RequestInit,
