@@ -2,12 +2,15 @@ import { createHttpClient } from '@/src/lib/http/http.client';
 import { Microservices } from '@/src/lib/http/services.types';
 
 import {
+  CampaignRepository,
+  CreateCampaignInput,
+} from '../application/campaign.repository';
+import { Campaign, CampaignDetails, CampaignStatus } from '../domain';
+import {
+  mapCampaignCreateInput,
   mapCampaignDetails,
-  mapCampaignFormData,
   mapCampaignList,
-} from '../campaign.mapper';
-import { CampaignCreateFormData } from '../domain/campaign.schema';
-import { CampaignStatus } from '../domain/campaign-status.types';
+} from './campaign.mapper';
 import {
   CampaignCreateRequest,
   CampaignDetailsResponse,
@@ -18,33 +21,41 @@ import {
 
 const client = createHttpClient(Microservices.core);
 
-export const getCampaignsAPI = async () =>
-  mapCampaignList(await client.get<CampaignListResponse[]>('campaign'));
+export const campaignApiRepository: CampaignRepository = {
+  async getCampaigns(): Promise<Campaign[]> {
+    const response = await client.get<CampaignListResponse[]>('campaign');
+    return mapCampaignList(response);
+  },
 
-export const getCampaignDetailsAPI = async (id: number) =>
-  mapCampaignDetails(
-    await client.get<CampaignDetailsResponse>(`campaign/${id}`),
-  );
+  async getCampaignDetails(id: number): Promise<CampaignDetails> {
+    const response = await client.get<CampaignDetailsResponse>(
+      `campaign/${id}`,
+    );
+    return mapCampaignDetails(response);
+  },
 
-export const createCampaignAPI = (data: CampaignCreateFormData) =>
-  client.post<undefined, CampaignCreateRequest>(
-    'campaign',
-    mapCampaignFormData(data),
-  );
+  async createCampaign(data: CreateCampaignInput): Promise<void> {
+    await client.post<undefined, CampaignCreateRequest>(
+      'campaign',
+      mapCampaignCreateInput(data),
+    );
+  },
 
-export const deleteCampaignAPI = (id: number) =>
-  client.delete(`campaign/${id}`);
+  async deleteCampaign(id: number): Promise<void> {
+    await client.delete(`campaign/${id}`);
+  },
 
-export const updateCampaignStatusAPI = async (
-  id: number,
-  newStatus: CampaignStatus,
-) => {
-  const data = await client.patch<
-    UpdateCampaignStatusResponse,
-    UpdateCampaignStatusRequest
-  >(`campaign/${id}/status`, {
-    status: newStatus.toString(),
-  });
+  async updateCampaignStatus(
+    id: number,
+    newStatus: CampaignStatus,
+  ): Promise<CampaignStatus> {
+    const data = await client.patch<
+      UpdateCampaignStatusResponse,
+      UpdateCampaignStatusRequest
+    >(`campaign/${id}/status`, {
+      status: newStatus.toString(),
+    });
 
-  return CampaignStatus[data.status as keyof typeof CampaignStatus];
+    return CampaignStatus[data.status as keyof typeof CampaignStatus];
+  },
 };

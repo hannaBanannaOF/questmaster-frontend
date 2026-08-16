@@ -1,3 +1,3 @@
 export * from './application';
-export * from './domain/user.types';
+export * from './domain';
 export * from './presentation';

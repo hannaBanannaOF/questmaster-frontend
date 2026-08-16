@@ -1,2 +1,3 @@
-export * from './components/invite-container/invite-container.ui';
-export * from './intive.hooks';
+export * from './components';
+export * from './invite.hooks';
+export * from './invite.queries';

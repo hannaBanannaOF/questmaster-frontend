@@ -1,28 +1,25 @@
+'use client';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 import { useToast } from '@/src/design';
 
-import { GameSystem } from '../../rpg/domain/game-system.types';
 import {
   createCharacterUseCase,
   deleteCharacterUseCase,
-  getCharacterDetailUseCase,
-  getCharactersUseCase,
   updateCharacterHpUseCase,
 } from '../application';
-import { Character } from '../domain/character.types';
+import { Character, CharacterDetail } from '../domain';
 import { CharacterListFilters } from '../infra/dto.types';
+import { characterQueries } from './character.queries';
 
 export function useCharacters(filters?: CharacterListFilters) {
   const t = useTranslations('character.toast');
   const { addToast } = useToast();
 
-  const query = useQuery({
-    queryKey: filters ? ['characters', filters] : ['characters'],
-    queryFn: async () => getCharactersUseCase(filters),
-  });
+  const query = useQuery(characterQueries.list(filters));
 
   const { error, isError } = query;
 
@@ -36,30 +33,20 @@ export function useCharacters(filters?: CharacterListFilters) {
 }
 
 export function useCharacterDetail(id: number) {
-  return useQuery({
-    queryKey: ['characters', id],
-    queryFn: () => getCharacterDetailUseCase(id),
-    placeholderData: (prev) =>
-      prev ?? {
-        id: 0,
-        slug: 'placeholder',
-        name: 'Placeholder',
-        system: GameSystem.CALL_OF_CTHULHU,
-        currentHp: 0,
-        maxHp: 0,
-        isPlayer: false,
-      },
-  });
+  return useQuery(characterQueries.detail(id));
 }
 
 export function useCreateCharacter() {
   const queryClient = useQueryClient();
   const { addToast } = useToast();
   const t = useTranslations('character.toast');
+
   return useMutation({
     mutationFn: createCharacterUseCase,
     onSuccess: async (data, variables) => {
-      await queryClient.invalidateQueries({ queryKey: ['characters'] });
+      await queryClient.invalidateQueries({
+        queryKey: characterQueries.all(),
+      });
       addToast(
         t('success.create.title'),
         t('success.create.message', { name: variables.name }),
@@ -80,14 +67,17 @@ export function useDeleteCharacter() {
   return useMutation({
     mutationFn: ({ id }: { id: number; name: string }) =>
       deleteCharacterUseCase(id),
-    onSuccess: async (_, variables) => {
-      const { id } = variables;
-      queryClient.removeQueries({ queryKey: ['characters', id] });
-      await queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSuccess: async (_, { id, name }) => {
+      queryClient.removeQueries({
+        queryKey: characterQueries.detail(id).queryKey,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: characterQueries.all(),
+      });
       await queryClient.invalidateQueries({ queryKey: ['campaigns'] });
       addToast(
         t('success.delete.title'),
-        t('success.delete.message', { name: variables.name }),
+        t('success.delete.message', { name }),
         'success',
       );
     },
@@ -104,31 +94,30 @@ export function useUpdateHP() {
 
   return useMutation({
     mutationFn: ({ newHp, id }: { newHp: number; id: number }) =>
-      updateCharacterHpUseCase(newHp, id),
+      updateCharacterHpUseCase(id, newHp),
 
     onMutate: async ({ newHp, id }) => {
+      const detailQueryKey = characterQueries.detail(id).queryKey;
+      const listQueryKey = characterQueries.all();
+
       await Promise.all([
-        queryClient.cancelQueries({ queryKey: ['characters', id] }),
-        queryClient.cancelQueries({ queryKey: ['characters'] }),
+        queryClient.cancelQueries({ queryKey: detailQueryKey }),
+        queryClient.cancelQueries({ queryKey: listQueryKey }),
       ]);
 
-      const previousCharacter = queryClient.getQueryData<Character>([
-        'characters',
-        id,
-      ]);
-      const previousList = queryClient.getQueryData<Character[]>([
-        'characters',
-      ]);
+      const previousCharacter =
+        queryClient.getQueryData<CharacterDetail>(detailQueryKey);
+      const previousList = queryClient.getQueryData<Character[]>(listQueryKey);
 
       queryClient.setQueryData(
-        ['characters', id],
-        (oldCharacter?: Character) =>
+        detailQueryKey,
+        (oldCharacter?: CharacterDetail) =>
           oldCharacter ? { ...oldCharacter, currentHp: newHp } : undefined,
       );
 
       if (previousCharacter?.slug) {
         queryClient.setQueriesData(
-          { queryKey: ['characters'] },
+          { queryKey: listQueryKey },
           (oldList?: Character[]) => {
             if (!Array.isArray(oldList)) return oldList;
             return oldList.map((char: Character) =>
@@ -143,19 +132,22 @@ export function useUpdateHP() {
       return { previousCharacter, previousList };
     },
     onError: (error, variables, context) => {
+      const detailQueryKey = characterQueries.detail(variables.id).queryKey;
+      const listQueryKey = characterQueries.all();
+
       if (context?.previousCharacter) {
-        queryClient.setQueryData(
-          ['characters', variables.id],
-          context.previousCharacter,
-        );
+        queryClient.setQueryData<CharacterDetail>(detailQueryKey, context.previousCharacter);
       }
       if (context?.previousList) {
-        queryClient.setQueryData(['characters'], context.previousList);
+        queryClient.setQueryData(listQueryKey, context.previousList);
       }
       addToast(t('error.update'), error.message, 'error');
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['characters'] });
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: characterQueries.detail(variables.id).queryKey,
+      });
+      queryClient.invalidateQueries({ queryKey: characterQueries.all() });
     },
   });
 }

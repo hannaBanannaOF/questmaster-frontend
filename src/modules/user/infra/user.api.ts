@@ -1,9 +1,13 @@
 import { createHttpClient, Microservices } from '@/src/lib/http';
 
-import { mapUserInfo } from '../user.mapper';
+import { UserRepository } from '../application/user.repository';
 import { UserInfoResponse } from './dto.types';
+import { mapUserInfo } from './user.mapper';
 
 const client = createHttpClient(Microservices.core);
 
-export const getUserInfo = async () =>
-  mapUserInfo(await client.get<UserInfoResponse>('user'));
+export const userApiRepository: UserRepository = {
+  async getUserInfo() {
+    return mapUserInfo(await client.get<UserInfoResponse>('user'));
+  },
+};

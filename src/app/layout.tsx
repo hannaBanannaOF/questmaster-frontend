@@ -6,7 +6,6 @@ import isToday from 'dayjs/plugin/isToday';
 import locallizedFormat from 'dayjs/plugin/localizedFormat';
 import { ScrollText } from 'lucide-react';
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
@@ -24,7 +23,7 @@ import {
 } from '../design';
 import { cinzel, nunito } from '../design/theme/styles/typography';
 import { QueryProvider } from '../lib/query/query.provider';
-import { UserTag } from '../modules/user/presentation/user.ui';
+import { UserTag } from '../modules/user';
 
 export const metadata: Metadata = {
   title: 'QuestMaster',
@@ -56,7 +55,6 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <Script src="/env-config.js" strategy="beforeInteractive" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

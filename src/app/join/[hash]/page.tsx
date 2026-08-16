@@ -4,8 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
 import { useToast } from '@/src/design';
-import { useInviteDetails } from '@/src/modules/invite';
-import { InviteDetailsContainer } from '@/src/modules/invite/presentation/components/invite-details-container/invite-details-container.ui';
+import { InviteDetailsContainer, useInviteDetails } from '@/src/modules/invite';
 
 export default function JoinCampaignPage() {
   const params = useParams();

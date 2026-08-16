@@ -1,12 +1,15 @@
 import { createHttpClient, Microservices } from '@/src/lib/http';
 
 import {
+  CharacterRepository,
+  CreateCharacterInput,
+} from '../application/character.repository';
+import { Character, CharacterDetail } from '../domain';
+import {
   mapCharacterDetail,
-  mapCharacterFormData,
   mapCharacterList,
   mapHpRequest,
-} from '../character.mapper';
-import { CharacterCreateFormData } from '../domain/character.schema';
+} from './character.mapper';
 import {
   CharacterCreateRequest,
   CharacterCurrentHpResponse,
@@ -18,32 +21,39 @@ import {
 
 const client = createHttpClient(Microservices.core);
 
-export const getCharactersAPI = async (filters?: CharacterListFilters) =>
-  mapCharacterList(
-    await client.get<CharacterListResponse[], CharacterListFilters>(
-      'character',
-      filters,
-    ),
-  );
+export const characterApiRepository: CharacterRepository = {
+  async getCharacters(filters?: CharacterListFilters): Promise<Character[]> {
+    const response = await client.get<
+      CharacterListResponse[],
+      CharacterListFilters
+    >('character', filters);
+    return mapCharacterList(response);
+  },
 
-export const getCharacterDetailAPI = async (id: number) =>
-  mapCharacterDetail(
-    await client.get<CharacterDetailResponse>(`character/${id}`),
-  );
+  async getCharacterDetail(id: number): Promise<CharacterDetail> {
+    const response = await client.get<CharacterDetailResponse>(
+      `character/${id}`,
+    );
+    return mapCharacterDetail(response);
+  },
 
-export const createCharacterAPI = async (data: CharacterCreateFormData) =>
-  client.post<undefined, CharacterCreateRequest>(
-    'character',
-    mapCharacterFormData(data),
-  );
+  async createCharacter(data: CreateCharacterInput): Promise<void> {
+    await client.post<undefined, CharacterCreateRequest>('character', {
+      name: data.name,
+      hp: data.hp,
+      system: data.system,
+    });
+  },
 
-export const deleteCharacterAPI = async (id: number) =>
-  client.delete(`character/${id}`);
+  async deleteCharacter(id: number): Promise<void> {
+    await client.delete(`character/${id}`);
+  },
 
-export const updateCharacterHpAPI = async (newHp: number, id: number) => {
-  const data = await client.patch<
-    CharacterCurrentHpResponse,
-    CharacterUpdateHpRequest
-  >(`character/${id}/hp`, mapHpRequest(newHp));
-  return data.current_hp;
+  async updateCharacterHp(id: number, newHp: number): Promise<number> {
+    const data = await client.patch<
+      CharacterCurrentHpResponse,
+      CharacterUpdateHpRequest
+    >(`character/${id}/hp`, mapHpRequest(newHp));
+    return data.current_hp;
+  },
 };

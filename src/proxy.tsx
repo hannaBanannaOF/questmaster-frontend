@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -15,15 +14,8 @@ export async function proxy(req: NextRequest) {
   const matchCampaings = url.pathname.match(/^\/campaigns\/([^/]+)$/);
   if (matchCampaings) {
     const slug = matchCampaings[1];
-
-    const cookieStore = await cookies();
-
-    const sessionToken = cookieStore.get(
-      process.env.SESSION_COOKIE_NAME ?? '',
-    )?.value;
     const client = createHttpClient(
       Microservices.core,
-      sessionToken,
       url.pathname + url.search,
     );
     try {
@@ -47,14 +39,8 @@ export async function proxy(req: NextRequest) {
   const matchCharacterSheet = url.pathname.match(/^\/characters\/([^/]+)$/);
   if (matchCharacterSheet) {
     const slug = matchCharacterSheet[1];
-    const cookieStore = await cookies();
-
-    const sessionToken = cookieStore.get(
-      process.env.SESSION_COOKIE_NAME ?? '',
-    )?.value;
     const client = createHttpClient(
       Microservices.core,
-      sessionToken,
       url.pathname + url.search,
     );
     try {

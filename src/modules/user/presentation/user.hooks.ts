@@ -1,16 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getUserInfoUseCase } from '../application';
+import { userQueries } from './user.queries';
 
 export function useUserInfo() {
-  return useQuery({
-    queryKey: ['user-info'],
-    queryFn: getUserInfoUseCase,
-    placeholderData: (prev) =>
-      prev ?? {
-        username: 'placeholder',
-        name: 'placeholder',
-        surname: 'placeholder',
-      },
-  });
+  return useQuery(userQueries.detail());
 }

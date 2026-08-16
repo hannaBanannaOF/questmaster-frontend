@@ -1,6 +1,10 @@
+import 'server-only';
+
+import { cookies, headers as getNextHeaders } from 'next/headers';
+import { redirect } from 'next/navigation';
+
 import { HttpError } from './http.types';
 import { Microservices } from './services.types';
-import { getRuntimeConfig } from '@/src/lib/config/env';
 
 async function parseResponse(response: Response) {
   if (response.status === 204) return null;
@@ -9,33 +13,39 @@ async function parseResponse(response: Response) {
   return json;
 }
 
-function buildHeaders({
+async function buildHeaders({
   useData,
-  sessionToken,
   originalUrl,
 }: {
   useData?: boolean;
-  sessionToken?: string;
   originalUrl?: string;
 }) {
   const headers: Record<string, string> = {};
 
-  const config = typeof window !== 'undefined' ? getRuntimeConfig() : process.env;
+  // Captura o cookie de sessão automaticamente
+  const cookieStore = await cookies();
+  const cookieName = process.env.SESSION_COOKIE_NAME;
 
-  if (sessionToken) {
-    headers['Cookie'] =
-      `${config.SESSION_COOKIE_NAME ?? ''}=${sessionToken}`;
+  if (cookieName) {
+    const sessionToken = cookieStore.get(cookieName)?.value;
+    if (sessionToken) {
+      headers['Cookie'] = `${cookieName}=${sessionToken}`;
+    }
   }
 
   if (useData) {
     headers['Content-Type'] = 'application/json;charset=UTF-8';
   }
 
-  // Optional: forward original URL (client only)
-  if (typeof window !== 'undefined') {
-    headers['Original-Url'] = window.location.pathname + window.location.search;
-  } else if (originalUrl) {
+  if (originalUrl) {
     headers['Original-Url'] = originalUrl;
+  } else {
+    const incomingHeaders = await getNextHeaders();
+    const currentPath =
+      incomingHeaders.get('x-pathname') || incomingHeaders.get('referer');
+    if (currentPath) {
+      headers['Original-Url'] = currentPath;
+    }
   }
 
   return headers;
@@ -44,9 +54,12 @@ function buildHeaders({
 async function handleAuth(response: Response) {
   if (response.status !== 401) return;
 
-  const { redirectUrl } = await response.json();
-  if (typeof window !== 'undefined') {
-    window.location.replace(redirectUrl);
+  const { redirectUrl } = await response
+    .json()
+    .catch(() => ({ redirectUrl: '/login' }));
+
+  if (redirectUrl) {
+    redirect(redirectUrl);
   }
 
   throw {
@@ -56,21 +69,14 @@ async function handleAuth(response: Response) {
   } satisfies HttpError<string | undefined>;
 }
 
-export function createHttpClient(
-  ms: Microservices,
-  sessionToken?: string,
-  originalUrl?: string,
-) {
-  const config = typeof window !== 'undefined' ? getRuntimeConfig() : process.env;
-  const baseUrl = config.CORE_API_URL;
+export function createHttpClient(ms: Microservices, originalUrl?: string) {
+  const baseUrl = process.env.CORE_API_URL;
+
   const request = async <Response, RequestBody>(
     input: RequestInfo,
     init?: RequestInit,
   ): Promise<Response> => {
-    const response = await fetch(input, {
-      credentials: 'include',
-      ...init,
-    });
+    const response = await fetch(input, init);
 
     await handleAuth(response);
 
@@ -112,19 +118,18 @@ export function createHttpClient(
   };
 
   return {
-    get: <Response, QueryParams = undefined>(
+    get: async <Response, QueryParams = undefined>(
       uri: string,
       params?: QueryParams,
       v = 1,
     ) =>
       request<Response, undefined>(buildUrl<QueryParams>(uri, params, v), {
-        headers: buildHeaders({
-          sessionToken: sessionToken,
-          originalUrl: originalUrl,
+        headers: await buildHeaders({
+          originalUrl,
         }),
       }),
 
-    post: <Response, RequestBody, QueryParams = undefined>(
+    post: async <Response, RequestBody, QueryParams = undefined>(
       uri: string,
       data?: RequestBody,
       params?: QueryParams,
@@ -132,15 +137,14 @@ export function createHttpClient(
     ) =>
       request<Response, RequestBody>(buildUrl<QueryParams>(uri, params, v), {
         method: 'POST',
-        headers: buildHeaders({
+        headers: await buildHeaders({
           useData: data !== undefined,
-          sessionToken: sessionToken,
-          originalUrl: originalUrl,
+          originalUrl,
         }),
         body: data ? JSON.stringify(data) : undefined,
       }),
 
-    patch: <Response, RequestBody, QueryParams = undefined>(
+    patch: async <Response, RequestBody, QueryParams = undefined>(
       uri: string,
       data?: RequestBody,
       params?: QueryParams,
@@ -148,24 +152,22 @@ export function createHttpClient(
     ) =>
       request<Response, RequestBody>(buildUrl<QueryParams>(uri, params, v), {
         method: 'PATCH',
-        headers: buildHeaders({
+        headers: await buildHeaders({
           useData: data !== undefined,
-          sessionToken: sessionToken,
-          originalUrl: originalUrl,
+          originalUrl,
         }),
         body: data ? JSON.stringify(data) : undefined,
       }),
 
-    delete: <Response, QueryParams = undefined>(
+    delete: async <Response, QueryParams = undefined>(
       uri: string,
       params?: QueryParams,
       v = 1,
     ) =>
       request<Response, undefined>(buildUrl<QueryParams>(uri, params, v), {
         method: 'DELETE',
-        headers: buildHeaders({
-          sessionToken: sessionToken,
-          originalUrl: originalUrl,
+        headers: await buildHeaders({
+          originalUrl,
         }),
       }),
   };
