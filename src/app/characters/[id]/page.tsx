@@ -1,18 +1,20 @@
-'use client';
-
-import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
-
-import { useToast } from '@/src/design';
 import {
-  CharacterDetailContainer,
-  useCharacterDetail,
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+
+import {
+  CharacterDetailsView,
+  characterQueries,
 } from '@/src/modules/character';
 
-export default function CharacterDetailPage() {
-  const params = useParams();
-  const rawId = params.id;
+export default async function CharacterDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id: rawId } = await params;
 
   if (!rawId || Array.isArray(rawId)) {
     throw new Error('Invalid id param');
@@ -23,19 +25,13 @@ export default function CharacterDetailPage() {
   if (Number.isNaN(id)) {
     throw new Error('Id must be a number');
   }
-  const { data, isPending, isError, error } = useCharacterDetail(id);
-  const router = useRouter();
-  const { addToast } = useToast();
-  const t = useTranslations('character.toast');
 
-  useEffect(() => {
-    if (isError) {
-      addToast(t('error.detail'), error.message, 'error');
-      router.replace('/characters');
-    }
-  }, [isError, router, error, addToast, t]);
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(characterQueries.detail(id));
 
   return (
-    data && <CharacterDetailContainer character={data} loading={isPending} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CharacterDetailsView id={id} />
+    </HydrationBoundary>
   );
 }

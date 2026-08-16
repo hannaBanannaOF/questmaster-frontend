@@ -1,3 +1,5 @@
+'use client';
+
 import { Check, Copy, Link2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import {

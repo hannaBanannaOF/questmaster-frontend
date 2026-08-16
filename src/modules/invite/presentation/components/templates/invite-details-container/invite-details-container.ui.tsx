@@ -1,3 +1,5 @@
+'use client';
+
 import { Heart, Scroll, Swords, UserCheck, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';

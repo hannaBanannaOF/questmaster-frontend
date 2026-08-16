@@ -1,18 +1,17 @@
-'use client';
-
-import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
-
-import { useToast } from '@/src/design';
 import {
-  CampaignDetailsContainer,
-  useCampaignDetails,
-} from '@/src/modules/campaign';
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
 
-export default function CampaignDetailPage() {
-  const params = useParams();
-  const rawId = params.id;
+import { CampaignDetailsView, campaignQueries } from '@/src/modules/campaign';
+
+export default async function CampaignDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id: rawId } = await params;
 
   if (!rawId || Array.isArray(rawId)) {
     throw new Error('Invalid id param');
@@ -24,18 +23,12 @@ export default function CampaignDetailPage() {
     throw new Error('Id must be a number');
   }
 
-  const { data, isPending, isError, error } = useCampaignDetails(id);
-  const router = useRouter();
-  const { addToast } = useToast();
-  const t = useTranslations('campaign.toast');
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(campaignQueries.detail(id));
 
-  useEffect(() => {
-    if (isError) {
-      addToast(t('error.detail'), error.message, 'error');
-      router.replace('/campaigns');
-    }
-  }, [isError, router, error, addToast, t]);
   return (
-    data && <CampaignDetailsContainer campaign={data} loading={isPending} />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <CampaignDetailsView id={id} />
+    </HydrationBoundary>
   );
 }

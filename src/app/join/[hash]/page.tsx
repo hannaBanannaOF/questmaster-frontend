@@ -1,14 +1,17 @@
-'use client';
-import { useParams, useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
 
-import { useToast } from '@/src/design';
-import { InviteDetailsContainer, useInviteDetails } from '@/src/modules/invite';
+import { InviteDetailsView, inviteQueries } from '@/src/modules/invite';
 
-export default function JoinCampaignPage() {
-  const params = useParams();
-  const rawHash = params.hash;
+export default async function JoinCampaignPage({
+  params,
+}: {
+  params: Promise<{ hash: string }>;
+}) {
+  const { hash: rawHash } = await params;
 
   if (!rawHash || Array.isArray(rawHash)) {
     throw new Error('Invalid hash param');
@@ -19,20 +22,13 @@ export default function JoinCampaignPage() {
   if (hash === '') {
     throw new Error('Hash must not be null');
   }
-  const { data, isFetching, isError, error } = useInviteDetails(hash);
 
-  const { addToast } = useToast();
-  const t = useTranslations('invite.toast');
-  const router = useRouter();
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(inviteQueries.detail(hash));
 
-  useEffect(() => {
-    if (isError) {
-      addToast(t('error.detail'), error.message, 'error');
-      router.replace('/');
-    }
-  }, [isError, router, error, addToast, t]);
-
-  if (!data) return null;
-
-  return <InviteDetailsContainer invite={data} loading={isFetching} />;
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <InviteDetailsView hash={hash} />
+    </HydrationBoundary>
+  );
 }
