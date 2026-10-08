@@ -1,0 +1,19 @@
+.text[data-tone='muted'] {
+  color: var(--color-text-muted);
+}
+
+.text[data-tone='danger'] {
+  color: var(--color-destructive);
+}
+
+.text[data-weight='bold'] {
+  font-weight: var(--font-weight-semibold);
+}
+
+.text[data-size='sm'] {
+  font-size: var(--font-size-sm);
+}
+
+.text[data-uppercase] {
+  text-transform: uppercase;
+}

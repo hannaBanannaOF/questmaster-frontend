@@ -1,10 +1,18 @@
-import { Container, Text, Title } from '../design';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export default function HomePage() {
-  return (
-    <Container direction="column" align="center">
-      <Title>Welcome to Questmaster</Title>
-      <Text variant="muted">Your RPG campaign management hub.</Text>
-    </Container>
-  );
+import { DashboardView } from '@/src/modules/dashboard';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('dashboard');
+  return { title: t('title') };
+}
+
+interface HomePageProps {
+  searchParams: Promise<{ view?: string | string[] }>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const { view } = await searchParams;
+  return <DashboardView view={typeof view === 'string' ? view : undefined} />;
 }

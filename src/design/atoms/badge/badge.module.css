@@ -1,0 +1,34 @@
+.badge {
+  --badge-tone: var(--color-text-muted);
+  --badge-tone-soft: var(--color-card-fg);
+
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  border: 1px solid var(--badge-tone);
+  border-radius: var(--radius-xl);
+  background-color: var(--badge-tone-soft);
+  color: var(--badge-tone);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.badge[data-tone='info'] {
+  --badge-tone: var(--color-status-draft);
+  --badge-tone-soft: var(--color-status-draft-soft);
+}
+
+.badge[data-tone='success'] {
+  --badge-tone: var(--color-status-playing);
+  --badge-tone-soft: var(--color-status-playing-soft);
+}
+
+.badge[data-tone='warning'] {
+  --badge-tone: var(--color-status-paused);
+  --badge-tone-soft: var(--color-status-paused-soft);
+}
+
+.badge[data-tone='neutral'] {
+  --badge-tone: var(--color-status-archived);
+  --badge-tone-soft: var(--color-status-archived-soft);
+}

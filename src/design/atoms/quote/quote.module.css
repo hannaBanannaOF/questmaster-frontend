@@ -1,0 +1,9 @@
+.quote {
+  margin: 0;
+  padding: var(--spacing-md);
+  border-left: 2px solid var(--color-primary-soft);
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-align: start;
+  white-space: pre-line;
+}

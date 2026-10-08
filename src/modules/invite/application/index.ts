@@ -1,2 +1,2 @@
 export * from './invite.repository';
-export * from './usecases';
+export * from './use-cases';

@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.select {
+  appearance: none;
+  padding-right: 40px;
+}
+
+.select:not(:disabled) {
+  cursor: pointer;
+}
+
+.icon {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}

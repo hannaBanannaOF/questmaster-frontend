@@ -1,0 +1,95 @@
+.button {
+  --button-tone: var(--color-primary);
+  --button-tone-soft: var(--color-primary-soft);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.button[data-color='danger'] {
+  --button-tone: var(--color-destructive);
+  --button-tone-soft: var(--color-destructive-soft);
+}
+
+.button[data-variant='solid'] {
+  background-color: var(--button-tone);
+  color: var(--color-text-contrast);
+}
+
+.button[data-variant='solid']:hover {
+  filter: brightness(1.1);
+}
+
+.button[data-variant='outline'] {
+  background-color: transparent;
+  border-color: var(--button-tone);
+  color: var(--button-tone);
+}
+
+.button[data-variant='outline']:not(:disabled):hover {
+  background-color: var(--button-tone-soft);
+  filter: brightness(1.1);
+}
+
+.button[data-variant='muted'] {
+  background-color: var(--color-card-fg);
+  color: var(--color-text-primary);
+}
+
+.button[data-variant='muted']:not(:disabled):hover {
+  filter: brightness(1.2);
+}
+
+.button[data-variant='text'] {
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-semibold);
+}
+
+.button[data-variant='text']:not(:disabled):hover {
+  color: var(--color-text-primary);
+}
+
+.button:not(:disabled):active {
+  filter: contrast(1.2);
+  box-shadow: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  filter: grayscale(0.5);
+  box-shadow: none;
+}
+
+.button[data-loading] {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.button[data-size='lg'] {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.button[data-icon-only] {
+  padding: var(--spacing-xs);
+}

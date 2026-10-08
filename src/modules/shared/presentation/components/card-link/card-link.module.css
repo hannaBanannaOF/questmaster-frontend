@@ -1,0 +1,15 @@
+.cardLink {
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+.cardLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}

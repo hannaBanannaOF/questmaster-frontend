@@ -1,19 +1,13 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-import { CampaignListView, campaignQueries } from '@/src/modules/campaign';
+import { CampaignListView } from '@/src/modules/campaign';
 
-export default async function CampaignPage() {
-  const queryClient = new QueryClient();
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('campaign.list');
+  return { title: t('title') };
+}
 
-  await queryClient.prefetchQuery(campaignQueries.list());
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <CampaignListView />
-    </HydrationBoundary>
-  );
+export default function CampaignsPage() {
+  return <CampaignListView />;
 }

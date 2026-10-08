@@ -1,0 +1,4 @@
+.emptyState {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+}

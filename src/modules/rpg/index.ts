@@ -1,2 +1,2 @@
-export * from './domain/game-system.types';
+export * from './domain';
 export * from './presentation';

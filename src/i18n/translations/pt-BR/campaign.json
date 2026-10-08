@@ -33,7 +33,8 @@
         "label": "Nome da campanha",
         "placeholder": "Ex.: Curse of Strahd",
         "errors": {
-          "required": "Campo \"Nome da campanha\" é obrigatório!"
+          "required": "Campo \"Nome da campanha\" é obrigatório!",
+          "max": "O nome deve ter no máximo 255 caracteres."
         }
       },
       "overview": {
@@ -74,5 +75,16 @@
         "message": "\"{name}\" foi excluída com sucesso."
       }
     }
+  },
+  "detail": {
+    "notFound": {
+      "title": "Campanha não encontrada",
+      "message": "Ela pode ter sido excluída ou você não tem acesso a ela.",
+      "back": "Voltar para campanhas"
+    }
+  },
+  "errors": {
+    "invalidTransition": "Essa mudança de status não é permitida.",
+    "notDeletable": "Só é possível excluir campanhas em rascunho ou arquivadas."
   }
 }

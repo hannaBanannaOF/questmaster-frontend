@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      var(--color-card-border) 0%,
+      var(--color-primary) 50%,
+      var(--color-card-border) 100%
+    )
+    1;
+  background-color: var(--color-card-bg);
+}

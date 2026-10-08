@@ -1,3 +1,2 @@
-export * from './http.client';
-export * from './http.types';
-export * from './services.types';
+export * from './http-client';
+export * from './relative-path';

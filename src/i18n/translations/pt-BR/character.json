@@ -18,7 +18,8 @@
         "label": "Nome do personagem",
         "placeholder": "Ex.: Aelar  Windwalker",
         "errors": {
-          "required": "Campo \"Nome do personagem\" é obrigatório!"
+          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "max": "O nome deve ter no máximo 255 caracteres."
         }
       },
       "hp": {
@@ -47,7 +48,9 @@
     "submit": "Excluir personagem"
   },
   "controls": {
-    "hp": "Pontos de vida (PV)"
+    "hp": "Pontos de vida (PV)",
+    "decrease": "Diminuir PV",
+    "increase": "Aumentar PV"
   },
   "actions": {
     "delete": "Excluir"
@@ -70,5 +73,16 @@
         "message": "\"{name}\" foi excluído com sucesso."
       }
     }
+  },
+  "detail": {
+    "notFound": {
+      "title": "Personagem não encontrado",
+      "message": "Ele pode ter sido excluído ou você não tem acesso a ele.",
+      "back": "Voltar para personagens"
+    }
+  },
+  "errors": {
+    "invalidHp": "O valor de PV informado é inválido.",
+    "notEditable": "Só o dono da ficha pode alterá-la."
   }
 }

@@ -1,0 +1,7 @@
+.label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.required {
+  color: var(--color-destructive);
+}

@@ -1,0 +1,33 @@
+.iconBox {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.iconBox[data-tone='primary'] {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.iconBox[data-tone='surface'] {
+  background-color: var(--color-card-fg);
+  color: var(--color-text-primary);
+}
+
+.iconBox[data-shape='circle'] {
+  border-radius: var(--radius-full);
+}
+
+.iconBox[data-size='sm'] {
+  padding: var(--spacing-xs);
+}
+
+.iconBox[data-size='md'] {
+  padding: var(--spacing-sm);
+}
+
+.iconBox[data-size='lg'] {
+  padding: var(--spacing-md);
+}

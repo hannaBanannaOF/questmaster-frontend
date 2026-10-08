@@ -1,34 +1,20 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import type { Metadata } from 'next';
 
-import { InviteDetailsView, inviteQueries } from '@/src/modules/invite';
+import { getInvite, InviteView } from '@/src/modules/invite';
 
-export default async function JoinCampaignPage({
-  params,
-}: {
+interface JoinPageProps {
   params: Promise<{ hash: string }>;
-}) {
-  const { hash: rawHash } = await params;
+}
 
-  if (!rawHash || Array.isArray(rawHash)) {
-    throw new Error('Invalid hash param');
-  }
+export async function generateMetadata({
+  params,
+}: JoinPageProps): Promise<Metadata> {
+  const { hash } = await params;
+  const invite = await getInvite(hash);
+  return { title: invite.campaignName };
+}
 
-  const hash = String(rawHash);
-
-  if (hash === '') {
-    throw new Error('Hash must not be null');
-  }
-
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(inviteQueries.detail(hash));
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <InviteDetailsView hash={hash} />
-    </HydrationBoundary>
-  );
+export default async function JoinPage({ params }: JoinPageProps) {
+  const { hash } = await params;
+  return <InviteView hash={hash} />;
 }

@@ -1,0 +1,47 @@
+/* Peças de layout compartilhadas pelas seções do dashboard */
+
+.eyebrow {
+  letter-spacing: 0.12em;
+}
+
+/* Conteúdo principal + coluna lateral; a lateral desce no celular */
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+.main {
+  flex: 999 1 35rem;
+  min-width: 0;
+}
+
+.aside {
+  flex: 1 1 18rem;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.count {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.welcomeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 55rem;
+}
+
+.center {
+  text-align: center;
+}
