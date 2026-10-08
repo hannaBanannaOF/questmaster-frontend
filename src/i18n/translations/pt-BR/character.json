@@ -16,7 +16,7 @@
     "form": {
       "name": {
         "label": "Nome do personagem",
-        "placeholder": "Ex.: Aelar  Windwalker",
+        "placeholder": "Ex.: Aelar Windwalker",
         "errors": {
           "required": "Campo \"Nome do personagem\" é obrigatório!",
           "max": "O nome deve ter no máximo 255 caracteres."

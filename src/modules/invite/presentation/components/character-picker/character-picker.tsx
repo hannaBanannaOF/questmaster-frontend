@@ -11,6 +11,10 @@ interface CharacterPickerProps {
   /** Nome do campo enviado no form. */
   name: string;
   legend: string;
+  /** Ficha marcada ao renderizar (ex.: a escolhida antes de um erro). */
+  defaultValue?: string;
+  /** Id da mensagem de erro do campo, para leitores de tela. */
+  errorId?: string;
 }
 
 /** Lista de fichas como rádios nativos: escolher funciona mesmo sem JS. */
@@ -18,11 +22,17 @@ export function CharacterPicker({
   characters,
   name,
   legend,
+  defaultValue,
+  errorId,
 }: CharacterPickerProps) {
   const t = useTranslations('character.list');
 
   return (
-    <fieldset className={styles.fieldset}>
+    <fieldset
+      className={styles.fieldset}
+      aria-invalid={errorId ? true : undefined}
+      aria-describedby={errorId}
+    >
       <legend className="visually-hidden">{legend}</legend>
       <List>
         {characters.map((character) => (
@@ -33,6 +43,7 @@ export function CharacterPicker({
                 name={name}
                 value={character.slug}
                 required
+                defaultChecked={character.slug === defaultValue}
                 className="visually-hidden"
               />
               <Stack align="center" justify="space-between">

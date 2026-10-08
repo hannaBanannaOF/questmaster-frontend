@@ -31,7 +31,7 @@
     "form": {
       "name": {
         "label": "Nome da campanha",
-        "placeholder": "Ex.: Curse of Strahd",
+        "placeholder": "Ex.: As Máscaras de Nyarlathotep",
         "errors": {
           "required": "Campo \"Nome da campanha\" é obrigatório!",
           "max": "O nome deve ter no máximo 255 caracteres."
