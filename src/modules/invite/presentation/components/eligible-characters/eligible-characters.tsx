@@ -7,7 +7,6 @@ import { getCharacters } from '@/src/modules/character';
 import type { Invite } from '../../../domain';
 import { acceptInviteAction } from '../../invite.actions';
 import { AcceptInviteForm } from '../accept-invite-form/accept-invite-form';
-import { CharacterPicker } from '../character-picker/character-picker';
 
 /** Fichas do usuário que podem entrar na campanha (mesmo sistema, sem campanha). */
 export async function EligibleCharacters({ invite }: { invite: Invite }) {
@@ -30,13 +29,10 @@ export async function EligibleCharacters({ invite }: { invite: Invite }) {
   }
 
   return (
-    <AcceptInviteForm action={acceptInviteAction.bind(null, invite.hash)}>
-      <CharacterPicker
-        characters={characters}
-        name="character"
-        legend={t('invite.character.choose')}
-      />
-    </AcceptInviteForm>
+    <AcceptInviteForm
+      action={acceptInviteAction.bind(null, invite.hash)}
+      characters={characters}
+    />
   );
 }
 

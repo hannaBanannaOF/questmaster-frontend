@@ -2,11 +2,14 @@
 
 import { Swords } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { type ReactNode, useActionState } from 'react';
+import { useActionState, useId } from 'react';
 
 import { Stack, SubmitButton, Text } from '@/src/design';
 import { type FormState, initialFormState } from '@/src/lib/actions';
+import type { CharacterSummary } from '@/src/modules/character/domain';
 import { useFormErrorToast } from '@/src/modules/shared/presentation/hooks/use-action-feedback';
+
+import { CharacterPicker } from '../character-picker/character-picker';
 
 interface AcceptInviteFormProps {
   /** Server Action já vinculada ao hash do convite. */
@@ -14,12 +17,16 @@ interface AcceptInviteFormProps {
     state: FormState<'character'>,
     formData: FormData,
   ) => Promise<FormState<'character'>>;
-  /** Seletor de personagem renderizado no servidor. */
-  children: ReactNode;
+  /** Fichas que podem entrar na campanha. */
+  characters: CharacterSummary[];
 }
 
-export function AcceptInviteForm({ action, children }: AcceptInviteFormProps) {
+export function AcceptInviteForm({
+  action,
+  characters,
+}: AcceptInviteFormProps) {
   const t = useTranslations();
+  const errorId = useId();
   const [state, formAction] = useActionState(
     action,
     initialFormState as FormState<'character'>,
@@ -28,12 +35,21 @@ export function AcceptInviteForm({ action, children }: AcceptInviteFormProps) {
 
   const characterError = state.fieldErrors?.character;
 
+  // noValidate: a action valida e responde com a mensagem do app, no lugar
+  // do balão nativo, que aparecia preso ao rádio escondido
   return (
-    <form action={formAction}>
+    <form action={formAction} noValidate>
       <Stack direction="column" align="stretch">
-        {children}
+        <CharacterPicker
+          characters={characters}
+          name="character"
+          legend={t('invite.character.choose')}
+          // O React limpa o form depois da action; isso devolve a escolha
+          defaultValue={state.values?.character}
+          errorId={characterError ? errorId : undefined}
+        />
         {characterError && (
-          <Text tone="danger" small role="alert">
+          <Text tone="danger" small role="alert" id={errorId}>
             {t(characterError)}
           </Text>
         )}

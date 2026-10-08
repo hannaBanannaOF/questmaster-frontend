@@ -16,6 +16,12 @@ export const characterCreateSchema = yup.object({
     .max(255, key('name.errors.max')),
   hp: yup
     .number()
+    // Campo vazio é "obrigatório", não "não é número"
+    .transform((value, original) =>
+      typeof original === 'string' && original.trim() === ''
+        ? undefined
+        : value,
+    )
     .typeError(key('hp.errors.type'))
     .required(key('hp.errors.required'))
     .integer(key('hp.errors.type'))

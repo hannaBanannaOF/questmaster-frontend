@@ -44,7 +44,11 @@ export async function acceptInviteAction(
     const invite = await inviteUseCases.acceptInvite(hash, characterSlug);
     campaign = { slug: invite.campaignSlug, name: invite.campaignName };
   } catch (error) {
-    return { status: 'error', message: toErrorMessage(error) };
+    return {
+      status: 'error',
+      message: toErrorMessage(error),
+      values: { character: characterSlug },
+    };
   }
 
   revalidatePath('/campaigns', 'layout');

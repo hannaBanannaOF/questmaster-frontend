@@ -6,28 +6,25 @@ import type { FormState } from '@/src/lib/actions';
 import { aCharacter } from '@/src/test/fixtures';
 import { renderWithProviders } from '@/src/test/render';
 
-import { CharacterPicker } from '../character-picker/character-picker';
 import { AcceptInviteForm } from './accept-invite-form';
 
 type State = FormState<'character'>;
 
 function setup(action: (state: State, formData: FormData) => Promise<State>) {
   renderWithProviders(
-    <AcceptInviteForm action={action}>
-      <CharacterPicker
-        name="character"
-        legend="Escolha seu personagem"
-        characters={[
-          aCharacter({ slug: 'harvey', name: 'Harvey Walters' }),
-          aCharacter({ slug: 'jenny', name: 'Jenny Barnes' }),
-        ]}
-      />
-    </AcceptInviteForm>,
+    <AcceptInviteForm
+      action={action}
+      characters={[
+        aCharacter({ slug: 'harvey', name: 'Harvey Walters' }),
+        aCharacter({ slug: 'jenny', name: 'Jenny Barnes' }),
+      ]}
+    />,
   );
   return userEvent.setup();
 }
 
 const join = () => screen.getByRole('button', { name: 'Juntar-se a campanha' });
+const radio = (name: RegExp) => screen.getByRole('radio', { name });
 
 describe('AcceptInviteForm', () => {
   it('lista as fichas como rádios e envia a escolhida', async () => {
@@ -39,42 +36,51 @@ describe('AcceptInviteForm', () => {
     const user = setup(action);
 
     expect(screen.getAllByRole('radio')).toHaveLength(2);
-    await user.click(screen.getByLabelText(/Jenny Barnes/));
+    await user.click(radio(/Jenny Barnes/));
     await user.click(join());
 
     expect(action.mock.calls[0][1].get('character')).toBe('jenny');
   });
 
-  it('mostra o erro quando nenhuma ficha foi escolhida', async () => {
-    const user = setup(async () => ({
+  it('sem escolha, envia e mostra a mensagem do app', async () => {
+    const action = vi.fn(async (): Promise<State> => ({
       status: 'error',
       fieldErrors: { character: 'invite.character.required' },
     }));
+    const user = setup(action);
 
-    // O required do rádio barra o envio; o servidor valida do mesmo jeito
-    await user.click(screen.getByLabelText(/Harvey Walters/));
+    // Sem o balão nativo do navegador: a action valida
     await user.click(join());
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(
+    expect(action).toHaveBeenCalledOnce();
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent(
       'Escolha um personagem para entrar na campanha.',
+    );
+    expect(screen.getByRole('group')).toHaveAttribute(
+      'aria-describedby',
+      alert.id,
     );
     expect(
       screen.queryByText('Não foi possível se juntar a campanha!'),
     ).not.toBeInTheDocument();
   });
 
-  it('avisa quando a API recusa a entrada', async () => {
-    const user = setup(async () => ({
+  it('avisa quando a API recusa e mantém a ficha escolhida', async () => {
+    const user = setup(async (_state, formData) => ({
       status: 'error',
       message: 'Convite expirado',
+      values: { character: String(formData.get('character')) },
     }));
 
-    await user.click(screen.getByLabelText(/Harvey Walters/));
+    await user.click(radio(/Jenny Barnes/));
     await user.click(join());
 
     expect(
       await screen.findByText('Não foi possível se juntar a campanha!'),
     ).toBeInTheDocument();
     expect(screen.getByText('Convite expirado')).toBeInTheDocument();
+    expect(radio(/Jenny Barnes/)).toBeChecked();
+    expect(radio(/Harvey Walters/)).not.toBeChecked();
   });
 });

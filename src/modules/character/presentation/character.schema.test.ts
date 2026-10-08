@@ -37,6 +37,9 @@ describe('characterCreateSchema', () => {
   it.each([
     ['abc', 'hp.errors.type'],
     ['1.5', 'hp.errors.type'],
+    ['', 'hp.errors.required'],
+    ['   ', 'hp.errors.required'],
+    [undefined, 'hp.errors.required'],
   ])('recusa PV %j', async (hp, error) => {
     const result = await validate(characterCreateSchema, {
       name: 'Harvey',
