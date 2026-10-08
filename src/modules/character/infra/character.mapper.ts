@@ -1,53 +1,43 @@
-import { GameSystem } from '@/src/modules/rpg';
+import type { GameSystem } from '@/src/modules/rpg/domain';
 
-import { Character, CharacterDetail } from '../domain';
-import { CharacterCreateFormData } from '../presentation/schemas/character.schema';
-import {
+import type { CharacterFilters, CreateCharacterInput } from '../application';
+import type { CharacterDetails, CharacterSummary } from '../domain';
+import type {
   CharacterCreateRequest,
-  CharacterCurrentHpResponse,
-  CharacterDetailResponse,
+  CharacterDetailsResponse,
+  CharacterListQuery,
   CharacterListResponse,
-  CharacterUpdateHpRequest,
-} from './dto.types';
+} from './character.dto';
 
-const toGameSystem = (val: string) =>
-  GameSystem[val as keyof typeof GameSystem];
-
-export const mapCharacterList = (
-  response: CharacterListResponse[],
-): Character[] =>
-  response.map((character) => ({
-    slug: character.slug,
-    name: character.name,
-    system: toGameSystem(character.system),
-    currentHp: character.current_hp,
-    maxHp: character.max_hp,
-  }));
-
-export const mapCharacterDetail = (
-  response: CharacterDetailResponse,
-): CharacterDetail => ({
-  id: response.id,
-  name: response.name,
+export const toCharacterSummary = (
+  response: CharacterListResponse,
+): CharacterSummary => ({
   slug: response.slug,
-  system: toGameSystem(response.system),
+  name: response.name,
+  system: response.system as GameSystem,
   currentHp: response.current_hp,
   maxHp: response.max_hp,
+});
+
+export const toCharacterDetails = (
+  response: CharacterDetailsResponse,
+): CharacterDetails => ({
+  ...toCharacterSummary(response),
+  id: response.id,
   isPlayer: response.is_player,
 });
 
-export const mapCharacterFormData = (
-  data: CharacterCreateFormData,
+export const toCharacterListQuery = (
+  filters: CharacterFilters = {},
+): CharacterListQuery => ({
+  game_system: filters.gameSystem,
+  without_campaign: filters.withoutCampaign,
+});
+
+export const toCharacterCreateRequest = (
+  input: CreateCharacterInput,
 ): CharacterCreateRequest => ({
-  hp: data.hp,
-  name: data.name,
-  system: data.game_system,
+  name: input.name,
+  hp: input.hp,
+  system: input.system,
 });
-
-export const mapHpRequest = (newHp: number): CharacterUpdateHpRequest => ({
-  new_hp: newHp,
-});
-
-export const mapCurrentHpResponse = (
-  response: CharacterCurrentHpResponse,
-): number => response.current_hp;

@@ -1,0 +1,14 @@
+.card {
+  border-color: color-mix(
+    in srgb,
+    var(--color-destructive) 55%,
+    var(--color-card-border)
+  );
+  text-align: center;
+}
+
+/* Mais específico que o tom do IconBox ([data-tone]) */
+.card .icon[data-tone] {
+  background-color: var(--color-destructive-soft);
+  color: var(--color-destructive);
+}

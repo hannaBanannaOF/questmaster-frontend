@@ -1,2 +1,3 @@
-export * from './campaign.types';
-export * from './campaign-status.types';
+export * from './campaign';
+export * from './campaign-status';
+export * from './errors';

@@ -1,0 +1,44 @@
+schema: spec-driven
+
+context: |
+  Language: pt-BR
+  All artifacts must be written in pt-BR.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Produto: QuestMaster, hub de gerenciamento de campanhas de RPG de mesa.
+  O mesmo usuário pode jogar (tem personagens) e mestrar (é DM de campanhas).
+
+  Stack: Next.js 16 (App Router, Server Components, Server Actions), React 19,
+  TypeScript, next-intl (textos em src/i18n/translations/pt-BR), CSS Modules
+  com tokens em src/design/foundations. A API é externa (CORE_API_URL).
+
+  Arquitetura: src/modules/<módulo>/{domain,application,infra,presentation}
+  (Clean Architecture; domain é puro). src/design é o design system em
+  Atomic Design e não conhece regras de negócio. Rotas em src/app.
+
+  Escopo atual (POC): web primeiro, mobile depois. Sistema suportado:
+  Call of Cthulhu 7e; o próximo provável é D&D 5e, então fichas devem ter
+  uma base comum (nome, sistema, PV) e blocos específicos por sistema.
+  Fora da POC: party ao vivo no painel do mestre, data da próxima sessão.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

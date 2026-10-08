@@ -1,2 +1,2 @@
 export * from './character.repository';
-export * from './usecases';
+export * from './use-cases';

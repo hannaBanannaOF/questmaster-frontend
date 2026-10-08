@@ -1,33 +1,31 @@
-import { Eye } from 'lucide-react';
+import { Dices, Eye, type LucideIcon } from 'lucide-react';
 
-import { GameSystem } from '@/src/modules/rpg/domain/game-system.types';
+import type { SelectOption } from '@/src/design';
 
-export const GAME_SYSTEM_META = {
-  [GameSystem.CALL_OF_CTHULHU]: {
-    label: 'Call of Cthulhu 7e',
-    icon: Eye,
-  },
-  // [GameSystem.DUNGEONS_AND_DRAGONS]: {
-  //   label: 'D&D 5e',
-  //   icon: Swords,
-  // },
-  // [GameSystem.CYBERPUNK_RED]: {
-  //   label: 'Cyberpunk RED',
-  //   icon: Cpu,
-  // },
-  // [GameSystem.ORDEM_PARANORMAL]: {
-  //   label: 'Ordem Paranormal',
-  //   icon: Ghost,
-  // },
-} as const;
+import { GameSystem } from '../domain';
 
-export function getGameSystemMeta(system: GameSystem) {
-  return GAME_SYSTEM_META[system];
+interface GameSystemMeta {
+  label: string;
+  icon: LucideIcon;
 }
 
-export function getGameSystemSelectValues() {
+const GAME_SYSTEM_META: Record<GameSystem, GameSystemMeta> = {
+  [GameSystem.CALL_OF_CTHULHU]: { label: 'Call of Cthulhu 7e', icon: Eye },
+};
+
+/** Sistemas que a API conhece mas o front ainda não: mostra o código cru. */
+const fallbackMeta = (system: string): GameSystemMeta => ({
+  label: system,
+  icon: Dices,
+});
+
+export function getGameSystemMeta(system: GameSystem): GameSystemMeta {
+  return GAME_SYSTEM_META[system] ?? fallbackMeta(system);
+}
+
+export function getGameSystemOptions(): SelectOption[] {
   return Object.entries(GAME_SYSTEM_META).map(([value, meta]) => ({
-    value: value as GameSystem,
+    value,
     label: meta.label,
   }));
 }

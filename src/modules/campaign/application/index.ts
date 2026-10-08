@@ -1,2 +1,2 @@
 export * from './campaign.repository';
-export * from './usecases';
+export * from './use-cases';

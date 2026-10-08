@@ -1,1 +1,2 @@
-export * from './character.types';
+export * from './character';
+export * from './errors';

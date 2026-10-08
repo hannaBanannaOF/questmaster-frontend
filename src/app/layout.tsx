@@ -1,32 +1,26 @@
-import '../design/styles/index.css';
+import '@/src/design/foundations/global.css';
 
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import isToday from 'dayjs/plugin/isToday';
-import locallizedFormat from 'dayjs/plugin/localizedFormat';
 import { ScrollText } from 'lucide-react';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
+import { type ReactNode, Suspense } from 'react';
 
 import {
+  AppShell,
   Brand,
-  Container,
+  fontVariables,
   Header,
-  Main,
-  ModalProvider,
   Nav,
-  NavItem,
-  ThemeProvider,
+  ThemeScript,
   ToastProvider,
-} from '../design';
-import { cinzel, nunito } from '../design/theme/styles/typography';
-import { QueryProvider } from '../lib/query/query.provider';
-import { UserTag } from '../modules/user';
+} from '@/src/design';
+import { FlashToaster } from '@/src/lib/flash/flash-toaster';
+import { UserGreeting, UserGreetingSkeleton } from '@/src/modules/user';
 
 export const metadata: Metadata = {
-  title: 'QuestMaster',
+  title: { default: 'QuestMaster', template: '%s · QuestMaster' },
   icons: {
     icon: [
       { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
@@ -40,42 +34,22 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const t = await getTranslations('common.header');
-  const locale = await getLocale();
-  const messages = await getMessages();
-
-  dayjs.locale(locale);
-  dayjs.extend(isToday);
-  dayjs.extend(customParseFormat);
-  dayjs.extend(locallizedFormat);
+}: {
+  children: ReactNode;
+}) {
+  const [locale, t] = await Promise.all([
+    getLocale(),
+    getTranslations('common.header'),
+  ]);
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            (function() {
-              try {
-                const stored = localStorage.getItem('theme');
-                const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const theme = stored === 'dark' || stored === 'light'
-                  ? stored
-                  : (system ? 'dark' : 'light');
-
-                document.documentElement.setAttribute('data-theme', theme);
-              } catch (e) {}
-            })();
-            `,
-          }}
-        />
+        <ThemeScript />
       </head>
-      <body className={`${cinzel.variable} ${nunito.variable}`}>
+      <body className={fontVariables}>
         <NextTopLoader
-          color="var(--color-primary)" // Cor do seu design system
+          color="var(--color-primary)"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
@@ -83,35 +57,42 @@ export default async function RootLayout({
           easing="ease"
           speed={200}
         />
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
-            <QueryProvider>
-              <ToastProvider>
-                <ModalProvider>
-                  <Header
-                    brand={
-                      <Brand
-                        brandName="Questmaster"
-                        subtitle="MANAGEMENT HUB"
-                        icon={<ScrollText display="flex" />}
-                      />
-                    }
-                  >
-                    <Nav>
-                      <NavItem label={t('dashboard')} href="/" />
-                      <NavItem label={t('campaigns')} href="/campaigns" />
-                      <NavItem label={t('characters')} href="/characters" />
-                    </Nav>
-                    <Container>
-                      <UserTag />
-                    </Container>
-                  </Header>
-                  <Main>{children}</Main>
-                </ModalProvider>
-              </ToastProvider>
-            </QueryProvider>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider>
+          <ToastProvider>
+            <AppShell
+              header={
+                <Header
+                  brand={
+                    <Brand
+                      name="Questmaster"
+                      subtitle="MANAGEMENT HUB"
+                      icon={<ScrollText size={24} />}
+                    />
+                  }
+                  nav={
+                    <Nav
+                      label={t('navLabel')}
+                      items={[
+                        { href: '/', label: t('dashboard'), exact: true },
+                        { href: '/campaigns', label: t('campaigns') },
+                        { href: '/characters', label: t('characters') },
+                      ]}
+                    />
+                  }
+                  actions={
+                    // O header renderiza na hora; o usuário chega por streaming
+                    <Suspense fallback={<UserGreetingSkeleton />}>
+                      <UserGreeting />
+                    </Suspense>
+                  }
+                />
+              }
+            >
+              {children}
+            </AppShell>
+            <FlashToaster />
+          </ToastProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

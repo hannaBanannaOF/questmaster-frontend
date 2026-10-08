@@ -1,0 +1,89 @@
+{
+  "title": "Dashboard",
+  "loading": "Preparando sua mesa...",
+  "greeting": "Bem-vindo de volta",
+  "eyebrow": {
+    "continue": "Continuar jogando",
+    "ready": "Pronto pra aventura"
+  },
+  "tabs": {
+    "label": "Visão do dashboard",
+    "player": "Jogando",
+    "dm": "Mestrando"
+  },
+  "player": {
+    "subtitle": "Suas aventuras como jogador.",
+    "newCharacter": "Novo personagem",
+    "openCampaign": "Ver campanha",
+    "characters": "Meus personagens",
+    "seeAll": "Ver todos",
+    "nextSteps": "Próximos passos",
+    "ready": {
+      "title": "Seus personagens ainda não estão em nenhuma campanha",
+      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar."
+    },
+    "idle": {
+      "title": "{count, plural, one {# personagem sem campanha} other {# personagens sem campanha}}",
+      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar."
+    },
+    "becomeDm": {
+      "title": "Quer mestrar?",
+      "message": "Crie uma campanha e convide sua party.",
+      "action": "Criar campanha"
+    },
+    "empty": {
+      "title": "Você ainda não tem personagens",
+      "message": "Crie uma ficha pra entrar nas campanhas como jogador. Dá pra jogar e mestrar ao mesmo tempo.",
+      "steps": {
+        "create": "Crie o personagem e escolha o sistema.",
+        "invite": "Peça o link de convite pro mestre da mesa.",
+        "join": "Abra o link e escolha com qual ficha entrar."
+      },
+      "action": "Criar personagem"
+    }
+  },
+  "dm": {
+    "subtitle": "As campanhas que você mestra, num lugar só.",
+    "newCampaign": "Nova campanha",
+    "summary": "Resumo por status",
+    "campaigns": "Suas campanhas",
+    "empty": {
+      "title": "Você ainda não mestra nenhuma campanha",
+      "message": "Que tal conduzir a próxima aventura? Crie uma campanha, escolha o sistema e convide sua party.",
+      "steps": {
+        "create": "Crie a campanha. Ela começa como <bold>Rascunho</bold>.",
+        "invite": "Gere o link de convite e mande pra party.",
+        "start": "Clique em <bold>Iniciar</bold> quando todo mundo entrar."
+      },
+      "action": "Criar campanha"
+    }
+  },
+  "steps": "Como começar",
+  "crossRole": {
+    "toDm": {
+      "title": "Você mestra {count, plural, one {# campanha} other {# campanhas}}.",
+      "hint": "Elas estão na visão de mestre.",
+      "action": "Ir pra Mestrando"
+    },
+    "toPlayer": {
+      "title": "Você também joga.",
+      "hint": "Suas fichas estão na visão de jogador.",
+      "action": "Ir pra Jogando"
+    }
+  },
+  "welcome": {
+    "title": "Bem-vindo ao Questmaster",
+    "message": "Seu livro de aventuras está em branco. Por onde você quer começar?",
+    "dm": {
+      "title": "Vou mestrar",
+      "message": "Crie uma campanha, escolha o sistema e gere um link de convite pra sua party.",
+      "action": "Criar campanha"
+    },
+    "player": {
+      "title": "Vou jogar",
+      "message": "Crie seu personagem agora. Quando o mestre mandar o link de convite, é só abrir e escolher a ficha.",
+      "action": "Criar personagem"
+    },
+    "inviteHint": "Já recebeu um link de convite? Abra o link direto: ele te traz pra cá com a campanha pronta."
+  }
+}

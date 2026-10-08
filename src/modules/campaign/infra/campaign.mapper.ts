@@ -1,49 +1,47 @@
-import { GameSystem } from '@/src/modules/rpg/domain/game-system.types';
+import type { GameSystem } from '@/src/modules/rpg/domain';
 
-import { CreateCampaignInput } from '../application/campaign.repository';
-import { Campaign, CampaignDetails, CampaignStatus } from '../domain';
-import {
+import type { CreateCampaignInput } from '../application';
+import type {
+  CampaignDetails,
+  CampaignStatus,
+  CampaignSummary,
+} from '../domain';
+import type {
   CampaignCreateRequest,
   CampaignDetailsResponse,
   CampaignListResponse,
-} from './dto.types';
+} from './campaign.dto';
 
-const toGameSystem = (val: string) =>
-  GameSystem[val as keyof typeof GameSystem];
-const toCampaignStatus = (val: string) =>
-  CampaignStatus[val as keyof typeof CampaignStatus];
+export const toCampaignSummary = (
+  response: CampaignListResponse,
+): CampaignSummary => ({
+  slug: response.slug,
+  name: response.name,
+  system: response.system as GameSystem,
+  status: response.status as CampaignStatus,
+  isDm: response.is_dm,
+  playerCount: response.player_count,
+});
 
-export const mapCampaignList = (
-  response: CampaignListResponse[],
-): Campaign[] =>
-  response.map((campaign) => ({
-    slug: campaign.slug,
-    name: campaign.name,
-    system: toGameSystem(campaign.system),
-    dmed: campaign.is_dm,
-    status: toCampaignStatus(campaign.status),
-    playerCount: campaign.player_count,
-  }));
-
-export const mapCampaignDetails = (
+export const toCampaignDetails = (
   response: CampaignDetailsResponse,
 ): CampaignDetails => ({
   id: response.id,
-  dmed: response.is_dm,
-  name: response.name,
-  playerCount: response.characters.length,
   slug: response.slug,
-  status: toCampaignStatus(response.status),
-  system: toGameSystem(response.system),
+  name: response.name,
+  system: response.system as GameSystem,
+  status: response.status as CampaignStatus,
+  isDm: response.is_dm,
   overview: response.overview,
   characters: response.characters,
+  playerCount: response.characters.length,
   inviteHash: response.invite_hash,
 });
 
-export const mapCampaignCreateInput = (
-  data: CreateCampaignInput,
+export const toCampaignCreateRequest = (
+  input: CreateCampaignInput,
 ): CampaignCreateRequest => ({
-  name: data.name,
-  system: data.system,
-  overview: data.overview,
+  name: input.name,
+  system: input.system,
+  overview: input.overview,
 });

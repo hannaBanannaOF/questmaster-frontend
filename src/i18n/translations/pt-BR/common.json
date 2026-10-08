@@ -2,10 +2,35 @@
   "header": {
     "dashboard": "Dashboard",
     "campaigns": "Campanhas",
-    "characters": "Personagens"
+    "characters": "Personagens",
+    "navLabel": "Navegação principal"
   },
   "user": {
     "greeting": "Olá, {name}",
     "greeting_default": "Olá, Aventureiro!"
+  },
+  "home": {
+    "title": "Bem-vindo ao Questmaster",
+    "subtitle": "Seu hub de gerenciamento de campanhas de RPG."
+  },
+  "breadcrumb": "Trilha de navegação",
+  "actions": {
+    "close": "Fechar",
+    "retry": "Tentar novamente",
+    "backHome": "Voltar ao início"
+  },
+  "form": {
+    "selectPlaceholder": "Selecione uma opção..."
+  },
+  "errors": {
+    "unexpected": "Algo deu errado. Tente novamente.",
+    "page": {
+      "title": "Algo deu errado",
+      "message": "Não foi possível carregar esta página."
+    },
+    "notFound": {
+      "title": "Página não encontrada",
+      "message": "O que você procura não existe ou foi removido."
+    }
   }
 }

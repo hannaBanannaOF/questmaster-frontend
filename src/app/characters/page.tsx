@@ -1,19 +1,13 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from '@tanstack/react-query';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-import { CharacterListView, characterQueries } from '@/src/modules/character';
+import { CharacterListView } from '@/src/modules/character';
 
-export default async function CharacterListPage() {
-  const queryClient = new QueryClient();
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('character.list');
+  return { title: t('title') };
+}
 
-  await queryClient.prefetchQuery(characterQueries.list());
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <CharacterListView />
-    </HydrationBoundary>
-  );
+export default function CharactersPage() {
+  return <CharacterListView />;
 }

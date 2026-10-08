@@ -1,1 +1,1 @@
-export * from './invite.types';
+export * from './invite';

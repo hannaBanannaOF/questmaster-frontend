@@ -1,0 +1,11 @@
+.main {
+  max-width: 1200px;
+  margin: var(--spacing-sm) auto 0;
+  padding: var(--spacing-xl);
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: var(--spacing-md);
+  }
+}

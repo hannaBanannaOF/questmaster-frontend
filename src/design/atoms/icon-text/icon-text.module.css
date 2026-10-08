@@ -1,0 +1,23 @@
+.iconText {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.iconText[data-tone='muted'] {
+  color: var(--color-text-muted);
+}
+
+.iconText[data-tone='primary'] {
+  color: var(--color-primary);
+}
+
+.iconText[data-tone='danger'] {
+  color: var(--color-destructive);
+}
+
+.iconText > svg {
+  flex-shrink: 0;
+}

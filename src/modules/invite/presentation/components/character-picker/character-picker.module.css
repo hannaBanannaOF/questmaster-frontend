@@ -1,0 +1,33 @@
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option {
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: var(--color-card-fg);
+}
+
+/* Seleção via CSS: o rádio nativo carrega o estado, sem JS */
+.option:has(input:checked) {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-soft);
+}
+
+.option:has(input:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.check {
+  display: none;
+  color: var(--color-primary);
+}
+
+.option:has(input:checked) .check {
+  display: flex;
+}

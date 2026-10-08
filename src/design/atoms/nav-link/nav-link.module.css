@@ -1,0 +1,21 @@
+.navLink {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.navLink:hover {
+  color: var(--color-text-primary);
+}
+
+.navLink[aria-current='page'] {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

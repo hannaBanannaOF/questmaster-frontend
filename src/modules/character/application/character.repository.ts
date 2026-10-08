@@ -1,16 +1,24 @@
-import { Character, CharacterDetail } from '../domain';
-import { CharacterListFilters } from '../infra/dto.types';
+import type { GameSystem } from '@/src/modules/rpg/domain';
 
-export type CreateCharacterInput = {
+import type { CharacterDetails, CharacterSummary } from '../domain';
+
+export interface CharacterFilters {
+  gameSystem?: GameSystem;
+  /** Só personagens que ainda não estão em nenhuma campanha. */
+  withoutCampaign?: boolean;
+}
+
+export interface CreateCharacterInput {
   name: string;
   hp: number;
-  system: string;
-};
+  system: GameSystem;
+}
 
 export interface CharacterRepository {
-  getCharacters(filters?: CharacterListFilters): Promise<Character[]>;
-  getCharacterDetail(id: number): Promise<CharacterDetail>;
-  createCharacter(data: CreateCharacterInput): Promise<void>;
-  deleteCharacter(id: number): Promise<void>;
-  updateCharacterHp(id: number, newHp: number): Promise<number>;
+  list(filters?: CharacterFilters): Promise<CharacterSummary[]>;
+  findById(id: number): Promise<CharacterDetails>;
+  resolveSlug(slug: string): Promise<number>;
+  create(input: CreateCharacterInput): Promise<void>;
+  delete(id: number): Promise<void>;
+  updateHp(id: number, hp: number): Promise<number>;
 }

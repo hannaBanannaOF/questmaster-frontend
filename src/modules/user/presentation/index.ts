@@ -1,2 +1,1 @@
-export * from './components';
-export * from './user.hooks';
+export * from './components/user-greeting/user-greeting';

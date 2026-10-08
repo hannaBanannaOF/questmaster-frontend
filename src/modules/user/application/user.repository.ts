@@ -1,5 +1,5 @@
-import { UserInfo } from '../domain/user.types';
+import type { User } from '../domain';
 
 export interface UserRepository {
-  getUserInfo(): Promise<UserInfo>;
+  getCurrent(): Promise<User>;
 }

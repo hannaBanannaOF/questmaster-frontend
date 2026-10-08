@@ -4,7 +4,5 @@ import { Loader } from '@/src/design';
 
 export default async function Loading() {
   const t = await getTranslations('campaign.list');
-  return (
-    <Loader size="lg" message={t('loading')} />
-  );
+  return <Loader size="lg" message={t('loading')} />;
 }

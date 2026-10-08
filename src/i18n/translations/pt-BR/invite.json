@@ -21,7 +21,13 @@
     }
   },
   "character": {
-    "choose": "Escolha seu personagem"
+    "choose": "Escolha seu personagem",
+    "required": "Escolha um personagem para entrar na campanha."
   },
-  "join": "Juntar-se a campanha"
+  "join": "Juntar-se a campanha",
+  "notFound": {
+    "title": "Convite não encontrado",
+    "message": "O link pode estar errado ou o convite expirou.",
+    "back": "Voltar ao início"
+  }
 }
