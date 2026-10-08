@@ -12,8 +12,12 @@ O link `/join/<hash>` SHALL mostrar a campanha que está convidando: nome, siste
 - **WHEN** o usuário abre um link de convite válido
 - **THEN** vê "Você foi convidado para" com os dados da campanha e "Escolha seu personagem"
 
+#### Scenario: Campanha sem jogadores
+- **WHEN** a campanha do convite ainda não tem jogadores
+- **THEN** o número de jogadores aparece como "Nenhum jogador ainda"
+
 #### Scenario: Convite inválido ou expirado
-- **WHEN** o hash não existe ou o convite expirou
+- **WHEN** o hash não existe, não tem o formato de um convite ou o convite expirou
 - **THEN** vê "Convite não encontrado" com o botão "Voltar ao início"
 
 ### Requirement: Fichas elegíveis

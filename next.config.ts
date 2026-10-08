@@ -5,9 +5,6 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   output: 'standalone',
-  experimental: {
-    globalNotFound: true,
-  },
 };
 
 export default withNextIntl(nextConfig);
