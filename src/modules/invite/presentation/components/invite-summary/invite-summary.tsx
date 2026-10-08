@@ -35,14 +35,11 @@ export function InviteSummary({ invite }: { invite: Invite }) {
         <Stack align="center" gap="sm" className={styles.meta}>
           <GameSystemIcon system={invite.campaignSystem} size={16} />
           <span>{systemLabel}</span>
-          {invite.campaignPlayerCount > 0 && (
-            <>
-              <span aria-hidden>•</span>
-              <IconText tone="muted" icon={<Users size={12} />}>
-                {invite.campaignPlayerCount}
-              </IconText>
-            </>
-          )}
+          <span aria-hidden>•</span>
+          {/* Mesmo zerado: quem é convidado quer saber se a mesa já tem gente */}
+          <IconText tone="muted" icon={<Users size={12} />}>
+            {t('players', { count: invite.campaignPlayerCount })}
+          </IconText>
         </Stack>
         {invite.campaignOverview && <Quote>{invite.campaignOverview}</Quote>}
       </Stack>

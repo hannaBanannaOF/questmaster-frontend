@@ -10,6 +10,14 @@ export interface Invite {
   campaignSystem: GameSystem;
 }
 
+const HASH_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** O hash é um UUID; qualquer outra coisa no link não pode ser um convite. */
+export function isInviteHash(value: string) {
+  return HASH_PATTERN.test(value);
+}
+
 /** Caminho público do convite, compartilhado com os jogadores. */
 export function getInvitePath(hash: string) {
   return `/join/${hash}`;
