@@ -1,4 +1,4 @@
-.tabs {
+.list {
   display: inline-flex;
   gap: var(--spacing-xxs);
   margin: 0;
@@ -9,7 +9,7 @@
   list-style: none;
 }
 
-.tab {
+.item {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
@@ -21,16 +21,16 @@
   transition: all var(--duration-fast) var(--ease-standard);
 }
 
-.tab:hover {
+.item:hover {
   color: var(--color-text-primary);
 }
 
-.tab[aria-current='page'] {
+.item[aria-current='page'] {
   background-color: var(--color-primary-soft);
   color: var(--color-primary);
 }
 
-.tab:focus-visible {
+.item:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }

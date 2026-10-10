@@ -6,4 +6,6 @@ export * from './field/field';
 export * from './loader/loader';
 export * from './nav/nav';
 export * from './page-header/page-header';
+export * from './pagination/pagination';
+export * from './segmented-nav/segmented-nav';
 export * from './submit-button/submit-button';

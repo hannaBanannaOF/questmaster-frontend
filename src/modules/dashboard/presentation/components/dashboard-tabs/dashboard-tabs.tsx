@@ -1,9 +1,9 @@
 import { Crown, Swords } from 'lucide-react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { SegmentedNav } from '@/src/design';
+
 import type { DashboardTab } from '../../../domain';
-import styles from './dashboard-tabs.module.css';
 
 const TABS = [
   { view: 'player', icon: Swords },
@@ -15,21 +15,14 @@ export function DashboardTabs({ active }: { active: DashboardTab }) {
   const t = useTranslations('dashboard.tabs');
 
   return (
-    <nav aria-label={t('label')}>
-      <ul className={styles.tabs}>
-        {TABS.map(({ view, icon: Icon }) => (
-          <li key={view}>
-            <Link
-              href={`/?view=${view}`}
-              className={styles.tab}
-              aria-current={view === active ? 'page' : undefined}
-            >
-              <Icon size={18} aria-hidden />
-              {t(view)}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <SegmentedNav
+      label={t('label')}
+      items={TABS.map(({ view, icon: Icon }) => ({
+        href: `/?view=${view}`,
+        label: t(view),
+        icon: <Icon size={18} aria-hidden />,
+        current: view === active,
+      }))}
+    />
   );
 }
