@@ -30,5 +30,10 @@
     "title": "Convite não encontrado",
     "message": "O link pode estar errado ou o convite expirou.",
     "back": "Voltar ao início"
+  },
+  "dm": {
+    "title": "Você é o mestre desta campanha",
+    "message": "Mestres não entram na própria campanha como jogador. Mande este link pra sua party.",
+    "action": "Ir para a campanha"
   }
 }
