@@ -1,3 +1,4 @@
+import type { Page, PageRequest } from '@/src/lib/pagination';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
 import type { CharacterDetails, CharacterSummary } from '../domain';
@@ -15,7 +16,10 @@ export interface CreateCharacterInput {
 }
 
 export interface CharacterRepository {
-  list(filters?: CharacterFilters): Promise<CharacterSummary[]>;
+  list(
+    filters: CharacterFilters,
+    page: PageRequest,
+  ): Promise<Page<CharacterSummary>>;
   findById(id: number): Promise<CharacterDetails>;
   resolveSlug(slug: string): Promise<number>;
   create(input: CreateCharacterInput): Promise<void>;

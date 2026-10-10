@@ -12,6 +12,7 @@ export interface InviteDetailsResponse {
   campaign_name: string;
   campaign_overview?: string;
   campaign_player_count: number;
+  is_dm: boolean;
   campaign_system: string;
 }
 

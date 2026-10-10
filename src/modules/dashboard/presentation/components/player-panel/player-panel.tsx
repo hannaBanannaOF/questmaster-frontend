@@ -3,38 +3,32 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { Card, List, ListItem, Stack, Text, Title } from '@/src/design';
-import {
-  type CampaignSummary,
-  CreateCampaignButton,
-} from '@/src/modules/campaign';
+import type { Page } from '@/src/lib/pagination';
+import { CreateCampaignButton } from '@/src/modules/campaign';
 import {
   CharacterCard,
   type CharacterSummary,
   CreateCharacterButton,
 } from '@/src/modules/character';
 
-import { pickContinueCampaign } from '../../../domain';
-import type { Loaded } from '../../dashboard.loaders';
+import type { DashboardCampaigns, Loaded } from '../../dashboard.loaders';
 import styles from '../../dashboard.module.css';
 import { ContinuePlayingCard } from '../continue-playing-card/continue-playing-card';
 import { CrossRoleBanner } from '../cross-role-banner/cross-role-banner';
 import { RoleEmptyState } from '../role-empty-state/role-empty-state';
 import { SectionError } from '../section-error/section-error';
 
-/** Quantos personagens cabem na prévia antes do "Ver todos". */
-const PREVIEW_SIZE = 5;
-
 interface PlayerPanelProps {
-  /** Campanhas de outros mestres; ausente quando a busca falhou. */
-  playerCampaigns?: CampaignSummary[];
-  dmCampaignCount: number;
-  characters: Loaded<CharacterSummary[]>;
-  idleCharacters: Loaded<CharacterSummary[]>;
+  /** Ausente quando a busca de campanhas falhou. */
+  campaigns?: DashboardCampaigns;
+  /** Prévia dos personagens, com o total. */
+  characters: Loaded<Page<CharacterSummary>>;
+  /** Prévia dos personagens sem campanha, com o total. */
+  idleCharacters: Loaded<Page<CharacterSummary>>;
 }
 
 export async function PlayerPanel({
-  playerCampaigns,
-  dmCampaignCount,
+  campaigns,
   characters,
   idleCharacters,
 }: PlayerPanelProps) {
@@ -44,9 +38,12 @@ export async function PlayerPanel({
     getTranslations('campaign'),
   ]);
 
-  const crossRole = dmCampaignCount > 0 && (
+  const dmTotal = campaigns?.dmTotal ?? 0;
+  const playerTotal = campaigns?.playerTotal ?? 0;
+
+  const crossRole = dmTotal > 0 && (
     <CrossRoleBanner
-      title={t('crossRole.toDm.title', { count: dmCampaignCount })}
+      title={t('crossRole.toDm.title', { count: dmTotal })}
       hint={t('crossRole.toDm.hint')}
       href="/?view=dm"
       action={t('crossRole.toDm.action')}
@@ -62,8 +59,7 @@ export async function PlayerPanel({
     );
   }
 
-  const isEmpty =
-    characters.data.length === 0 && (playerCampaigns?.length ?? 0) === 0;
+  const isEmpty = characters.data.total === 0 && playerTotal === 0;
 
   if (isEmpty) {
     return (
@@ -85,21 +81,22 @@ export async function PlayerPanel({
     );
   }
 
-  const continueCampaign = playerCampaigns
-    ? pickContinueCampaign(playerCampaigns)
-    : undefined;
-  const idle = idleCharacters.ok ? idleCharacters.data : [];
+  const continueCampaign = campaigns?.continueCampaign;
+  const idle = idleCharacters.ok
+    ? idleCharacters.data
+    : { items: [], total: 0 };
   const allIdle =
-    playerCampaigns?.length === 0 && idle.length === characters.data.length;
+    campaigns !== undefined &&
+    playerTotal === 0 &&
+    idle.total === characters.data.total;
   // Com todos parados, o destaque "pronto pra aventura" já explica o convite
-  const showIdle = !allIdle && idle.length > 0;
-  const showBecomeDm = dmCampaignCount === 0;
+  const showIdle = !allIdle && idle.total > 0;
+  const hiddenIdle = idle.total - idle.items.length;
+  const showBecomeDm = campaigns !== undefined && dmTotal === 0;
 
   return (
     <>
-      {!playerCampaigns && (
-        <SectionError title={tCampaign('toast.error.list')} />
-      )}
+      {!campaigns && <SectionError title={tCampaign('toast.error.list')} />}
       {continueCampaign && <ContinuePlayingCard campaign={continueCampaign} />}
       {!continueCampaign && allIdle && (
         <Card as="section" hero aria-labelledby="dashboard-ready">
@@ -124,12 +121,14 @@ export async function PlayerPanel({
         >
           <Stack align="center" justify="space-between">
             <Title order={3}>{t('player.characters')}</Title>
-            {characters.data.length > PREVIEW_SIZE && (
-              <Link href="/characters">{t('player.seeAll')}</Link>
+            {characters.data.total > characters.data.items.length && (
+              <Link href="/characters">
+                {t('player.seeAll', { count: characters.data.total })}
+              </Link>
             )}
           </Stack>
           <List>
-            {characters.data.slice(0, PREVIEW_SIZE).map((character) => (
+            {characters.data.items.map((character) => (
               <ListItem key={character.slug}>
                 <CharacterCard character={character} />
               </ListItem>
@@ -149,10 +148,12 @@ export async function PlayerPanel({
               <Card compact>
                 <Stack direction="column" gap="xs">
                   <Text bold>
-                    {t('player.idle.title', { count: idle.length })}
+                    {t('player.idle.title', { count: idle.total })}
                   </Text>
                   <Text tone="muted" small>
-                    {idle.map((character) => character.name).join(', ')}
+                    {idle.items.map((character) => character.name).join(', ')}
+                    {hiddenIdle > 0 &&
+                      ` ${t('player.idle.more', { count: hiddenIdle })}`}
                   </Text>
                   <Text tone="muted" small>
                     {t('player.idle.message')}

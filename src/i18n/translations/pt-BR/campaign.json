@@ -7,7 +7,24 @@
       "message": "Seu livro de aventuras está vazio. Crie sua primeira campanha para começar a sua jornada.",
       "create": "Criar campanha"
     },
-    "new": "Nova campanha"
+    "new": "Nova campanha",
+    "filters": {
+      "role": "Filtrar por papel",
+      "all": "Todas",
+      "dm": "Mestrando",
+      "player": "Jogando",
+      "status": "Status",
+      "anyStatus": "Todos os status",
+      "apply": "Filtrar"
+    },
+    "filtered": {
+      "empty": {
+        "title": "Nenhuma campanha encontrada",
+        "message": "Nenhuma das suas campanhas bate com esses filtros.",
+        "clear": "Limpar filtros"
+      }
+    },
+    "range": "Mostrando {from, number}–{to, number} de {total, number} campanhas"
   },
   "dm": "DM",
   "status": {
@@ -86,5 +103,8 @@
   "errors": {
     "invalidTransition": "Essa mudança de status não é permitida.",
     "notDeletable": "Só é possível excluir campanhas em rascunho ou arquivadas."
+  },
+  "card": {
+    "playingWith": "Com {names}"
   }
 }

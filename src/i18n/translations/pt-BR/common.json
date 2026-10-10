@@ -32,5 +32,16 @@
       "title": "Página não encontrada",
       "message": "O que você procura não existe ou foi removido."
     }
+  },
+  "pagination": {
+    "label": "Paginação",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "page": "Página {page}",
+    "outOfRange": {
+      "title": "Essa página não existe",
+      "message": "A lista tem {count, plural, one {# página} other {# páginas}}. Ela pode ter diminuído desde que o link foi copiado.",
+      "action": "Ir para a primeira página"
+    }
   }
 }

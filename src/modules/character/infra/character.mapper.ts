@@ -1,3 +1,4 @@
+import type { PageRequest } from '@/src/lib/pagination';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
 import type { CharacterFilters, CreateCharacterInput } from '../application';
@@ -28,10 +29,13 @@ export const toCharacterDetails = (
 });
 
 export const toCharacterListQuery = (
-  filters: CharacterFilters = {},
+  filters: CharacterFilters,
+  page: PageRequest,
 ): CharacterListQuery => ({
   game_system: filters.gameSystem,
   without_campaign: filters.withoutCampaign,
+  limit: page.limit,
+  offset: page.offset,
 });
 
 export const toCharacterCreateRequest = (

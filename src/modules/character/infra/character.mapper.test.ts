@@ -46,17 +46,24 @@ describe('toCharacterDetails', () => {
 describe('toCharacterListQuery', () => {
   it('converte os filtros para a query da API', () => {
     expect(
-      toCharacterListQuery({
-        gameSystem: GameSystem.CALL_OF_CTHULHU,
-        withoutCampaign: true,
-      }),
-    ).toEqual({ game_system: 'CALL_OF_CTHULHU', without_campaign: true });
+      toCharacterListQuery(
+        { gameSystem: GameSystem.CALL_OF_CTHULHU, withoutCampaign: true },
+        { limit: 10, offset: 20 },
+      ),
+    ).toEqual({
+      game_system: 'CALL_OF_CTHULHU',
+      without_campaign: true,
+      limit: 10,
+      offset: 20,
+    });
   });
 
-  it('sem filtros, não envia nada', () => {
-    expect(toCharacterListQuery()).toEqual({
+  it('sem filtros, envia só a página', () => {
+    expect(toCharacterListQuery({}, { limit: 5, offset: 0 })).toEqual({
       game_system: undefined,
       without_campaign: undefined,
+      limit: 5,
+      offset: 0,
     });
   });
 });

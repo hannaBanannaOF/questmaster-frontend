@@ -10,6 +10,7 @@ import {
 } from '../domain';
 import type { CampaignRepository } from './campaign.repository';
 import {
+  makeCountCampaignsByStatus,
   makeCreateCampaign,
   makeDeleteCampaign,
   makeGetCampaignBySlug,
@@ -23,7 +24,13 @@ function fakeRepository(
   overrides: Partial<CampaignRepository> = {},
 ): CampaignRepository {
   return {
-    list: vi.fn().mockResolvedValue([]),
+    list: vi.fn().mockResolvedValue({ items: [], total: 0 }),
+    countByStatus: vi.fn().mockResolvedValue({
+      DRAFT: 0,
+      ACTIVE: 0,
+      PAUSED: 0,
+      ARCHIVED: 0,
+    }),
     findById: vi.fn().mockResolvedValue(aCampaignDetails()),
     resolveSlug: vi.fn().mockResolvedValue(1),
     create: vi.fn().mockResolvedValue(undefined),
@@ -34,13 +41,28 @@ function fakeRepository(
 }
 
 describe('makeListCampaigns', () => {
-  it('devolve as campanhas do repositório', async () => {
-    const campaigns = [aCampaign()];
+  it('repassa filtros e página e devolve a página do repositório', async () => {
+    const page = { items: [aCampaign()], total: 11 };
     const repository = fakeRepository({
-      list: vi.fn().mockResolvedValue(campaigns),
+      list: vi.fn().mockResolvedValue(page),
     });
+    const filters = { role: 'dm' as const, status: ACTIVE };
+    const request = { limit: 10, offset: 10 };
 
-    await expect(makeListCampaigns(repository)()).resolves.toBe(campaigns);
+    await expect(makeListCampaigns(repository)(filters, request)).resolves.toBe(
+      page,
+    );
+    expect(repository.list).toHaveBeenCalledWith(filters, request);
+  });
+});
+
+describe('makeCountCampaignsByStatus', () => {
+  it('conta pelo papel pedido', async () => {
+    const repository = fakeRepository();
+
+    await makeCountCampaignsByStatus(repository)('player');
+
+    expect(repository.countByStatus).toHaveBeenCalledWith('player');
   });
 });
 

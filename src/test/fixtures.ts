@@ -20,13 +20,19 @@ export const aCampaign = (
   status: CampaignStatus.DRAFT,
   isDm: true,
   playerCount: 0,
+  myCharacters: [],
   ...overrides,
 });
 
 export const aCampaignDetails = (
   overrides: Partial<CampaignDetails> = {},
 ): CampaignDetails => ({
-  ...aCampaign(),
+  slug: 'mascaras-de-nyarlathotep',
+  name: 'Máscaras de Nyarlathotep',
+  system: GameSystem.CALL_OF_CTHULHU,
+  status: CampaignStatus.DRAFT,
+  isDm: true,
+  playerCount: 0,
   id: 1,
   characters: [],
   ...overrides,

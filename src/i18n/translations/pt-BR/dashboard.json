@@ -16,7 +16,7 @@
     "newCharacter": "Novo personagem",
     "openCampaign": "Ver campanha",
     "characters": "Meus personagens",
-    "seeAll": "Ver todos",
+    "seeAll": "Ver todos ({count, number})",
     "nextSteps": "Próximos passos",
     "ready": {
       "title": "Seus personagens ainda não estão em nenhuma campanha",
@@ -24,7 +24,8 @@
     },
     "idle": {
       "title": "{count, plural, one {# personagem sem campanha} other {# personagens sem campanha}}",
-      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar."
+      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar.",
+      "more": "e mais {count, number}"
     },
     "becomeDm": {
       "title": "Quer mestrar?",
@@ -40,7 +41,8 @@
         "join": "Abra o link e escolha com qual ficha entrar."
       },
       "action": "Criar personagem"
-    }
+    },
+    "playingWith": "Com {names}"
   },
   "dm": {
     "subtitle": "As campanhas que você mestra, num lugar só.",
@@ -56,7 +58,8 @@
         "start": "Clique em <bold>Iniciar</bold> quando todo mundo entrar."
       },
       "action": "Criar campanha"
-    }
+    },
+    "seeAll": "Ver todas ({count, number})"
   },
   "steps": "Como começar",
   "crossRole": {

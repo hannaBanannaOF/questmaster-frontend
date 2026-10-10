@@ -4,11 +4,7 @@ import { Stack, Text, Title } from '@/src/design';
 import { CreateCampaignButton } from '@/src/modules/campaign';
 import { CreateCharacterButton } from '@/src/modules/character';
 
-import {
-  hasPlayerRole,
-  resolveDashboardTab,
-  splitCampaignsByRole,
-} from '../../domain';
+import { hasPlayerRole, resolveDashboardTab } from '../../domain';
 import { DashboardTabs } from '../components/dashboard-tabs/dashboard-tabs';
 import { DashboardUnavailable } from '../components/dashboard-unavailable/dashboard-unavailable';
 import { DashboardWelcome } from '../components/dashboard-welcome/dashboard-welcome';
@@ -23,12 +19,11 @@ export async function DashboardView({ view }: { view?: string }) {
     getTranslations('dashboard'),
   ]);
 
-  const byRole = campaigns.ok
-    ? splitCampaignsByRole(campaigns.data)
-    : undefined;
+  const campaignData = campaigns.ok ? campaigns.data : undefined;
   const hasPlayer =
-    characters.ok && hasPlayerRole(characters.data, byRole?.player ?? []);
-  const hasDm = (byRole?.dm.length ?? 0) > 0;
+    characters.ok &&
+    hasPlayerRole(characters.data.total, campaignData?.playerTotal ?? 0);
+  const hasDm = (campaignData?.dmTotal ?? 0) > 0;
 
   // Tudo falhou: mostrar abas com dois erros empilhados só confundiria
   if (!campaigns.ok && !characters.ok) {
@@ -62,13 +57,12 @@ export async function DashboardView({ view }: { view?: string }) {
 
       {active === 'player' ? (
         <PlayerPanel
-          playerCampaigns={byRole?.player}
-          dmCampaignCount={byRole?.dm.length ?? 0}
+          campaigns={campaignData}
           characters={characters}
           idleCharacters={idleCharacters}
         />
       ) : (
-        <DmPanel dmCampaigns={byRole?.dm} hasPlayerRole={hasPlayer} />
+        <DmPanel campaigns={campaignData} hasPlayerRole={hasPlayer} />
       )}
     </Stack>
   );

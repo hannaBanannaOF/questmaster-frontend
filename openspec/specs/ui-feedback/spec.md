@@ -39,3 +39,18 @@ Resultados de ações (criar, excluir, atualizar, convidar, entrar) SHALL ser co
 #### Scenario: Erro ao excluir
 - **WHEN** a exclusão de uma campanha falha
 - **THEN** aparece um toast de erro com o título "Não foi possível excluir campanha!"
+
+### Requirement: Paginação de listas
+As listas de campanhas e de personagens SHALL mostrar 10 itens por página, com páginas numeradas na URL (`?page=N`) e o resumo "Mostrando X–Y de N". Os filtros (papel e status nas campanhas, "Sem campanha" nos personagens) SHALL ficar na URL, e trocar um filtro SHALL voltar para a página 1. O paginador MUST NOT aparecer quando tudo cabe numa página. Enquanto a nova página carrega, o Loader SHALL ocupar o lugar da lista, mantendo cabeçalho e filtros.
+
+#### Scenario: Muitas páginas
+- **WHEN** a lista tem mais páginas do que cabem no paginador
+- **THEN** ele mostra a primeira, a última e as vizinhas da atual, com reticências entre elas
+
+#### Scenario: Filtro sem resultado
+- **WHEN** nenhum item bate com os filtros
+- **THEN** aparece um estado vazio específico do filtro, com o caminho para limpar os filtros
+
+#### Scenario: Página além do fim
+- **WHEN** o usuário abre uma página maior que a última
+- **THEN** vê "Essa página não existe" com o link para a primeira página

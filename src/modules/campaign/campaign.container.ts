@@ -3,6 +3,7 @@ import 'server-only';
 import { createHttpClient, Microservice } from '@/src/lib/http';
 
 import {
+  makeCountCampaignsByStatus,
   makeCreateCampaign,
   makeDeleteCampaign,
   makeGetCampaignBySlug,
@@ -18,6 +19,7 @@ const campaigns = createCampaignHttpRepository(
 
 export const campaignUseCases = {
   listCampaigns: makeListCampaigns(campaigns),
+  countCampaignsByStatus: makeCountCampaignsByStatus(campaigns),
   getCampaignBySlug: makeGetCampaignBySlug(campaigns),
   createCampaign: makeCreateCampaign(campaigns),
   deleteCampaign: makeDeleteCampaign(campaigns),

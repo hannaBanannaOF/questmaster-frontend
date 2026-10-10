@@ -1,3 +1,5 @@
+import type { PageRequest } from '@/src/lib/pagination';
+
 import {
   canEditCharacter,
   CharacterNotEditableError,
@@ -11,8 +13,9 @@ import type {
 } from './character.repository';
 
 export const makeListCharacters =
-  (characters: CharacterRepository) => (filters?: CharacterFilters) =>
-    characters.list(filters);
+  (characters: CharacterRepository) =>
+  (filters: CharacterFilters, page: PageRequest) =>
+    characters.list(filters, page);
 
 export const makeGetCharacterBySlug =
   (characters: CharacterRepository) => async (slug: string) =>

@@ -15,6 +15,7 @@ const invite: Invite = {
   campaignName: 'Máscaras de Nyarlathotep',
   campaignPlayerCount: 3,
   campaignSystem: GameSystem.CALL_OF_CTHULHU,
+  isDm: false,
 };
 
 function fakeRepository(

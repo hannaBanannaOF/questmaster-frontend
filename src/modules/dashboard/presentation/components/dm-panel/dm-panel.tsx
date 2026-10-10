@@ -1,28 +1,31 @@
 import { Crown } from 'lucide-react';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
-import { Card, List, ListItem, Stack, Title } from '@/src/design';
+import { List, ListItem, Stack, Title } from '@/src/design';
 import {
   CampaignCard,
+  campaignListHref,
   CampaignStatusBadge,
-  type CampaignSummary,
   CreateCampaignButton,
+  orderStatusCounts,
 } from '@/src/modules/campaign';
+import { CardLink } from '@/src/modules/shared/presentation';
 
-import { countCampaignsByStatus, sortDmCampaigns } from '../../../domain';
+import type { DashboardCampaigns } from '../../dashboard.loaders';
 import styles from '../../dashboard.module.css';
 import { CrossRoleBanner } from '../cross-role-banner/cross-role-banner';
 import { RoleEmptyState } from '../role-empty-state/role-empty-state';
 import { SectionError } from '../section-error/section-error';
 
 interface DmPanelProps {
-  /** Campanhas mestradas pelo usuário; ausente quando a busca falhou. */
-  dmCampaigns?: CampaignSummary[];
+  /** Ausente quando a busca de campanhas falhou. */
+  campaigns?: DashboardCampaigns;
   hasPlayerRole: boolean;
 }
 
-export async function DmPanel({ dmCampaigns, hasPlayerRole }: DmPanelProps) {
+export async function DmPanel({ campaigns, hasPlayerRole }: DmPanelProps) {
   const [t, tCampaign] = await Promise.all([
     getTranslations('dashboard'),
     getTranslations('campaign'),
@@ -37,7 +40,7 @@ export async function DmPanel({ dmCampaigns, hasPlayerRole }: DmPanelProps) {
     />
   );
 
-  if (!dmCampaigns) {
+  if (!campaigns) {
     return (
       <>
         <SectionError title={tCampaign('toast.error.list')} />
@@ -46,7 +49,7 @@ export async function DmPanel({ dmCampaigns, hasPlayerRole }: DmPanelProps) {
     );
   }
 
-  if (dmCampaigns.length === 0) {
+  if (campaigns.dmTotal === 0) {
     const bold = (chunks: ReactNode) => <strong>{chunks}</strong>;
     return (
       <>
@@ -69,21 +72,32 @@ export async function DmPanel({ dmCampaigns, hasPlayerRole }: DmPanelProps) {
 
   return (
     <>
+      {/* Cada status leva à lista de campanhas já filtrada */}
       <section aria-label={t('dm.summary')} className={styles.statusGrid}>
-        {countCampaignsByStatus(dmCampaigns).map(({ status, count }) => (
-          <Card key={status} compact>
+        {orderStatusCounts(campaigns.dmCounts).map(({ status, count }) => (
+          <CardLink
+            key={status}
+            href={campaignListHref({ role: 'dm', status })}
+          >
             <Stack align="center" justify="space-between">
               <CampaignStatusBadge status={status} />
               <span className={styles.count}>{count}</span>
             </Stack>
-          </Card>
+          </CardLink>
         ))}
       </section>
 
       <Stack as="section" direction="column" align="stretch">
-        <Title order={3}>{t('dm.campaigns')}</Title>
+        <Stack align="center" justify="space-between">
+          <Title order={3}>{t('dm.campaigns')}</Title>
+          {campaigns.dmTotal > campaigns.dmPreview.items.length && (
+            <Link href={campaignListHref({ role: 'dm' })}>
+              {t('dm.seeAll', { count: campaigns.dmTotal })}
+            </Link>
+          )}
+        </Stack>
         <List>
-          {sortDmCampaigns(dmCampaigns).map((campaign) => (
+          {campaigns.dmPreview.items.map((campaign) => (
             <ListItem key={campaign.slug}>
               <CampaignCard campaign={campaign} />
             </ListItem>
