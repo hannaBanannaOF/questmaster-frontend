@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -68,7 +68,10 @@ describe('CampaignStatusActions', () => {
     );
 
     finish({ ok: true, data: undefined });
-    expect(await screen.findByRole('button', { name: 'Pausar' })).toBeEnabled();
+    // O botão já existe desabilitado; espera a transição terminar
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Pausar' })).toBeEnabled(),
+    );
   });
 
   it('avisa com o motivo quando a API recusa', async () => {
