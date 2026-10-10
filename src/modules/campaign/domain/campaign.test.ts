@@ -38,7 +38,7 @@ describe('canInviteToCampaign', () => {
   it.each([
     [DRAFT, true],
     [ACTIVE, true],
-    [PAUSED, false],
+    [PAUSED, true],
     [ARCHIVED, false],
   ])('DM em %s → %s', (status, expected) => {
     expect(canInviteToCampaign({ isDm: true, status })).toBe(expected);

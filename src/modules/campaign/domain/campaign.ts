@@ -40,11 +40,10 @@ export function canDeleteCampaign(campaign: CampaignAccess) {
   );
 }
 
-/** Convites só fazem sentido enquanto a campanha pode receber jogadores. */
+/**
+ * Convites valem enquanto a campanha não terminou: pausada ainda recebe
+ * jogadores, só arquivada não (mesma regra do core).
+ */
 export function canInviteToCampaign(campaign: CampaignAccess) {
-  return (
-    campaign.isDm &&
-    campaign.status !== CampaignStatus.PAUSED &&
-    campaign.status !== CampaignStatus.ARCHIVED
-  );
+  return campaign.isDm && campaign.status !== CampaignStatus.ARCHIVED;
 }

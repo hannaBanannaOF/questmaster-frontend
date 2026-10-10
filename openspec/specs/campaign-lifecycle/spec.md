@@ -43,8 +43,16 @@ O DM SHALL poder excluir uma campanha apenas em Rascunho ou Arquivada, sempre ap
 - **WHEN** a campanha está Jogando ou Pausada
 - **THEN** o botão "Excluir" não aparece
 
-### Requirement: Convites só quando cabem jogadores
-O DM SHALL poder criar e copiar o link de convite apenas em Rascunho ou Jogando. Em Pausada ou Arquivada o controle de convite MUST NOT aparecer.
+### Requirement: Convites até a campanha ser arquivada
+O DM SHALL poder criar e copiar o link de convite em Rascunho, Jogando ou Pausada: uma campanha pausada continua aceitando jogadores. Em Arquivada o controle de convite MUST NOT aparecer, e o core recusa criar ou aceitar convites.
+
+#### Scenario: Campanha pausada
+- **WHEN** o DM abre uma campanha Pausada
+- **THEN** o controle de convite continua disponível
+
+#### Scenario: Campanha arquivada
+- **WHEN** o DM abre uma campanha Arquivada
+- **THEN** o controle de convite não aparece
 
 #### Scenario: Primeiro convite
 - **WHEN** o DM clica em "Criar convite" numa campanha sem convite
