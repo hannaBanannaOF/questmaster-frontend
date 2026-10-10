@@ -8,13 +8,17 @@ import type { Invite } from '../../../domain';
 import { acceptInviteAction } from '../../invite.actions';
 import { AcceptInviteForm } from '../accept-invite-form/accept-invite-form';
 
+const MAX_ELIGIBLE = 100;
+
 /** Fichas do usuário que podem entrar na campanha (mesmo sistema, sem campanha). */
 export async function EligibleCharacters({ invite }: { invite: Invite }) {
-  const [characters, t] = await Promise.all([
-    getCharacters({
-      gameSystem: invite.campaignSystem,
-      withoutCampaign: true,
-    }),
+  const [{ items: characters }, t] = await Promise.all([
+    // Uma página com o máximo da API: a escolha é uma lista só, sem paginador
+    getCharacters(
+      { gameSystem: invite.campaignSystem, withoutCampaign: true },
+      1,
+      MAX_ELIGIBLE,
+    ),
     getTranslations(),
   ]);
 

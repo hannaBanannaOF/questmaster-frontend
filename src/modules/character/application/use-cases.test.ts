@@ -17,7 +17,7 @@ function fakeRepository(
   overrides: Partial<CharacterRepository> = {},
 ): CharacterRepository {
   return {
-    list: vi.fn().mockResolvedValue([]),
+    list: vi.fn().mockResolvedValue({ items: [], total: 0 }),
     findById: vi.fn().mockResolvedValue(aCharacterDetails()),
     resolveSlug: vi.fn().mockResolvedValue(1),
     create: vi.fn().mockResolvedValue(undefined),
@@ -28,17 +28,18 @@ function fakeRepository(
 }
 
 describe('makeListCharacters', () => {
-  it('repassa os filtros ao repositório', async () => {
-    const characters = [aCharacter()];
+  it('repassa filtros e página ao repositório', async () => {
+    const page = { items: [aCharacter()], total: 1 };
     const repository = fakeRepository({
-      list: vi.fn().mockResolvedValue(characters),
+      list: vi.fn().mockResolvedValue(page),
     });
     const filters = { withoutCampaign: true };
+    const request = { limit: 10, offset: 0 };
 
-    await expect(makeListCharacters(repository)(filters)).resolves.toBe(
-      characters,
-    );
-    expect(repository.list).toHaveBeenCalledWith(filters);
+    await expect(
+      makeListCharacters(repository)(filters, request),
+    ).resolves.toBe(page);
+    expect(repository.list).toHaveBeenCalledWith(filters, request);
   });
 });
 

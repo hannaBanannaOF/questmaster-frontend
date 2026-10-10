@@ -8,6 +8,8 @@ export interface Invite {
   campaignOverview?: string;
   campaignPlayerCount: number;
   campaignSystem: GameSystem;
+  /** Quem abriu o convite é o mestre da campanha (e não pode entrar como jogador). */
+  isDm: boolean;
 }
 
 const HASH_PATTERN =

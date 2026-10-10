@@ -1,17 +1,27 @@
+import type { PageRequest } from '@/src/lib/pagination';
+
 import {
   CampaignNotDeletableError,
+  type CampaignRole,
   type CampaignStatus,
   canDeleteCampaign,
   canTransition,
   InvalidStatusTransitionError,
 } from '../domain';
 import type {
+  CampaignListFilters,
   CampaignRepository,
   CreateCampaignInput,
 } from './campaign.repository';
 
-export const makeListCampaigns = (campaigns: CampaignRepository) => () =>
-  campaigns.list();
+export const makeListCampaigns =
+  (campaigns: CampaignRepository) =>
+  (filters: CampaignListFilters, page: PageRequest) =>
+    campaigns.list(filters, page);
+
+export const makeCountCampaignsByStatus =
+  (campaigns: CampaignRepository) => (role?: CampaignRole) =>
+    campaigns.countByStatus(role);
 
 export const makeGetCampaignBySlug =
   (campaigns: CampaignRepository) => async (slug: string) =>

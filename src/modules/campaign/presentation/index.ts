@@ -1,5 +1,10 @@
 // API pública da apresentação (consumida pelas rotas em src/app)
-export { getCampaignBySlug, getCampaigns } from './campaign.loaders';
+export {
+  getCampaignBySlug,
+  getCampaignCounts,
+  getCampaigns,
+} from './campaign.loaders';
+export * from './campaign-list.params';
 export * from './components/campaign-card/campaign-card';
 export * from './components/campaign-status-badge/campaign-status-badge';
 export * from './components/create-campaign-button/create-campaign-button';

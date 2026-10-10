@@ -17,6 +17,7 @@ const toInvite = (response: InviteDetailsResponse): Invite => ({
   campaignOverview: response.campaign_overview,
   campaignPlayerCount: response.campaign_player_count,
   campaignSystem: response.campaign_system as GameSystem,
+  isDm: response.is_dm ?? false,
 });
 
 export const createInviteHttpRepository = (

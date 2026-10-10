@@ -20,6 +20,13 @@ O link `/join/<hash>` SHALL mostrar a campanha que está convidando: nome, siste
 - **WHEN** o hash não existe, não tem o formato de um convite ou o convite expirou
 - **THEN** vê "Convite não encontrado" com o botão "Voltar ao início"
 
+### Requirement: Convite aberto pelo mestre
+Quando o mestre da campanha abre o próprio convite, a página SHALL mostrar os dados da campanha e, no lugar da escolha de ficha, o aviso "Você é o mestre desta campanha" com o link para ela. O mestre MUST NOT ver o formulário de entrar.
+
+#### Scenario: Mestre confere o link
+- **WHEN** o DM abre o link de convite da própria campanha
+- **THEN** vê o aviso e "Ir para a campanha", sem a lista de fichas
+
 ### Requirement: Fichas elegíveis
 A escolha SHALL listar apenas personagens do usuário que são do mesmo sistema da campanha e ainda não estão em nenhuma campanha.
 

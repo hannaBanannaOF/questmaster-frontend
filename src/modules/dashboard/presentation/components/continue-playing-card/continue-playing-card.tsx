@@ -1,5 +1,5 @@
-import { Users } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { Swords, Users } from 'lucide-react';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { ButtonLink, Card, IconText, Stack, Text, Title } from '@/src/design';
 import {
@@ -19,7 +19,9 @@ export function ContinuePlayingCard({
   campaign: CampaignSummary;
 }) {
   const t = useTranslations('dashboard');
+  const format = useFormatter();
   const { label: systemLabel } = getGameSystemMeta(campaign.system);
+  const myCharacters = campaign.myCharacters.map(({ name }) => name);
 
   return (
     <Card as="section" hero aria-labelledby={TITLE_ID}>
@@ -42,6 +44,13 @@ export function ContinuePlayingCard({
                 {campaign.playerCount > 0 && (
                   <IconText tone="muted" icon={<Users size={16} />}>
                     {campaign.playerCount}
+                  </IconText>
+                )}
+                {myCharacters.length > 0 && (
+                  <IconText tone="muted" icon={<Swords size={16} />}>
+                    {t('player.playingWith', {
+                      names: format.list(myCharacters),
+                    })}
                   </IconText>
                 )}
               </Stack>

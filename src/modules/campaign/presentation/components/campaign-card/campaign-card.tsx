@@ -1,4 +1,5 @@
-import { Users } from 'lucide-react';
+import { Swords, Users } from 'lucide-react';
+import { useFormatter, useTranslations } from 'next-intl';
 
 import { IconText, Stack, Text, Title } from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
@@ -9,7 +10,10 @@ import { CampaignStatusBadge } from '../campaign-status-badge/campaign-status-ba
 import { DmBadge } from '../dm-badge/dm-badge';
 
 export function CampaignCard({ campaign }: { campaign: CampaignSummary }) {
+  const t = useTranslations('campaign.card');
+  const format = useFormatter();
   const { label: systemLabel } = getGameSystemMeta(campaign.system);
+  const myCharacters = campaign.myCharacters.map(({ name }) => name);
 
   return (
     <CardLink href={`/campaigns/${campaign.slug}`}>
@@ -28,6 +32,11 @@ export function CampaignCard({ campaign }: { campaign: CampaignSummary }) {
             {campaign.playerCount > 0 && (
               <IconText tone="muted" icon={<Users size={16} />}>
                 {campaign.playerCount}
+              </IconText>
+            )}
+            {myCharacters.length > 0 && (
+              <IconText tone="muted" icon={<Swords size={16} />}>
+                {t('playingWith', { names: format.list(myCharacters) })}
               </IconText>
             )}
           </Stack>

@@ -8,7 +8,20 @@
       "title": "Ainda sem heróis",
       "message": "Sua party está vazia. Crie seu primeiro personagem para começar a aventura",
       "create": "Criar personagem"
-    }
+    },
+    "filters": {
+      "label": "Filtrar personagens",
+      "all": "Todos",
+      "withoutCampaign": "Sem campanha"
+    },
+    "filtered": {
+      "empty": {
+        "title": "Todos na mesa",
+        "message": "Todos os seus personagens já estão em alguma campanha.",
+        "clear": "Ver todos"
+      }
+    },
+    "range": "Mostrando {from, number}–{to, number} de {total, number} personagens"
   },
   "create": {
     "title": "Novo personagem",

@@ -14,6 +14,7 @@ const anInvite = (overrides: Partial<Invite> = {}): Invite => ({
   campaignOverview: 'Nova York, 1925.',
   campaignPlayerCount: 0,
   campaignSystem: GameSystem.CALL_OF_CTHULHU,
+  isDm: false,
   ...overrides,
 });
 

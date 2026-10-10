@@ -4,13 +4,17 @@ import { notFound } from 'next/navigation';
 import { cache } from 'react';
 
 import { NotFoundError } from '@/src/lib/errors';
+import { PAGE_SIZE, toPageRequest } from '@/src/lib/pagination';
 
 import type { CharacterFilters } from '../application';
 import { characterUseCases } from '../character.container';
 
-export const getCharacters = cache((filters?: CharacterFilters) =>
-  characterUseCases.listCharacters(filters),
-);
+/** Uma página da lista de personagens; `size` muda só em prévias e no convite. */
+export const getCharacters = (
+  filters: CharacterFilters,
+  page: number,
+  size = PAGE_SIZE,
+) => characterUseCases.listCharacters(filters, toPageRequest(page, size));
 
 export const getCharacterBySlug = cache(async (slug: string) => {
   try {

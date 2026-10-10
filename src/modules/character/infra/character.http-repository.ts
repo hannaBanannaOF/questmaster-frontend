@@ -1,11 +1,12 @@
 import type { HttpClient } from '@/src/lib/http';
+import { mapPage } from '@/src/lib/pagination';
 
 import type { CharacterRepository } from '../application';
 import type {
   CharacterDetailsResponse,
   CharacterHpRequest,
   CharacterHpResponse,
-  CharacterListResponse,
+  CharacterListPageResponse,
   SlugResolveResponse,
 } from './character.dto';
 import {
@@ -18,12 +19,12 @@ import {
 export const createCharacterHttpRepository = (
   http: HttpClient,
 ): CharacterRepository => ({
-  async list(filters) {
-    const response = await http.get<CharacterListResponse[]>(
+  async list(filters, page) {
+    const response = await http.get<CharacterListPageResponse>(
       'character',
-      toCharacterListQuery(filters),
+      toCharacterListQuery(filters, page),
     );
-    return response.map(toCharacterSummary);
+    return mapPage(response, toCharacterSummary);
   },
 
   async findById(id) {

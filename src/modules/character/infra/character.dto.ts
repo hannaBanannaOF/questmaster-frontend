@@ -11,10 +11,17 @@ export interface CharacterDetailsResponse extends CharacterListResponse {
   is_player: boolean;
 }
 
+export interface CharacterListPageResponse {
+  items: CharacterListResponse[];
+  total: number;
+}
+
 export interface CharacterListQuery {
   game_system?: string;
   without_campaign?: boolean;
-  [key: string]: string | boolean | undefined;
+  limit: number;
+  offset: number;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface CharacterCreateRequest {

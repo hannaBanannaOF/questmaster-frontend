@@ -5,7 +5,23 @@ export interface CampaignListResponse {
   status: string;
   system: string;
   player_count: number;
+  my_characters: { slug: string; name: string }[];
 }
+
+export interface CampaignListPageResponse {
+  items: CampaignListResponse[];
+  total: number;
+}
+
+export interface CampaignListQuery {
+  role?: string;
+  status?: string;
+  limit: number;
+  offset: number;
+  [key: string]: string | number | undefined;
+}
+
+export type CampaignStatusCountsResponse = Record<string, number>;
 
 export interface CampaignDetailsResponse {
   id: number;

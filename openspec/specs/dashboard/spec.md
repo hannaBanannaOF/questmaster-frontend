@@ -17,7 +17,7 @@ O dashboard SHALL ter as abas "Jogando" e "Mestrando", ambas sempre visíveis, m
 - **THEN** vê um estado vazio com três passos e a ação para começar, e um atalho para a outra aba se ela tiver conteúdo
 
 ### Requirement: Aba Jogando
-A aba Jogando SHALL destacar a primeira campanha em andamento de outro mestre ("Continuar jogando"), listar até 5 personagens do usuário e indicar próximos passos.
+A aba Jogando SHALL destacar a primeira campanha em andamento de outro mestre ("Continuar jogando"), com as fichas do usuário nela, listar até 5 personagens do usuário com "Ver todos (N)" quando houver mais, e indicar próximos passos.
 
 #### Scenario: Personagens fora de campanha
 - **WHEN** nenhum personagem do usuário está em campanha
@@ -28,7 +28,11 @@ A aba Jogando SHALL destacar a primeira campanha em andamento de outro mestre ("
 - **THEN** "Próximos passos" oferece "Quer mestrar?" com o botão de criar campanha
 
 ### Requirement: Aba Mestrando
-A aba Mestrando SHALL mostrar a contagem de campanhas por status e a lista das campanhas que o usuário mestra, ordenadas por Jogando, Rascunho, Pausada e Arquivada.
+A aba Mestrando SHALL mostrar a contagem de campanhas por status, na ordem Jogando, Rascunho, Pausada e Arquivada, e até 5 campanhas que o usuário mestra, em ordem de nome, com "Ver todas (N)" quando houver mais. Cada contagem SHALL levar à lista de campanhas filtrada por mestre e por aquele status.
+
+#### Scenario: Atalho pelo status
+- **WHEN** o DM clica na contagem de campanhas Pausadas
+- **THEN** abre `/campaigns?role=dm&status=PAUSED`
 
 #### Scenario: Usuário que só joga
 - **WHEN** o usuário não mestra nenhuma campanha

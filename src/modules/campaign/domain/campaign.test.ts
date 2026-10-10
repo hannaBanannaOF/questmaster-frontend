@@ -4,6 +4,9 @@ import {
   canDeleteCampaign,
   canInviteToCampaign,
   canManageCampaign,
+  isCampaignRole,
+  orderStatusCounts,
+  totalCampaigns,
 } from './campaign';
 import { CampaignStatus } from './campaign-status';
 
@@ -50,4 +53,30 @@ describe('canInviteToCampaign', () => {
       expect(canInviteToCampaign({ isDm: false, status })).toBe(false);
     },
   );
+});
+
+describe('isCampaignRole', () => {
+  it('aceita só dm e player', () => {
+    expect(isCampaignRole('dm')).toBe(true);
+    expect(isCampaignRole('player')).toBe(true);
+    expect(isCampaignRole('DM')).toBe(false);
+    expect(isCampaignRole(undefined)).toBe(false);
+  });
+});
+
+describe('contagem por status', () => {
+  const counts = { [DRAFT]: 0, [ACTIVE]: 2, [PAUSED]: 1, [ARCHIVED]: 4 };
+
+  it('ordena por Jogando, Rascunho, Pausada e Arquivada, incluindo os zerados', () => {
+    expect(orderStatusCounts(counts)).toEqual([
+      { status: ACTIVE, count: 2 },
+      { status: DRAFT, count: 0 },
+      { status: PAUSED, count: 1 },
+      { status: ARCHIVED, count: 4 },
+    ]);
+  });
+
+  it('soma todos os status', () => {
+    expect(totalCampaigns(counts)).toBe(7);
+  });
 });
