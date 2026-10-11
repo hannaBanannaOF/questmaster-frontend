@@ -6,6 +6,8 @@ export interface CharacterSummary {
   system: GameSystem;
   currentHp?: number;
   maxHp?: number;
+  /** Última vez que o usuário abriu a ficha; ausente se nunca abriu. */
+  lastAccessedAt?: Date;
 }
 
 export interface CharacterDetails extends CharacterSummary {

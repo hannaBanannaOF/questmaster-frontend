@@ -1,4 +1,4 @@
-import type { Page, PageRequest } from '@/src/lib/pagination';
+import type { ListSort, Page, PageRequest } from '@/src/lib/pagination';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
 import type { CharacterDetails, CharacterSummary } from '../domain';
@@ -7,6 +7,7 @@ export interface CharacterFilters {
   gameSystem?: GameSystem;
   /** Só personagens que ainda não estão em nenhuma campanha. */
   withoutCampaign?: boolean;
+  sort?: ListSort;
 }
 
 export interface CreateCharacterInput {

@@ -3,6 +3,9 @@
 /** Itens por página nas listas do app. */
 export const PAGE_SIZE = 10;
 
+/** Ordem das listas: nome (padrão do core) ou último acesso do usuário. */
+export type ListSort = 'name' | 'recent';
+
 export interface PageRequest {
   limit: number;
   offset: number;

@@ -27,6 +27,10 @@
   gap: var(--spacing-sm);
 }
 
+.zero {
+  opacity: 0.55;
+}
+
 .count {
   font-family: var(--font-heading);
   font-size: var(--font-size-2xl);

@@ -35,6 +35,31 @@ describe('toCampaignSummary', () => {
   });
 });
 
+describe('toCampaignSummary · último acesso', () => {
+  const base = {
+    slug: 'mascaras',
+    name: 'Máscaras',
+    is_dm: false,
+    status: 'ACTIVE',
+    system: 'CALL_OF_CTHULHU',
+    player_count: 3,
+    my_characters: [],
+  };
+
+  it('converte a data do último acesso', () => {
+    expect(
+      toCampaignSummary({ ...base, last_accessed_at: '2026-10-10T18:30:00Z' })
+        .lastAccessedAt,
+    ).toEqual(new Date('2026-10-10T18:30:00Z'));
+  });
+
+  it.each([null, undefined])('sem acesso (%s) fica indefinido', (value) => {
+    expect(
+      toCampaignSummary({ ...base, last_accessed_at: value }).lastAccessedAt,
+    ).toBeUndefined();
+  });
+});
+
 describe('toCampaignListQuery', () => {
   it('junta filtros e página na query da API', () => {
     expect(
@@ -43,6 +68,15 @@ describe('toCampaignListQuery', () => {
         { limit: 10, offset: 30 },
       ),
     ).toEqual({ role: 'player', status: 'PAUSED', limit: 10, offset: 30 });
+  });
+
+  it('leva sort=recent só quando pedido', () => {
+    expect(
+      toCampaignListQuery({ sort: 'recent' }, { limit: 5, offset: 0 }).sort,
+    ).toBe('recent');
+    expect(toCampaignListQuery({}, { limit: 5, offset: 0 }).sort).toBe(
+      undefined,
+    );
   });
 });
 

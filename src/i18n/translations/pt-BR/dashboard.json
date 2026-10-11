@@ -2,6 +2,7 @@
   "title": "Dashboard",
   "loading": "Preparando sua mesa...",
   "greeting": "Bem-vindo de volta",
+  "greetingNamed": "Bem-vindo de volta, {name}",
   "eyebrow": {
     "continue": "Continuar jogando",
     "ready": "Pronto pra aventura"
@@ -15,7 +16,9 @@
     "subtitle": "Suas aventuras como jogador.",
     "newCharacter": "Novo personagem",
     "openCampaign": "Ver campanha",
-    "characters": "Meus personagens",
+    "campaigns": "Campanhas recentes",
+    "seeAllCampaigns": "Ver todas ({count, number})",
+    "characters": "Personagens recentes",
     "seeAll": "Ver todos ({count, number})",
     "nextSteps": "Próximos passos",
     "ready": {
@@ -48,7 +51,7 @@
     "subtitle": "As campanhas que você mestra, num lugar só.",
     "newCampaign": "Nova campanha",
     "summary": "Resumo por status",
-    "campaigns": "Suas campanhas",
+    "campaigns": "Campanhas recentes",
     "empty": {
       "title": "Você ainda não mestra nenhuma campanha",
       "message": "Que tal conduzir a próxima aventura? Crie uma campanha, escolha o sistema e convide sua party.",
