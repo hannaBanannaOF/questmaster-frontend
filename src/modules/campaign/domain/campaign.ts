@@ -18,6 +18,8 @@ export interface CampaignSummary {
   playerCount: number;
   /** Fichas do usuário logado nessa campanha; vazio quando ele só mestra. */
   myCharacters: CampaignCharacterRef[];
+  /** Última vez que o usuário abriu a campanha; ausente se nunca abriu. */
+  lastAccessedAt?: Date;
 }
 
 /** Papel do usuário numa campanha: quem mestra ou quem joga. */
@@ -52,7 +54,10 @@ export interface CampaignCharacter {
 }
 
 // O detalhe não traz as fichas do usuário: isso só vem na lista
-export interface CampaignDetails extends Omit<CampaignSummary, 'myCharacters'> {
+export interface CampaignDetails extends Omit<
+  CampaignSummary,
+  'myCharacters' | 'lastAccessedAt'
+> {
   id: number;
   overview?: string;
   characters: CampaignCharacter[];

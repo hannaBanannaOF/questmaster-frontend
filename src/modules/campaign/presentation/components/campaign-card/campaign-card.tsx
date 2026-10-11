@@ -3,7 +3,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 
 import { IconText, Stack, Text, Title } from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
-import { CardLink } from '@/src/modules/shared/presentation';
+import { CardLink, LastAccess } from '@/src/modules/shared/presentation';
 
 import type { CampaignSummary } from '../../../domain';
 import { CampaignStatusBadge } from '../campaign-status-badge/campaign-status-badge';
@@ -40,6 +40,7 @@ export function CampaignCard({ campaign }: { campaign: CampaignSummary }) {
               </IconText>
             )}
           </Stack>
+          <LastAccess date={campaign.lastAccessedAt} />
         </Stack>
       </Stack>
     </CardLink>

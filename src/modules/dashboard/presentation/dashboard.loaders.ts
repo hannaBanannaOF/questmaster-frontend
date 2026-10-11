@@ -28,19 +28,27 @@ async function settle<T>(promise: Promise<T>): Promise<Loaded<T>> {
   }
 }
 
-// Só o que a tela mostra: contagens, a prévia do mestre e a campanha em andamento
+// Só o que a tela mostra, na ordem do último acesso: contagens, prévias e a
+// campanha em andamento aberta por último (que pode não estar entre as 5 recentes)
 async function loadCampaigns() {
-  const [dmCounts, playerCounts, dmPreview, active] = await Promise.all([
-    getCampaignCounts('dm'),
-    getCampaignCounts('player'),
-    getCampaigns({ role: 'dm' }, 1, PREVIEW_SIZE),
-    getCampaigns({ role: 'player', status: CampaignStatus.ACTIVE }, 1, 1),
-  ]);
+  const [dmCounts, playerCounts, dmPreview, playerPreview, active] =
+    await Promise.all([
+      getCampaignCounts('dm'),
+      getCampaignCounts('player'),
+      getCampaigns({ role: 'dm', sort: 'recent' }, 1, PREVIEW_SIZE),
+      getCampaigns({ role: 'player', sort: 'recent' }, 1, PREVIEW_SIZE),
+      getCampaigns(
+        { role: 'player', status: CampaignStatus.ACTIVE, sort: 'recent' },
+        1,
+        1,
+      ),
+    ]);
   return {
     dmCounts,
     dmTotal: totalCampaigns(dmCounts),
     playerTotal: totalCampaigns(playerCounts),
     dmPreview,
+    playerPreview,
     continueCampaign: active.items.at(0),
   };
 }
@@ -50,7 +58,7 @@ export type DashboardCampaigns = Awaited<ReturnType<typeof loadCampaigns>>;
 export const getDashboardData = cache(async () => {
   const [campaigns, characters, idleCharacters] = await Promise.all([
     settle(loadCampaigns()),
-    settle(getCharacters({}, 1, PREVIEW_SIZE)),
+    settle(getCharacters({ sort: 'recent' }, 1, PREVIEW_SIZE)),
     settle(getCharacters({ withoutCampaign: true }, 1, PREVIEW_SIZE)),
   ]);
   return { campaigns, characters, idleCharacters };

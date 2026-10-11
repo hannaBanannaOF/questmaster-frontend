@@ -6,6 +6,7 @@ export interface CampaignListResponse {
   system: string;
   player_count: number;
   my_characters: { slug: string; name: string }[];
+  last_accessed_at?: string | null;
 }
 
 export interface CampaignListPageResponse {
@@ -16,6 +17,7 @@ export interface CampaignListPageResponse {
 export interface CampaignListQuery {
   role?: string;
   status?: string;
+  sort?: string;
   limit: number;
   offset: number;
   [key: string]: string | number | undefined;

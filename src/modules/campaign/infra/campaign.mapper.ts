@@ -26,6 +26,9 @@ export const toCampaignSummary = (
   isDm: response.is_dm,
   playerCount: response.player_count,
   myCharacters: response.my_characters ?? [],
+  lastAccessedAt: response.last_accessed_at
+    ? new Date(response.last_accessed_at)
+    : undefined,
 });
 
 export const toCampaignDetails = (
@@ -49,6 +52,7 @@ export const toCampaignListQuery = (
 ): CampaignListQuery => ({
   role: filters.role,
   status: filters.status,
+  sort: filters.sort,
   limit: page.limit,
   offset: page.offset,
 });

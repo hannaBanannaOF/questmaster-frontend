@@ -7,17 +7,14 @@ import { List, ListItem, Stack, Title } from '@/src/design';
 import {
   CampaignCard,
   campaignListHref,
-  CampaignStatusBadge,
   CreateCampaignButton,
-  orderStatusCounts,
 } from '@/src/modules/campaign';
-import { CardLink } from '@/src/modules/shared/presentation';
 
 import type { DashboardCampaigns } from '../../dashboard.loaders';
-import styles from '../../dashboard.module.css';
 import { CrossRoleBanner } from '../cross-role-banner/cross-role-banner';
 import { RoleEmptyState } from '../role-empty-state/role-empty-state';
 import { SectionError } from '../section-error/section-error';
+import { StatusCountGrid } from '../status-count-grid/status-count-grid';
 
 interface DmPanelProps {
   /** Ausente quando a busca de campanhas falhou. */
@@ -72,20 +69,7 @@ export async function DmPanel({ campaigns, hasPlayerRole }: DmPanelProps) {
 
   return (
     <>
-      {/* Cada status leva à lista de campanhas já filtrada */}
-      <section aria-label={t('dm.summary')} className={styles.statusGrid}>
-        {orderStatusCounts(campaigns.dmCounts).map(({ status, count }) => (
-          <CardLink
-            key={status}
-            href={campaignListHref({ role: 'dm', status })}
-          >
-            <Stack align="center" justify="space-between">
-              <CampaignStatusBadge status={status} />
-              <span className={styles.count}>{count}</span>
-            </Stack>
-          </CardLink>
-        ))}
-      </section>
+      <StatusCountGrid counts={campaigns.dmCounts} />
 
       <Stack as="section" direction="column" align="stretch">
         <Stack align="center" justify="space-between">

@@ -6,7 +6,6 @@
     "navLabel": "Navegação principal"
   },
   "user": {
-    "greeting": "Olá, {name}",
     "greeting_default": "Olá, Aventureiro!"
   },
   "home": {
@@ -43,5 +42,6 @@
       "message": "A lista tem {count, plural, one {# página} other {# páginas}}. Ela pode ter diminuído desde que o link foi copiado.",
       "action": "Ir para a primeira página"
     }
-  }
+  },
+  "lastAccess": "Aberta {when}"
 }

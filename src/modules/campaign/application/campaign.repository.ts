@@ -1,4 +1,4 @@
-import type { Page, PageRequest } from '@/src/lib/pagination';
+import type { ListSort, Page, PageRequest } from '@/src/lib/pagination';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
 import type {
@@ -18,6 +18,7 @@ export interface CreateCampaignInput {
 export interface CampaignListFilters {
   role?: CampaignRole;
   status?: CampaignStatus;
+  sort?: ListSort;
 }
 
 /** Porta de saída: o domínio não sabe se os dados vêm de HTTP, cache, etc. */

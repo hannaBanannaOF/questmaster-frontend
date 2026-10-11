@@ -4,7 +4,11 @@ import { getTranslations } from 'next-intl/server';
 
 import { Card, List, ListItem, Stack, Text, Title } from '@/src/design';
 import type { Page } from '@/src/lib/pagination';
-import { CreateCampaignButton } from '@/src/modules/campaign';
+import {
+  CampaignCard,
+  campaignListHref,
+  CreateCampaignButton,
+} from '@/src/modules/campaign';
 import {
   CharacterCard,
   type CharacterSummary,
@@ -82,6 +86,7 @@ export async function PlayerPanel({
   }
 
   const continueCampaign = campaigns?.continueCampaign;
+  const recentCampaigns = campaigns?.playerPreview.items ?? [];
   const idle = idleCharacters.ok
     ? idleCharacters.data
     : { items: [], total: 0 };
@@ -114,26 +119,48 @@ export async function PlayerPanel({
 
       <div className={styles.columns}>
         <Stack
-          as="section"
           direction="column"
           align="stretch"
+          gap="lg"
           className={styles.main}
         >
-          <Stack align="center" justify="space-between">
-            <Title order={3}>{t('player.characters')}</Title>
-            {characters.data.total > characters.data.items.length && (
-              <Link href="/characters">
-                {t('player.seeAll', { count: characters.data.total })}
-              </Link>
-            )}
+          {recentCampaigns.length > 0 && (
+            <Stack as="section" direction="column" align="stretch">
+              <Stack align="center" justify="space-between">
+                <Title order={3}>{t('player.campaigns')}</Title>
+                {playerTotal > recentCampaigns.length && (
+                  <Link href={campaignListHref({ role: 'player' })}>
+                    {t('player.seeAllCampaigns', { count: playerTotal })}
+                  </Link>
+                )}
+              </Stack>
+              <List>
+                {recentCampaigns.map((campaign) => (
+                  <ListItem key={campaign.slug}>
+                    <CampaignCard campaign={campaign} />
+                  </ListItem>
+                ))}
+              </List>
+            </Stack>
+          )}
+
+          <Stack as="section" direction="column" align="stretch">
+            <Stack align="center" justify="space-between">
+              <Title order={3}>{t('player.characters')}</Title>
+              {characters.data.total > characters.data.items.length && (
+                <Link href="/characters">
+                  {t('player.seeAll', { count: characters.data.total })}
+                </Link>
+              )}
+            </Stack>
+            <List>
+              {characters.data.items.map((character) => (
+                <ListItem key={character.slug}>
+                  <CharacterCard character={character} />
+                </ListItem>
+              ))}
+            </List>
           </Stack>
-          <List>
-            {characters.data.items.map((character) => (
-              <ListItem key={character.slug}>
-                <CharacterCard character={character} />
-              </ListItem>
-            ))}
-          </List>
         </Stack>
 
         {(showIdle || showBecomeDm) && (

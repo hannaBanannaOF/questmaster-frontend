@@ -18,6 +18,9 @@ export const toCharacterSummary = (
   system: response.system as GameSystem,
   currentHp: response.current_hp,
   maxHp: response.max_hp,
+  lastAccessedAt: response.last_accessed_at
+    ? new Date(response.last_accessed_at)
+    : undefined,
 });
 
 export const toCharacterDetails = (
@@ -34,6 +37,7 @@ export const toCharacterListQuery = (
 ): CharacterListQuery => ({
   game_system: filters.gameSystem,
   without_campaign: filters.withoutCampaign,
+  sort: filters.sort,
   limit: page.limit,
   offset: page.offset,
 });

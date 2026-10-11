@@ -4,6 +4,7 @@ export interface CharacterListResponse {
   system: string;
   current_hp?: number;
   max_hp?: number;
+  last_accessed_at?: string | null;
 }
 
 export interface CharacterDetailsResponse extends CharacterListResponse {
@@ -19,6 +20,7 @@ export interface CharacterListPageResponse {
 export interface CharacterListQuery {
   game_system?: string;
   without_campaign?: boolean;
+  sort?: string;
   limit: number;
   offset: number;
   [key: string]: string | number | boolean | undefined;
