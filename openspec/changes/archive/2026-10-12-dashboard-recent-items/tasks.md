@@ -24,4 +24,4 @@
 ## 5. Integração
 
 - [x] 5.1 Rodar `yarn typecheck`, `yarn lint`, `yarn test`, `yarn build` e `openspec validate dashboard-recent-items` sem erros
-- [ ] 5.2 Conferir no ambiente de teste, com o core atual, que o dashboard abre em ordem de nome e sem "Aberta …", sem erros
+- [x] 5.2 Conferir no ambiente de teste, com o core atual, que o dashboard abre em ordem de nome e sem "Aberta …", sem erros

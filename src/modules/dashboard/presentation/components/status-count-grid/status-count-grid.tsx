@@ -27,7 +27,7 @@ export function StatusCountGrid({ counts }: { counts: CampaignStatusCounts }) {
         );
         // Zerada levaria a uma lista vazia: fica esmaecida e sem link
         return count === 0 ? (
-          <Card key={status} compact className={styles.zero}>
+          <Card key={status} className={styles.zero}>
             {content}
           </Card>
         ) : (
