@@ -23,7 +23,9 @@
   },
   "character": {
     "choose": "Escolha seu personagem",
-    "required": "Escolha um personagem para entrar na campanha."
+    "required": "Escolha um personagem para entrar na campanha.",
+    "mine": "Suas fichas",
+    "premade": "Fichas prontas do mestre"
   },
   "join": "Juntar-se a campanha",
   "notFound": {

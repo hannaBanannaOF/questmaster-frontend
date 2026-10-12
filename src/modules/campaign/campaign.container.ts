@@ -5,7 +5,9 @@ import { createHttpClient, Microservice } from '@/src/lib/http';
 import {
   makeCountCampaignsByStatus,
   makeCreateCampaign,
+  makeCreatePremadeCharacter,
   makeDeleteCampaign,
+  makeDeletePremadeCharacter,
   makeGetCampaignBySlug,
   makeListCampaigns,
   makeUpdateCampaignStatus,
@@ -24,4 +26,6 @@ export const campaignUseCases = {
   createCampaign: makeCreateCampaign(campaigns),
   deleteCampaign: makeDeleteCampaign(campaigns),
   updateCampaignStatus: makeUpdateCampaignStatus(campaigns),
+  createPremadeCharacter: makeCreatePremadeCharacter(campaigns),
+  deletePremadeCharacter: makeDeletePremadeCharacter(campaigns),
 };

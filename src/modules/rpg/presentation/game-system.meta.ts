@@ -1,16 +1,21 @@
-import { Dices, Eye, type LucideIcon } from 'lucide-react';
+import { Dices } from 'lucide-react';
+import type { ComponentType } from 'react';
 
 import type { SelectOption } from '@/src/design';
 
 import { GameSystem } from '../domain';
+import { InterlacedTentaclesIcon } from './components/interlaced-tentacles-icon/interlaced-tentacles-icon';
 
 interface GameSystemMeta {
   label: string;
-  icon: LucideIcon;
+  icon: ComponentType<{ size?: number }>;
 }
 
 const GAME_SYSTEM_META: Record<GameSystem, GameSystemMeta> = {
-  [GameSystem.CALL_OF_CTHULHU]: { label: 'Call of Cthulhu 7e', icon: Eye },
+  [GameSystem.CALL_OF_CTHULHU]: {
+    label: 'Call of Cthulhu 7e',
+    icon: InterlacedTentaclesIcon,
+  },
 };
 
 /** Sistemas que a API conhece mas o front ainda não: mostra o código cru. */

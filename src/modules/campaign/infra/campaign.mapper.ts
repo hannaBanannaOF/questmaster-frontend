@@ -1,20 +1,38 @@
 import type { PageRequest } from '@/src/lib/pagination';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
-import type { CampaignListFilters, CreateCampaignInput } from '../application';
+import type {
+  CampaignListFilters,
+  CreateCampaignInput,
+  CreatePremadeCharacterInput,
+} from '../application';
 import {
+  type CampaignCharacter,
   type CampaignDetails,
   CampaignStatus,
   type CampaignStatusCounts,
   type CampaignSummary,
 } from '../domain';
 import type {
+  CampaignCharacterResponse,
   CampaignCreateRequest,
   CampaignDetailsResponse,
   CampaignListQuery,
   CampaignListResponse,
   CampaignStatusCountsResponse,
+  PremadeCharacterCreateRequest,
 } from './campaign.dto';
+
+const toCampaignCharacter = (
+  character: CampaignCharacterResponse,
+): CampaignCharacter => ({
+  id: character.id,
+  name: character.name,
+  slug: character.slug,
+  currentHp: character.current_hp ?? undefined,
+  maxHp: character.max_hp ?? undefined,
+  isMine: character.is_mine ?? false,
+});
 
 export const toCampaignSummary = (
   response: CampaignListResponse,
@@ -41,7 +59,10 @@ export const toCampaignDetails = (
   status: response.status as CampaignStatus,
   isDm: response.is_dm,
   overview: response.overview,
-  characters: response.characters.map(({ id, name }) => ({ id, name })),
+  characters: response.characters.map(toCampaignCharacter),
+  premadeCharacters: (response.premade_characters ?? []).map(
+    toCampaignCharacter,
+  ),
   playerCount: response.characters.length,
   inviteHash: response.invite_hash,
 });
@@ -73,4 +94,11 @@ export const toCampaignCreateRequest = (
   name: input.name,
   system: input.system,
   overview: input.overview,
+});
+
+export const toPremadeCharacterCreateRequest = (
+  input: CreatePremadeCharacterInput,
+): PremadeCharacterCreateRequest => ({
+  name: input.name,
+  max_hp: input.maxHp,
 });

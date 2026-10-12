@@ -12,6 +12,7 @@ import type { CampaignRepository } from './campaign.repository';
 import {
   makeCountCampaignsByStatus,
   makeCreateCampaign,
+  makeCreatePremadeCharacter,
   makeDeleteCampaign,
   makeGetCampaignBySlug,
   makeListCampaigns,
@@ -36,6 +37,8 @@ function fakeRepository(
     create: vi.fn().mockResolvedValue(undefined),
     delete: vi.fn().mockResolvedValue(undefined),
     updateStatus: vi.fn(async (_id, status) => status),
+    createPremadeCharacter: vi.fn().mockResolvedValue(undefined),
+    deletePremadeCharacter: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   };
 }
@@ -169,5 +172,21 @@ describe('makeUpdateCampaignStatus', () => {
       makeUpdateCampaignStatus(repository)(1, ACTIVE),
     ).rejects.toBeInstanceOf(InvalidStatusTransitionError);
     expect(repository.updateStatus).not.toHaveBeenCalled();
+  });
+});
+
+describe('makeCreatePremadeCharacter', () => {
+  it('cria a ficha pronta na campanha', async () => {
+    const repository = fakeRepository();
+
+    await makeCreatePremadeCharacter(repository)(7, {
+      name: 'Harvey',
+      maxHp: 12,
+    });
+
+    expect(repository.createPremadeCharacter).toHaveBeenCalledWith(7, {
+      name: 'Harvey',
+      maxHp: 12,
+    });
   });
 });

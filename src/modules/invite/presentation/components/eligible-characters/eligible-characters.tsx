@@ -10,7 +10,7 @@ import { AcceptInviteForm } from '../accept-invite-form/accept-invite-form';
 
 const MAX_ELIGIBLE = 100;
 
-/** Fichas do usuário que podem entrar na campanha (mesmo sistema, sem campanha). */
+/** Fichas que podem entrar: as do usuário (mesmo sistema, sem campanha) e as prontas. */
 export async function EligibleCharacters({ invite }: { invite: Invite }) {
   const [{ items: characters }, t] = await Promise.all([
     // Uma página com o máximo da API: a escolha é uma lista só, sem paginador
@@ -22,7 +22,15 @@ export async function EligibleCharacters({ invite }: { invite: Invite }) {
     getTranslations(),
   ]);
 
-  if (characters.length === 0) {
+  const groups = [
+    { legend: t('invite.character.mine'), characters },
+    {
+      legend: t('invite.character.premade'),
+      characters: invite.premadeCharacters,
+    },
+  ].filter((group) => group.characters.length > 0);
+
+  if (groups.length === 0) {
     return (
       <EmptyState
         title={t('character.list.empty.title')}
@@ -35,7 +43,7 @@ export async function EligibleCharacters({ invite }: { invite: Invite }) {
   return (
     <AcceptInviteForm
       action={acceptInviteAction.bind(null, invite.hash)}
-      characters={characters}
+      groups={groups}
     />
   );
 }

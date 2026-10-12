@@ -22,3 +22,11 @@ export class HttpError extends AppError {
     super(message);
   }
 }
+
+/** Para quem não pode ver um recurso, ele não existe: 403 vira "não encontrado". */
+export function isNotFoundOrForbidden(error: unknown) {
+  return (
+    error instanceof NotFoundError ||
+    (error instanceof HttpError && error.status === 403)
+  );
+}

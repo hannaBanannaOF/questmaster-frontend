@@ -42,6 +42,11 @@
     "delete": "Excluir"
   },
   "characters": "Personagens",
+  "mine": "Sua ficha",
+  "emptyParty": {
+    "title": "Ninguém entrou ainda",
+    "message": "Mande o convite para os jogadores entrarem com as fichas."
+  },
   "create": {
     "title": "Nova campanha",
     "subtitle": "Comece uma nova jornada. Preencha os detalhes abaixo.",
@@ -106,5 +111,56 @@
   },
   "card": {
     "playingWith": "Com {names}"
+  },
+  "premade": {
+    "title": "Fichas prontas",
+    "new": "Nova ficha pronta",
+    "create": {
+      "title": "Nova ficha pronta",
+      "subtitle": "Os jogadores podem escolher esta ficha ao aceitar o convite."
+    },
+    "form": {
+      "name": {
+        "label": "Nome do personagem",
+        "placeholder": "Ex.: Harvey Walters",
+        "errors": {
+          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "max": "O nome deve ter no máximo 255 caracteres."
+        }
+      },
+      "maxHp": {
+        "label": "PV máximo (opcional)",
+        "placeholder": "Ex.: 12",
+        "errors": {
+          "type": "O PV deve ser um número inteiro.",
+          "min": "O PV deve ser maior que zero."
+        }
+      },
+      "submit": "Criar",
+      "cancel": "Cancelar"
+    },
+    "delete": {
+      "trigger": "Excluir",
+      "title": "Excluir ficha pronta",
+      "confirm": "Isso removerá permanentemente <bold>{name}</bold>. Essa ação não pode ser desfeita.",
+      "cancel": "Cancelar",
+      "submit": "Excluir ficha"
+    },
+    "toast": {
+      "error": {
+        "create": "Não foi possível criar a ficha pronta!",
+        "delete": "Não foi possível excluir a ficha pronta!"
+      },
+      "success": {
+        "create": {
+          "title": "Ficha pronta criada!",
+          "message": "\"{name}\" já pode ser escolhida no convite."
+        },
+        "delete": {
+          "title": "Ficha pronta excluída!",
+          "message": "A ficha foi removida da campanha."
+        }
+      }
+    }
   }
 }

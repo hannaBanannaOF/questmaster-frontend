@@ -51,4 +51,12 @@ describe('CharacterCard', () => {
 
     expect(screen.queryByText(/Aberta/)).not.toBeInTheDocument();
   });
+
+  it('mostra o selo quando passado', () => {
+    renderWithProviders(
+      <CharacterCard character={aCharacter()} tag={<span>Sua ficha</span>} />,
+    );
+
+    expect(screen.getByText('Sua ficha')).toBeInTheDocument();
+  });
 });

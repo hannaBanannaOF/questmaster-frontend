@@ -1,3 +1,4 @@
+import type { CharacterSummary } from '@/src/modules/character/domain';
 import type { GameSystem } from '@/src/modules/rpg/domain';
 
 /** Convite para uma campanha, identificado por um hash compartilhável. */
@@ -10,6 +11,8 @@ export interface Invite {
   campaignSystem: GameSystem;
   /** Quem abriu o convite é o mestre da campanha (e não pode entrar como jogador). */
   isDm: boolean;
+  /** Fichas prontas do mestre que ninguém escolheu, por nome. */
+  premadeCharacters: CharacterSummary[];
 }
 
 const HASH_PATTERN =

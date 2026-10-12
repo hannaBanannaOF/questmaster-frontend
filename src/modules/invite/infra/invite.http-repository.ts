@@ -10,7 +10,7 @@ import type {
   InviteDetailsResponse,
 } from './invite.dto';
 
-const toInvite = (response: InviteDetailsResponse): Invite => ({
+export const toInvite = (response: InviteDetailsResponse): Invite => ({
   hash: response.invite_hash,
   campaignSlug: response.campaign_slug,
   campaignName: response.campaign_name,
@@ -18,6 +18,14 @@ const toInvite = (response: InviteDetailsResponse): Invite => ({
   campaignPlayerCount: response.campaign_player_count,
   campaignSystem: response.campaign_system as GameSystem,
   isDm: response.is_dm ?? false,
+  premadeCharacters: (response.premade_characters ?? []).map((character) => ({
+    slug: character.slug,
+    name: character.name,
+    // As fichas prontas são do sistema da campanha
+    system: response.campaign_system as GameSystem,
+    currentHp: character.current_hp ?? undefined,
+    maxHp: character.max_hp ?? undefined,
+  })),
 });
 
 export const createInviteHttpRepository = (

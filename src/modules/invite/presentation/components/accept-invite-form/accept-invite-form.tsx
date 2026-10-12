@@ -17,14 +17,11 @@ interface AcceptInviteFormProps {
     state: FormState<'character'>,
     formData: FormData,
   ) => Promise<FormState<'character'>>;
-  /** Fichas que podem entrar na campanha. */
-  characters: CharacterSummary[];
+  /** Grupos de fichas que podem entrar; juntos formam uma única escolha. */
+  groups: { legend: string; characters: CharacterSummary[] }[];
 }
 
-export function AcceptInviteForm({
-  action,
-  characters,
-}: AcceptInviteFormProps) {
+export function AcceptInviteForm({ action, groups }: AcceptInviteFormProps) {
   const t = useTranslations();
   const errorId = useId();
   const [state, formAction] = useActionState(
@@ -40,14 +37,18 @@ export function AcceptInviteForm({
   return (
     <form action={formAction} noValidate>
       <Stack direction="column" align="stretch">
-        <CharacterPicker
-          characters={characters}
-          name="character"
-          legend={t('invite.character.choose')}
-          // O React limpa o form depois da action; isso devolve a escolha
-          defaultValue={state.values?.character}
-          errorId={characterError ? errorId : undefined}
-        />
+        {groups.map((group) => (
+          <CharacterPicker
+            key={group.legend}
+            characters={group.characters}
+            // Mesmo name em todos os grupos: um rádio marcado no form inteiro
+            name="character"
+            legend={group.legend}
+            // O React limpa o form depois da action; isso devolve a escolha
+            defaultValue={state.values?.character}
+            errorId={characterError ? errorId : undefined}
+          />
+        ))}
         {characterError && (
           <Text tone="danger" small role="alert" id={errorId}>
             {t(characterError)}

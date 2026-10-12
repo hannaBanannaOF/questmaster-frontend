@@ -4,6 +4,11 @@
   border: 0;
 }
 
+.legend {
+  margin-bottom: var(--spacing-sm);
+  padding: 0;
+}
+
 .option {
   cursor: pointer;
 }

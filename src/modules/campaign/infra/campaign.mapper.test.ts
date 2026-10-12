@@ -117,6 +117,73 @@ describe('toCampaignDetails', () => {
       playerCount: 2,
     });
   });
+
+  it('converte os personagens da party, com e sem os campos novos', () => {
+    const { characters } = toCampaignDetails({
+      id: 1,
+      slug: 'mascaras',
+      name: 'Máscaras',
+      is_dm: true,
+      status: 'ACTIVE',
+      system: 'CALL_OF_CTHULHU',
+      characters: [
+        {
+          id: 1,
+          name: 'Harvey',
+          slug: 'harvey',
+          current_hp: 8,
+          max_hp: 12,
+          is_mine: true,
+        },
+        { id: 2, name: 'Jenny', slug: 'jenny', current_hp: null, max_hp: null },
+        { id: 3, name: 'Velho' },
+      ],
+    });
+
+    expect(characters).toEqual([
+      {
+        id: 1,
+        name: 'Harvey',
+        slug: 'harvey',
+        currentHp: 8,
+        maxHp: 12,
+        isMine: true,
+      },
+      { id: 2, name: 'Jenny', slug: 'jenny', isMine: false },
+      { id: 3, name: 'Velho', isMine: false },
+    ]);
+  });
+
+  it('converte as fichas prontas; ausentes viram lista vazia', () => {
+    const base = {
+      id: 1,
+      slug: 'mascaras',
+      name: 'Máscaras',
+      is_dm: true,
+      status: 'DRAFT',
+      system: 'CALL_OF_CTHULHU',
+      characters: [],
+    };
+
+    expect(toCampaignDetails(base).premadeCharacters).toEqual([]);
+    expect(
+      toCampaignDetails({
+        ...base,
+        premade_characters: [
+          { id: 4, name: 'Pronta', slug: 'pronta', current_hp: 9, max_hp: 9 },
+        ],
+      }).premadeCharacters,
+    ).toEqual([
+      {
+        id: 4,
+        name: 'Pronta',
+        slug: 'pronta',
+        currentHp: 9,
+        maxHp: 9,
+        isMine: false,
+      },
+    ]);
+  });
 });
 
 describe('toCampaignCreateRequest', () => {

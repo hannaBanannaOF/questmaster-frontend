@@ -15,6 +15,7 @@ const anInvite = (overrides: Partial<Invite> = {}): Invite => ({
   campaignPlayerCount: 0,
   campaignSystem: GameSystem.CALL_OF_CTHULHU,
   isDm: false,
+  premadeCharacters: [],
   ...overrides,
 });
 

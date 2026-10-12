@@ -12,6 +12,7 @@ import type {
   CampaignListFilters,
   CampaignRepository,
   CreateCampaignInput,
+  CreatePremadeCharacterInput,
 } from './campaign.repository';
 
 export const makeListCampaigns =
@@ -48,3 +49,12 @@ export const makeUpdateCampaignStatus =
     }
     return campaigns.updateStatus(id, nextStatus);
   };
+
+export const makeCreatePremadeCharacter =
+  (campaigns: CampaignRepository) =>
+  (campaignId: number, input: CreatePremadeCharacterInput) =>
+    campaigns.createPremadeCharacter(campaignId, input);
+
+export const makeDeletePremadeCharacter =
+  (campaigns: CampaignRepository) => (characterId: number) =>
+    campaigns.deletePremadeCharacter(characterId);

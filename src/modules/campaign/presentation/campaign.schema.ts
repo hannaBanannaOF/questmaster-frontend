@@ -24,3 +24,29 @@ export const campaignCreateSchema = yup.object({
     .transform((value) => value || undefined)
     .optional(),
 });
+
+export const PREMADE_CHARACTER_FORM_FIELDS = ['name', 'maxHp'] as const;
+export type PremadeCharacterFormField =
+  (typeof PREMADE_CHARACTER_FORM_FIELDS)[number];
+
+const premadeKey = (path: string) => `campaign.premade.form.${path}`;
+
+export const premadeCharacterSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required(premadeKey('name.errors.required'))
+    .max(255, premadeKey('name.errors.max')),
+  maxHp: yup
+    .number()
+    // Campo vazio é "sem PV", não "não é número"
+    .transform((value, original) =>
+      typeof original === 'string' && original.trim() === ''
+        ? undefined
+        : value,
+    )
+    .typeError(premadeKey('maxHp.errors.type'))
+    .integer(premadeKey('maxHp.errors.type'))
+    .min(1, premadeKey('maxHp.errors.min'))
+    .optional(),
+});

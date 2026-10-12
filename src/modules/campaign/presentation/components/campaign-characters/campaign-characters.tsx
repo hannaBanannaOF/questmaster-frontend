@@ -1,16 +1,27 @@
 import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
-import { Card, List, ListItem, Stack, Title } from '@/src/design';
+import { Badge, Card, Stack, Title } from '@/src/design';
+// Caminho direto: o barrel de character carrega loaders server-only
+import { CharacterCard } from '@/src/modules/character/presentation/components/character-card/character-card';
+import type { GameSystem } from '@/src/modules/rpg/domain';
 
 import type { CampaignCharacter } from '../../../domain';
+import styles from './campaign-characters.module.css';
 
 const HEADING_ID = 'campaign-characters';
 
 export function CampaignCharacters({
   characters,
+  system,
+  empty,
 }: {
   characters: CampaignCharacter[];
+  /** As fichas da campanha são todas do sistema dela. */
+  system: GameSystem;
+  /** Mostrado no lugar da grade quando a campanha não tem jogadores. */
+  empty?: ReactNode;
 }) {
   const t = useTranslations('campaign');
 
@@ -22,15 +33,27 @@ export function CampaignCharacters({
           {t('characters')} ({characters.length})
         </Title>
       </Stack>
-      <List aria-labelledby={HEADING_ID}>
-        {characters.map((character) => (
-          <ListItem key={character.id}>
-            <Card>
-              <Title order={4}>{character.name}</Title>
-            </Card>
-          </ListItem>
-        ))}
-      </List>
+      {characters.length === 0 ? (
+        empty
+      ) : (
+        <ul className={styles.grid} aria-labelledby={HEADING_ID}>
+          {characters.map(({ id, slug, name, currentHp, maxHp, isMine }) => (
+            <li key={id}>
+              {slug ? (
+                <CharacterCard
+                  character={{ slug, name, system, currentHp, maxHp }}
+                  tag={isMine && <Badge tone="info">{t('mine')}</Badge>}
+                />
+              ) : (
+                // Sem slug o core ainda não publicou o link da ficha
+                <Card>
+                  <Title order={4}>{name}</Title>
+                </Card>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </Stack>
   );
 }

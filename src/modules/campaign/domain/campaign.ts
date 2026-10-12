@@ -51,6 +51,12 @@ export function totalCampaigns(counts: CampaignStatusCounts) {
 export interface CampaignCharacter {
   id: number;
   name: string;
+  /** Ausente enquanto o core não publica o link da ficha. */
+  slug?: string;
+  currentHp?: number;
+  maxHp?: number;
+  /** A ficha é do usuário logado. */
+  isMine: boolean;
 }
 
 // O detalhe não traz as fichas do usuário: isso só vem na lista
@@ -61,6 +67,8 @@ export interface CampaignDetails extends Omit<
   id: number;
   overview?: string;
   characters: CampaignCharacter[];
+  /** Fichas prontas que ninguém escolheu; o core só manda para o mestre. */
+  premadeCharacters: CampaignCharacter[];
   inviteHash?: string;
 }
 

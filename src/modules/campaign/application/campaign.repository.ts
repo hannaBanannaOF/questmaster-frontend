@@ -15,6 +15,11 @@ export interface CreateCampaignInput {
   overview?: string;
 }
 
+export interface CreatePremadeCharacterInput {
+  name: string;
+  maxHp?: number;
+}
+
 export interface CampaignListFilters {
   role?: CampaignRole;
   status?: CampaignStatus;
@@ -33,4 +38,10 @@ export interface CampaignRepository {
   create(input: CreateCampaignInput): Promise<void>;
   delete(id: number): Promise<void>;
   updateStatus(id: number, status: CampaignStatus): Promise<CampaignStatus>;
+  /** Cria uma ficha sem jogador na campanha (só o mestre). */
+  createPremadeCharacter(
+    campaignId: number,
+    input: CreatePremadeCharacterInput,
+  ): Promise<void>;
+  deletePremadeCharacter(characterId: number): Promise<void>;
 }

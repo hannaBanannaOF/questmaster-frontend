@@ -14,9 +14,15 @@ function setup(action: (state: State, formData: FormData) => Promise<State>) {
   renderWithProviders(
     <AcceptInviteForm
       action={action}
-      characters={[
-        aCharacter({ slug: 'harvey', name: 'Harvey Walters' }),
-        aCharacter({ slug: 'jenny', name: 'Jenny Barnes' }),
+      groups={[
+        {
+          legend: 'Suas fichas',
+          characters: [aCharacter({ slug: 'harvey', name: 'Harvey Walters' })],
+        },
+        {
+          legend: 'Fichas prontas do mestre',
+          characters: [aCharacter({ slug: 'jenny', name: 'Jenny Barnes' })],
+        },
       ]}
     />,
   );
@@ -27,6 +33,23 @@ const join = () => screen.getByRole('button', { name: 'Juntar-se a campanha' });
 const radio = (name: RegExp) => screen.getByRole('radio', { name });
 
 describe('AcceptInviteForm', () => {
+  it('mostra cada grupo com a legenda, numa escolha só', async () => {
+    const user = setup(vi.fn());
+
+    expect(screen.getByRole('group', { name: 'Suas fichas' })).toContainElement(
+      radio(/Harvey Walters/),
+    );
+    expect(
+      screen.getByRole('group', { name: 'Fichas prontas do mestre' }),
+    ).toContainElement(radio(/Jenny Barnes/));
+
+    await user.click(radio(/Harvey Walters/));
+    await user.click(radio(/Jenny Barnes/));
+
+    expect(radio(/Harvey Walters/)).not.toBeChecked();
+    expect(radio(/Jenny Barnes/)).toBeChecked();
+  });
+
   it('lista as fichas como rádios e envia a escolhida', async () => {
     const action = vi.fn(
       async (_state: State, _formData: FormData): Promise<State> => ({
@@ -57,10 +80,9 @@ describe('AcceptInviteForm', () => {
     expect(alert).toHaveTextContent(
       'Escolha um personagem para entrar na campanha.',
     );
-    expect(screen.getByRole('group')).toHaveAttribute(
-      'aria-describedby',
-      alert.id,
-    );
+    for (const group of screen.getAllByRole('group')) {
+      expect(group).toHaveAttribute('aria-describedby', alert.id);
+    }
     expect(
       screen.queryByText('Não foi possível se juntar a campanha!'),
     ).not.toBeInTheDocument();
