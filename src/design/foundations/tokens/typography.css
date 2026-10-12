@@ -7,8 +7,8 @@
   --font-size-md: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
-  --font-size-3xl: 3rem;
+  --font-size-2xl: clamp(1.5rem, 1rem + 1.6vw, 2rem);
+  --font-size-3xl: clamp(2rem, 1.2rem + 2.5vw, 3rem);
 }
 
 :root {

@@ -7,3 +7,11 @@
   padding: 0;
   list-style: none;
 }
+
+/* Barra inferior: os destinos dividem a largura igualmente */
+.list[data-variant='bottom'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 0;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+}

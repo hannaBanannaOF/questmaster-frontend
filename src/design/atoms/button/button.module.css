@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
+  min-height: var(--touch-target);
   padding: var(--spacing-xs) var(--spacing-md);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
@@ -91,5 +92,6 @@
 }
 
 .button[data-icon-only] {
+  min-width: var(--touch-target);
   padding: var(--spacing-xs);
 }
