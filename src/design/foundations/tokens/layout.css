@@ -1,0 +1,11 @@
+/*
+ * Mobile first: estilos base são os do celular; telas maiores ajustam com min-width.
+ * Breakpoints (literais nas media queries, que não aceitam variáveis):
+ *   48rem (768px)  tablet: navegação volta para o cabeçalho
+ *   64rem (1024px) desktop
+ */
+:root {
+  /* Barra de navegação inferior do celular, com a área segura do aparelho */
+  --bottom-nav-height: calc(4rem + env(safe-area-inset-bottom));
+  --touch-target: 2.75rem;
+}

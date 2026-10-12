@@ -42,3 +42,16 @@
     background-position: 0 0;
   }
 }
+
+/* Na mesa, no celular: botões de PV grandes e afastados para não tocar no errado */
+.controls button[data-icon-only] {
+  min-width: 3rem;
+  min-height: 3rem;
+}
+
+@media (min-width: 48rem) {
+  .controls button[data-icon-only] {
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+  }
+}

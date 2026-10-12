@@ -1,4 +1,7 @@
 .navLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-md);
   color: var(--color-text-muted);
@@ -18,4 +21,30 @@
 .navLink:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Barra inferior: ícone sobre o rótulo, área de toque de 48px */
+.navLink[data-variant='bottom'] {
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-xxs);
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--spacing-xxs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.navLink[data-variant='bottom'][aria-current='page'] {
+  background-color: transparent;
+}
+
+.icon {
+  display: flex;
+  padding: 2px var(--spacing-md);
+  border-radius: var(--radius-full);
+}
+
+.navLink[aria-current='page'] .icon {
+  background-color: var(--color-primary-soft);
 }

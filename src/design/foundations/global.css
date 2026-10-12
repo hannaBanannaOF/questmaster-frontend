@@ -3,6 +3,7 @@
 @import './tokens/radius.css';
 @import './tokens/spacing.css';
 @import './tokens/motion.css';
+@import './tokens/layout.css';
 
 html:not([data-theme]) {
   visibility: hidden;
@@ -39,6 +40,17 @@ h6 {
   font-family: var(--font-heading);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
+  /* Nomes longos de campanha ou ficha quebram em vez de vazar no celular */
+  overflow-wrap: break-word;
+}
+
+/* Menores no celular, os tamanhos padrão (2em e 1.5em) a partir de ~1024px */
+h1 {
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2rem);
+}
+
+h2 {
+  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.5rem);
 }
 
 a {

@@ -13,7 +13,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  min-height: 2.5rem;
+  min-height: var(--touch-target);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);

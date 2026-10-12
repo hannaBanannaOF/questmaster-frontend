@@ -93,17 +93,17 @@ export function HpControl({
         />
       </div>
       {editable && (
-        <Stack justify="center">
+        <Stack justify="center" gap="lg" className={styles.controls}>
           <Button
             variant="muted"
-            icon={<Minus size={14} />}
+            icon={<Minus size={18} />}
             aria-label={t('character.controls.decrease')}
             disabled={value <= 0}
             onClick={() => change(-1)}
           />
           <Button
             variant="muted"
-            icon={<Plus size={14} />}
+            icon={<Plus size={18} />}
             aria-label={t('character.controls.increase')}
             disabled={value >= max}
             onClick={() => change(1)}

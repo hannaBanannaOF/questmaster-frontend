@@ -1,7 +1,7 @@
 import '@/src/design/foundations/global.css';
 
-import { ScrollText } from 'lucide-react';
-import type { Metadata } from 'next';
+import { LayoutDashboard, ScrollText, Users } from 'lucide-react';
+import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
+// cover: a barra inferior usa env(safe-area-inset-bottom) no iPhone
+export const viewport: Viewport = { viewportFit: 'cover' };
+
 export default async function RootLayout({
   children,
 }: {
@@ -41,6 +44,21 @@ export default async function RootLayout({
     getLocale(),
     getTranslations('common.header'),
   ]);
+
+  const navItems = [
+    {
+      href: '/',
+      label: t('dashboard'),
+      icon: <LayoutDashboard size={22} />,
+      exact: true,
+    },
+    {
+      href: '/campaigns',
+      label: t('campaigns'),
+      icon: <ScrollText size={22} />,
+    },
+    { href: '/characters', label: t('characters'), icon: <Users size={22} /> },
+  ];
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -69,16 +87,7 @@ export default async function RootLayout({
                       icon={<ScrollText size={24} />}
                     />
                   }
-                  nav={
-                    <Nav
-                      label={t('navLabel')}
-                      items={[
-                        { href: '/', label: t('dashboard'), exact: true },
-                        { href: '/campaigns', label: t('campaigns') },
-                        { href: '/characters', label: t('characters') },
-                      ]}
-                    />
-                  }
+                  nav={<Nav label={t('navLabel')} items={navItems} />}
                   actions={
                     // O header renderiza na hora; o usuário chega por streaming
                     <Suspense fallback={<UserGreetingSkeleton />}>
@@ -86,6 +95,9 @@ export default async function RootLayout({
                     </Suspense>
                   }
                 />
+              }
+              bottomNav={
+                <Nav label={t('navLabel')} items={navItems} variant="bottom" />
               }
             >
               {children}

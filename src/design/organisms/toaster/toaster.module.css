@@ -1,7 +1,9 @@
 .region {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: var(--spacing-md);
+  /* No celular, largura da tela e acima da barra inferior */
+  bottom: calc(var(--bottom-nav-height) + var(--spacing-sm));
+  left: var(--spacing-md);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -16,7 +18,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xxs);
-  max-width: 360px;
+  max-width: none;
   padding: var(--spacing-md);
   border: 1px solid var(--color-card-border);
   border-left-width: 2px;
@@ -42,5 +44,17 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (min-width: 48rem) {
+  .region {
+    right: 20px;
+    bottom: 20px;
+    left: auto;
+  }
+
+  .toast {
+    max-width: 360px;
   }
 }

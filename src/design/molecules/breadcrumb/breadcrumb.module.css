@@ -15,6 +15,9 @@
 }
 
 .link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
   color: var(--color-text-muted);
   transition: color var(--duration-fast) var(--ease-standard);
 }
