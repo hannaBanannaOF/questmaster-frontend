@@ -59,8 +59,47 @@ O DM SHALL poder criar e copiar o link de convite em Rascunho, Jogando ou Pausad
 - **THEN** o link é gerado, passa a ser exibido com o botão "Copiar" e aparece o toast "Convite criado!"
 
 ### Requirement: Personagens da campanha
-O detalhe da campanha SHALL listar os personagens da party sob o título "Personagens (N)" quando houver pelo menos um jogador.
+O detalhe da campanha SHALL mostrar a party sob o título "Personagens (N)", em grade, com um card por personagem: nome, sistema, PV atual e máximo com barra, e link para a ficha. As fichas do próprio usuário SHALL levar o selo "Sua ficha"; as dos outros abrem em modo leitura. Quando a campanha não tem jogadores e ainda aceita convites, o mestre SHALL ver "Personagens (0)" com "Ninguém entrou ainda" e o controle de convite (criar ou copiar). Campanha arquivada sem jogadores MUST NOT mostrar a seção.
+
+#### Scenario: Mestre vê a party
+- **WHEN** o DM abre uma campanha com quatro personagens
+- **THEN** vê "Personagens (4)" com um card por personagem, cada um com "atual / máximo PV" e barra, e cada card leva à ficha
+
+#### Scenario: Jogador vê a própria ficha marcada
+- **WHEN** um jogador abre uma campanha em que joga com uma ficha
+- **THEN** o card da ficha dele tem o selo "Sua ficha" e os outros não
+
+#### Scenario: Campanha sem jogadores, com convite
+- **WHEN** o DM abre uma campanha em Rascunho sem jogadores e com convite criado
+- **THEN** vê "Personagens (0)", "Ninguém entrou ainda" e o botão de copiar o convite
+
+#### Scenario: Campanha sem jogadores, sem convite
+- **WHEN** o DM abre uma campanha em Rascunho sem jogadores e sem convite
+- **THEN** vê "Ninguém entrou ainda" com o botão "Criar convite"
 
 #### Scenario: Campanha sem jogadores
-- **WHEN** a campanha não tem jogadores
+- **WHEN** a campanha não tem jogadores e não aceita mais convites (Arquivada)
 - **THEN** a seção de personagens não aparece
+
+### Requirement: Fichas prontas do mestre
+O detalhe da campanha SHALL mostrar ao mestre, abaixo da party, a seção "Fichas prontas (N)" com as fichas que ele criou e nenhum jogador escolheu, em grade, cada uma com o card de ficha e o botão de excluir com confirmação. Enquanto a campanha aceita convites, o mestre SHALL ver "Nova ficha pronta", que cria uma ficha com nome e PV máximo opcional, no sistema da campanha. Jogadores MUST NOT ver a seção. Campanha arquivada sem fichas prontas MUST NOT mostrar a seção.
+
+#### Scenario: Mestre cria uma ficha pronta
+- **WHEN** o DM cria a ficha pronta "Harvey" com PV máximo 12 numa campanha em Rascunho
+- **THEN** vê o toast de sucesso e "Harvey" com "12 / 12 PV" em "Fichas prontas (1)"
+
+#### Scenario: Nome obrigatório
+- **WHEN** o DM envia o formulário de ficha pronta sem nome
+- **THEN** vê o erro de nome obrigatório e nenhuma ficha é criada
+
+#### Scenario: Mestre exclui uma ficha pronta
+- **WHEN** o DM exclui uma ficha pronta e confirma
+- **THEN** a ficha some da seção
+
+#### Scenario: Jogador não vê fichas prontas
+- **WHEN** um jogador abre uma campanha que tem fichas prontas
+- **THEN** a seção "Fichas prontas" não aparece
+
+#### Scenario: Ficha escolhida sai da seção
+- **WHEN** um jogador entra na campanha com uma ficha pronta
+- **THEN** a ficha aparece na party e não em "Fichas prontas"
