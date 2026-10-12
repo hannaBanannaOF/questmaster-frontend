@@ -139,3 +139,71 @@ export async function deletePremadeCharacterAction(
     RedirectType.replace,
   );
 }
+
+export async function leaveCampaignAction(
+  campaignId: number,
+  characterId: number,
+  characterSlug: string,
+  _state: FormState,
+  _formData: FormData,
+): Promise<FormState> {
+  if (
+    !Number.isInteger(campaignId) ||
+    !Number.isInteger(characterId) ||
+    typeof characterSlug !== 'string'
+  ) {
+    return { status: 'error' };
+  }
+
+  try {
+    await campaignUseCases.removeCharacterFromCampaign(campaignId, characterId);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error) };
+  }
+
+  revalidatePath('/campaigns', 'layout');
+  revalidatePath('/characters', 'layout');
+  await setFlash({
+    type: 'success',
+    title: 'campaign.party.toast.success.leave.title',
+    message: 'campaign.party.toast.success.leave.message',
+  });
+  // Era a única ficha? A campanha some para o jogador; a ficha continua dele
+  redirect(
+    `/characters/${encodeURIComponent(characterSlug)}`,
+    RedirectType.replace,
+  );
+}
+
+export async function removeFromCampaignAction(
+  campaignId: number,
+  campaignSlug: string,
+  characterId: number,
+  _state: FormState,
+  _formData: FormData,
+): Promise<FormState> {
+  if (
+    !Number.isInteger(campaignId) ||
+    !Number.isInteger(characterId) ||
+    typeof campaignSlug !== 'string'
+  ) {
+    return { status: 'error' };
+  }
+
+  try {
+    await campaignUseCases.removeCharacterFromCampaign(campaignId, characterId);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error) };
+  }
+
+  revalidatePath('/campaigns', 'layout');
+  await setFlash({
+    type: 'success',
+    title: 'campaign.party.toast.success.remove.title',
+    message: 'campaign.party.toast.success.remove.message',
+  });
+  redirect(
+    `/campaigns/${encodeURIComponent(campaignSlug)}`,
+    RedirectType.replace,
+  );
+}

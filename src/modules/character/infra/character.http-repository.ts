@@ -4,6 +4,8 @@ import { mapPage } from '@/src/lib/pagination';
 import type { CharacterRepository } from '../application';
 import type {
   CharacterDetailsResponse,
+  CharacterEditRequest,
+  CharacterEditResponse,
   CharacterHpRequest,
   CharacterHpResponse,
   CharacterListPageResponse,
@@ -54,5 +56,16 @@ export const createCharacterHttpRepository = (
       { new_hp: hp } satisfies CharacterHpRequest,
     );
     return response.current_hp;
+  },
+
+  async edit(id, input) {
+    const response = await http.patch<CharacterEditResponse>(
+      `character/${id}`,
+      {
+        name: input.name,
+        max_hp: input.maxHp,
+      } satisfies CharacterEditRequest,
+    );
+    return response.slug;
   },
 });

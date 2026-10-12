@@ -16,6 +16,12 @@ export interface CreateCharacterInput {
   system: GameSystem;
 }
 
+export interface EditCharacterInput {
+  name: string;
+  /** Ausente: não muda o PV máximo. */
+  maxHp?: number;
+}
+
 export interface CharacterRepository {
   list(
     filters: CharacterFilters,
@@ -26,4 +32,6 @@ export interface CharacterRepository {
   create(input: CreateCharacterInput): Promise<void>;
   delete(id: number): Promise<void>;
   updateHp(id: number, hp: number): Promise<number>;
+  /** Edita nome e PV máximo; devolve o slug, que acompanha o nome. */
+  edit(id: number, input: EditCharacterInput): Promise<string>;
 }

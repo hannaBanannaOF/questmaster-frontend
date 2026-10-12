@@ -43,3 +43,12 @@ export interface CharacterHpResponse {
 export interface SlugResolveResponse {
   id: number;
 }
+
+export interface CharacterEditRequest {
+  name: string;
+  max_hp?: number;
+}
+
+export interface CharacterEditResponse {
+  slug: string;
+}

@@ -70,4 +70,22 @@ describe('CampaignCharacters', () => {
       screen.queryByRole('list', { name: 'Personagens (0)' }),
     ).not.toBeInTheDocument();
   });
+
+  it('mostra a ação de cada membro abaixo do card, fora do link', () => {
+    renderWithProviders(
+      <CampaignCharacters
+        characters={[harvey, jenny]}
+        system={GameSystem.CALL_OF_CTHULHU}
+        memberAction={(character) =>
+          character.isMine ? <button type="button">Sair</button> : null
+        }
+      />,
+    );
+
+    const leave = screen.getByRole('button', { name: 'Sair' });
+    expect(screen.getAllByRole('button', { name: 'Sair' })).toHaveLength(1);
+    expect(screen.getByRole('link', { name: /Harvey/ })).not.toContainElement(
+      leave,
+    );
+  });
 });

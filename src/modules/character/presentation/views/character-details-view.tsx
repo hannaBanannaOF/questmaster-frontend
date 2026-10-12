@@ -1,15 +1,21 @@
+import { Pencil } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { Breadcrumb, Card, DetailPage, Stack, Text, Title } from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
-import { ConfirmDeleteButton } from '@/src/modules/shared/presentation';
+import {
+  ConfirmDeleteButton,
+  DialogButton,
+} from '@/src/modules/shared/presentation';
 
 import { canEditCharacter, getMaxHp } from '../../domain';
 import {
   deleteCharacterAction,
+  editCharacterAction,
   updateCharacterHpAction,
 } from '../character.actions';
 import { getCharacterBySlug } from '../character.loaders';
+import { CharacterEditForm } from '../components/character-edit-form/character-edit-form';
 import { HpControl } from '../components/hp-control/hp-control';
 
 const TITLE_ID = 'character-title';
@@ -49,22 +55,37 @@ export async function CharacterDetailsView({ slug }: { slug: string }) {
                 </Stack>
               </Stack>
               {editable && (
-                <ConfirmDeleteButton
-                  // id vinculado aqui; a permissão é checada no use case/API
-                  action={deleteCharacterAction.bind(null, character.id)}
-                  errorTitleKey="character.toast.error.delete"
-                  labels={{
-                    trigger: t('actions.delete'),
-                    title: t('delete.title'),
-                    confirm: t('delete.submit'),
-                    cancel: t('delete.cancel'),
-                    close: tCommon('actions.close'),
-                  }}
-                  description={t.rich('delete.confirm', {
-                    name: character.name,
-                    bold: (chunks) => <strong>{chunks}</strong>,
-                  })}
-                />
+                <Stack align="center" wrap>
+                  <DialogButton
+                    label={t('actions.edit')}
+                    variant="outline"
+                    icon={<Pencil size={12} />}
+                    title={t('edit.title')}
+                    closeLabel={tCommon('actions.close')}
+                  >
+                    <CharacterEditForm
+                      action={editCharacterAction.bind(null, character.id)}
+                      name={character.name}
+                      maxHp={character.maxHp}
+                    />
+                  </DialogButton>
+                  <ConfirmDeleteButton
+                    // id vinculado aqui; a permissão é checada no use case/API
+                    action={deleteCharacterAction.bind(null, character.id)}
+                    errorTitleKey="character.toast.error.delete"
+                    labels={{
+                      trigger: t('actions.delete'),
+                      title: t('delete.title'),
+                      confirm: t('delete.submit'),
+                      cancel: t('delete.cancel'),
+                      close: tCommon('actions.close'),
+                    }}
+                    description={t.rich('delete.confirm', {
+                      name: character.name,
+                      bold: (chunks) => <strong>{chunks}</strong>,
+                    })}
+                  />
+                </Stack>
               )}
             </Stack>
             <HpControl

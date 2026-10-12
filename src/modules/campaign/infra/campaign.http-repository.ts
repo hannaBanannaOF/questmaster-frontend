@@ -85,4 +85,8 @@ export const createCampaignHttpRepository = (
   async deletePremadeCharacter(characterId) {
     await http.delete(`character/${characterId}`);
   },
+
+  async removeCharacter(campaignId, characterId) {
+    await http.delete(`campaign/${campaignId}/character/${characterId}`);
+  },
 });

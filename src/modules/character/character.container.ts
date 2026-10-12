@@ -5,6 +5,7 @@ import { createHttpClient, Microservice } from '@/src/lib/http';
 import {
   makeCreateCharacter,
   makeDeleteCharacter,
+  makeEditCharacter,
   makeGetCharacterBySlug,
   makeListCharacters,
   makeUpdateCharacterHp,
@@ -22,4 +23,5 @@ export const characterUseCases = {
   createCharacter: makeCreateCharacter(characters),
   deleteCharacter: makeDeleteCharacter(characters),
   updateCharacterHp: makeUpdateCharacterHp(characters),
+  editCharacter: makeEditCharacter(characters),
 };

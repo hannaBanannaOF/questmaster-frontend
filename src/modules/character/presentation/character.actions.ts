@@ -14,8 +14,11 @@ import { setFlash } from '@/src/lib/flash/set-flash';
 
 import { characterUseCases } from '../character.container';
 import {
+  CHARACTER_EDIT_FORM_FIELDS,
   CHARACTER_FORM_FIELDS,
   characterCreateSchema,
+  type CharacterEditFormField,
+  characterEditSchema,
   type CharacterFormField,
 } from './character.schema';
 
@@ -86,4 +89,36 @@ export async function updateCharacterHpAction(
   } catch (error) {
     return { ok: false, message: toErrorMessage(error) };
   }
+}
+
+export async function editCharacterAction(
+  characterId: number,
+  _state: FormState<CharacterEditFormField>,
+  formData: FormData,
+): Promise<FormState<CharacterEditFormField>> {
+  if (!Number.isInteger(characterId)) return { status: 'error' };
+
+  const values = formValues(formData, CHARACTER_EDIT_FORM_FIELDS);
+  const input = await validate(characterEditSchema, values);
+  if (!input.ok) {
+    return { status: 'error', fieldErrors: input.fieldErrors, values };
+  }
+
+  let slug: string;
+  try {
+    slug = await characterUseCases.editCharacter(characterId, input.data);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error), values };
+  }
+
+  revalidatePath('/characters', 'layout');
+  revalidatePath('/campaigns', 'layout');
+  await setFlash({
+    type: 'success',
+    title: 'character.toast.success.edit.title',
+    message: 'character.toast.success.edit.message',
+    values: { name: input.data.name },
+  });
+  // O slug acompanha o nome: o endereço antigo deixa de existir
+  redirect(`/characters/${encodeURIComponent(slug)}`, RedirectType.replace);
 }

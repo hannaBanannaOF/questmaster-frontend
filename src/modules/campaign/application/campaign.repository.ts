@@ -44,4 +44,6 @@ export interface CampaignRepository {
     input: CreatePremadeCharacterInput,
   ): Promise<void>;
   deletePremadeCharacter(characterId: number): Promise<void>;
+  /** Tira a ficha da campanha; ela continua com o jogador. */
+  removeCharacter(campaignId: number, characterId: number): Promise<void>;
 }

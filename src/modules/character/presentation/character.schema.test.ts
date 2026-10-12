@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { validate } from '@/src/lib/actions/validation';
 import { GameSystem } from '@/src/modules/rpg/domain';
 
-import { characterCreateSchema } from './character.schema';
+import { characterCreateSchema, characterEditSchema } from './character.schema';
 
 const key = (path: string) => `character.create.form.${path}`;
 
@@ -76,6 +76,31 @@ describe('characterCreateSchema', () => {
     expect(result).toMatchObject({
       ok: false,
       fieldErrors: { system: key('game_system.errors.required') },
+    });
+  });
+});
+
+describe('characterEditSchema', () => {
+  const key = (path: string) => `character.edit.form.${path}`;
+
+  it('aceita nome com e sem PV máximo', async () => {
+    await expect(
+      validate(characterEditSchema, { name: ' Jão ', maxHp: '8' }),
+    ).resolves.toEqual({ ok: true, data: { name: 'Jão', maxHp: 8 } });
+    await expect(
+      validate(characterEditSchema, { name: 'Jão', maxHp: '' }),
+    ).resolves.toEqual({ ok: true, data: { name: 'Jão' } });
+  });
+
+  it('exige nome e PV inteiro positivo', async () => {
+    await expect(
+      validate(characterEditSchema, { name: '', maxHp: '0' }),
+    ).resolves.toEqual({
+      ok: false,
+      fieldErrors: {
+        name: key('name.errors.required'),
+        maxHp: key('maxHp.errors.min'),
+      },
     });
   });
 });

@@ -21,6 +21,8 @@ interface ConfirmDeleteButtonProps {
   /** Chave de tradução do título do toast de erro. */
   errorTitleKey: string;
   description: ReactNode;
+  /** Ícone do botão que abre a confirmação; padrão lixeira. */
+  icon?: ReactNode;
 }
 
 /** Botão de excluir que pede confirmação num diálogo antes de chamar a action. */
@@ -29,6 +31,7 @@ export function ConfirmDeleteButton({
   labels,
   errorTitleKey,
   description,
+  icon = <Trash2 size={12} />,
 }: ConfirmDeleteButtonProps) {
   const [open, setOpen] = useState(false);
   const [state, formAction] = useActionState(action, initialFormState);
@@ -41,7 +44,7 @@ export function ConfirmDeleteButton({
       <Button
         variant="outline"
         color="danger"
-        icon={<Trash2 size={12} />}
+        icon={icon}
         onClick={() => setOpen(true)}
       >
         {labels.trigger}
