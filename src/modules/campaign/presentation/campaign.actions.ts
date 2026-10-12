@@ -18,6 +18,9 @@ import {
   CAMPAIGN_FORM_FIELDS,
   campaignCreateSchema,
   type CampaignFormField,
+  PREMADE_CHARACTER_FORM_FIELDS,
+  type PremadeCharacterFormField,
+  premadeCharacterSchema,
 } from './campaign.schema';
 
 // Server Actions são endpoints públicos: todo argumento é validado aqui
@@ -83,4 +86,56 @@ export async function updateCampaignStatusAction(
 
   revalidatePath('/campaigns', 'layout');
   return { ok: true, data: undefined };
+}
+
+export async function createPremadeCharacterAction(
+  campaignId: number,
+  _state: FormState<PremadeCharacterFormField>,
+  formData: FormData,
+): Promise<FormState<PremadeCharacterFormField>> {
+  if (!Number.isInteger(campaignId)) return { status: 'error' };
+
+  const values = formValues(formData, PREMADE_CHARACTER_FORM_FIELDS);
+  const input = await validate(premadeCharacterSchema, values);
+  if (!input.ok) {
+    return { status: 'error', fieldErrors: input.fieldErrors, values };
+  }
+
+  try {
+    await campaignUseCases.createPremadeCharacter(campaignId, input.data);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error), values };
+  }
+
+  revalidatePath('/campaigns', 'layout');
+  return { status: 'success', values: { name: input.data.name } };
+}
+
+export async function deletePremadeCharacterAction(
+  campaignSlug: string,
+  characterId: number,
+  _state: FormState,
+  _formData: FormData,
+): Promise<FormState> {
+  if (typeof campaignSlug !== 'string' || !Number.isInteger(characterId)) {
+    return { status: 'error' };
+  }
+
+  try {
+    await campaignUseCases.deletePremadeCharacter(characterId);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error) };
+  }
+
+  revalidatePath('/campaigns', 'layout');
+  await setFlash({
+    type: 'success',
+    title: 'campaign.premade.toast.success.delete.title',
+    message: 'campaign.premade.toast.success.delete.message',
+  });
+  // Volta para a mesma campanha; o slug só monta um caminho interno
+  redirect(
+    `/campaigns/${encodeURIComponent(campaignSlug)}`,
+    RedirectType.replace,
+  );
 }

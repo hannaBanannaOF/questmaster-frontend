@@ -1,5 +1,6 @@
 import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
 import { IconText, Stack, Text, Title } from '@/src/design';
 import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
@@ -8,7 +9,14 @@ import { CardLink, LastAccess } from '@/src/modules/shared/presentation';
 import { type CharacterSummary, clampHp, getMaxHp } from '../../../domain';
 import styles from './character-card.module.css';
 
-export function CharacterCard({ character }: { character: CharacterSummary }) {
+export function CharacterCard({
+  character,
+  tag,
+}: {
+  character: CharacterSummary;
+  /** Selo ao lado do nome, ex.: "Sua ficha" na party da campanha. */
+  tag?: ReactNode;
+}) {
   const t = useTranslations('character.list');
   const { label: systemLabel } = getGameSystemMeta(character.system);
   const maxHp = getMaxHp(character);
@@ -19,7 +27,10 @@ export function CharacterCard({ character }: { character: CharacterSummary }) {
         <GameSystemIcon system={character.system} />
         <Stack direction="column">
           <Stack direction="column" gap="xxs">
-            <Title order={3}>{character.name}</Title>
+            <Stack align="center" wrap>
+              <Title order={3}>{character.name}</Title>
+              {tag}
+            </Stack>
             <Text tone="muted">{systemLabel}</Text>
           </Stack>
           {character.currentHp !== undefined && (

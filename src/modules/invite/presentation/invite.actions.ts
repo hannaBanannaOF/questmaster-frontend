@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 
 import type { ActionResult, FormState } from '@/src/lib/actions';
 import { toErrorMessage } from '@/src/lib/actions/action-error';
+import { HttpError } from '@/src/lib/errors';
 import { setFlash } from '@/src/lib/flash/set-flash';
 
 import { inviteUseCases } from '../invite.container';
@@ -44,6 +45,10 @@ export async function acceptInviteAction(
     const invite = await inviteUseCases.acceptInvite(hash, characterSlug);
     campaign = { slug: invite.campaignSlug, name: invite.campaignName };
   } catch (error) {
+    // Outro jogador pegou a ficha pronta antes: a escolha volta sem ela
+    if (error instanceof HttpError && error.status === 409) {
+      revalidatePath(`/join/${hash}`);
+    }
     return {
       status: 'error',
       message: toErrorMessage(error),

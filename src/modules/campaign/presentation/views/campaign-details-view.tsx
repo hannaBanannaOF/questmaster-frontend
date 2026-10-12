@@ -5,6 +5,7 @@ import {
   Card,
   DetailPage,
   Divider,
+  EmptyState,
   Quote,
   Stack,
   Text,
@@ -30,6 +31,7 @@ import { CampaignCharacters } from '../components/campaign-characters/campaign-c
 import { CampaignStatusActions } from '../components/campaign-status-actions/campaign-status-actions';
 import { CampaignStatusBadge } from '../components/campaign-status-badge/campaign-status-badge';
 import { DmBadge } from '../components/dm-badge/dm-badge';
+import { PremadeCharacters } from '../components/premade-characters/premade-characters';
 
 const TITLE_ID = 'campaign-title';
 
@@ -121,8 +123,26 @@ export async function CampaignDetailsView({ slug }: { slug: string }) {
         </Card>
       }
     >
-      {campaign.playerCount > 0 && (
-        <CampaignCharacters characters={campaign.characters} />
+      {(campaign.playerCount > 0 || canInvite) && (
+        <CampaignCharacters
+          characters={campaign.characters}
+          system={campaign.system}
+          empty={
+            <EmptyState
+              title={t('emptyParty.title')}
+              message={t('emptyParty.message')}
+              action={
+                <InviteLinkControl
+                  hash={campaign.inviteHash}
+                  createInvite={createInviteAction.bind(null, campaign.id)}
+                />
+              }
+            />
+          }
+        />
+      )}
+      {isManager && (canInvite || campaign.premadeCharacters.length > 0) && (
+        <PremadeCharacters campaign={campaign} canCreate={canInvite} />
       )}
     </DetailPage>
   );

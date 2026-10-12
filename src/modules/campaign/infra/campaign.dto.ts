@@ -34,7 +34,22 @@ export interface CampaignDetailsResponse {
   slug: string;
   status: string;
   system: string;
-  characters: { id: number; name: string }[];
+  characters: CampaignCharacterResponse[];
+  premade_characters?: CampaignCharacterResponse[];
+}
+
+export interface CampaignCharacterResponse {
+  id: number;
+  name: string;
+  slug?: string;
+  current_hp?: number | null;
+  max_hp?: number | null;
+  is_mine?: boolean;
+}
+
+export interface PremadeCharacterCreateRequest {
+  name: string;
+  max_hp?: number;
 }
 
 export interface CampaignCreateRequest {

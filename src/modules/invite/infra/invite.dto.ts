@@ -14,6 +14,12 @@ export interface InviteDetailsResponse {
   campaign_player_count: number;
   is_dm: boolean;
   campaign_system: string;
+  premade_characters?: {
+    slug: string;
+    name: string;
+    current_hp?: number | null;
+    max_hp?: number | null;
+  }[];
 }
 
 export interface AcceptInviteRequest {

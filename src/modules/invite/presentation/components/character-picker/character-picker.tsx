@@ -33,7 +33,9 @@ export function CharacterPicker({
       aria-invalid={errorId ? true : undefined}
       aria-describedby={errorId}
     >
-      <legend className="visually-hidden">{legend}</legend>
+      <legend className={styles.legend}>
+        <Title order={4}>{legend}</Title>
+      </legend>
       <List>
         {characters.map((character) => (
           <ListItem key={character.slug}>

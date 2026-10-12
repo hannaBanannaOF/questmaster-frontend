@@ -35,6 +35,7 @@ export const aCampaignDetails = (
   playerCount: 0,
   id: 1,
   characters: [],
+  premadeCharacters: [],
   ...overrides,
 });
 

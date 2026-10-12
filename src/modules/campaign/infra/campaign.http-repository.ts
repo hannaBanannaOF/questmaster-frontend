@@ -10,6 +10,7 @@ import type {
   CampaignStatusCountsResponse,
   CampaignStatusRequest,
   CampaignStatusResponse,
+  PremadeCharacterCreateRequest,
   SlugResolveResponse,
 } from './campaign.dto';
 import {
@@ -18,6 +19,7 @@ import {
   toCampaignListQuery,
   toCampaignStatusCounts,
   toCampaignSummary,
+  toPremadeCharacterCreateRequest,
 } from './campaign.mapper';
 
 export const createCampaignHttpRepository = (
@@ -69,5 +71,18 @@ export const createCampaignHttpRepository = (
       { status } satisfies CampaignStatusRequest,
     );
     return response.status as CampaignStatus;
+  },
+
+  async createPremadeCharacter(campaignId, input) {
+    await http.post<void>(
+      `campaign/${campaignId}/character`,
+      toPremadeCharacterCreateRequest(
+        input,
+      ) satisfies PremadeCharacterCreateRequest,
+    );
+  },
+
+  async deletePremadeCharacter(characterId) {
+    await http.delete(`character/${characterId}`);
   },
 });

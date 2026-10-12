@@ -16,6 +16,7 @@ const invite: Invite = {
   campaignPlayerCount: 3,
   campaignSystem: GameSystem.CALL_OF_CTHULHU,
   isDm: false,
+  premadeCharacters: [],
 };
 
 function fakeRepository(
