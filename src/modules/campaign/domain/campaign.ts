@@ -95,3 +95,13 @@ export function canDeleteCampaign(campaign: CampaignAccess) {
 export function canInviteToCampaign(campaign: CampaignAccess) {
   return campaign.isDm && campaign.status !== CampaignStatus.ARCHIVED;
 }
+
+/** O jogador sai com a própria ficha enquanto a campanha não está arquivada. */
+export function canLeaveCampaign(campaign: Pick<CampaignSummary, 'status'>) {
+  return campaign.status !== CampaignStatus.ARCHIVED;
+}
+
+/** Só o DM remove fichas da party, e não de uma campanha arquivada. */
+export function canRemoveFromCampaign(campaign: CampaignAccess) {
+  return campaign.isDm && campaign.status !== CampaignStatus.ARCHIVED;
+}

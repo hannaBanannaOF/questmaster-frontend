@@ -10,6 +10,7 @@ import type {
   CharacterFilters,
   CharacterRepository,
   CreateCharacterInput,
+  EditCharacterInput,
 } from './character.repository';
 
 export const makeListCharacters =
@@ -39,3 +40,8 @@ export const makeUpdateCharacterHp =
     if (!isValidHp(hp)) throw new InvalidHpError();
     return characters.updateHp(id, hp);
   };
+
+export const makeEditCharacter =
+  (characters: CharacterRepository) =>
+  (id: number, input: EditCharacterInput) =>
+    characters.edit(id, input);

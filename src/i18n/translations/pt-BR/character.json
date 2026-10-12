@@ -67,7 +67,8 @@
     "increase": "Aumentar PV"
   },
   "actions": {
-    "delete": "Excluir"
+    "delete": "Excluir",
+    "edit": "Editar"
   },
   "toast": {
     "error": {
@@ -85,6 +86,10 @@
       "delete": {
         "title": "Personagem excluido!",
         "message": "\"{name}\" foi excluído com sucesso."
+      },
+      "edit": {
+        "title": "Ficha atualizada!",
+        "message": "\"{name}\" foi salva."
       }
     }
   },
@@ -98,5 +103,27 @@
   "errors": {
     "invalidHp": "O valor de PV informado é inválido.",
     "notEditable": "Só o dono da ficha pode alterá-la."
+  },
+  "edit": {
+    "title": "Editar ficha",
+    "form": {
+      "name": {
+        "label": "Nome do personagem",
+        "errors": {
+          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "max": "O nome deve ter no máximo 255 caracteres."
+        }
+      },
+      "maxHp": {
+        "label": "PV máximo",
+        "placeholder": "Ex.: 12",
+        "errors": {
+          "type": "O PV deve ser um número inteiro.",
+          "min": "O PV deve ser maior que zero."
+        }
+      },
+      "submit": "Salvar",
+      "cancel": "Cancelar"
+    }
   }
 }

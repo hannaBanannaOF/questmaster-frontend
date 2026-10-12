@@ -19,7 +19,9 @@ import { ConfirmDeleteButton } from '@/src/modules/shared/presentation';
 import {
   canDeleteCampaign,
   canInviteToCampaign,
+  canLeaveCampaign,
   canManageCampaign,
+  canRemoveFromCampaign,
   getAvailableTransitions,
 } from '../../domain';
 import {
@@ -31,6 +33,7 @@ import { CampaignCharacters } from '../components/campaign-characters/campaign-c
 import { CampaignStatusActions } from '../components/campaign-status-actions/campaign-status-actions';
 import { CampaignStatusBadge } from '../components/campaign-status-badge/campaign-status-badge';
 import { DmBadge } from '../components/dm-badge/dm-badge';
+import { PartyMemberAction } from '../components/party-member-action/party-member-action';
 import { PremadeCharacters } from '../components/premade-characters/premade-characters';
 
 const TITLE_ID = 'campaign-title';
@@ -127,6 +130,12 @@ export async function CampaignDetailsView({ slug }: { slug: string }) {
         <CampaignCharacters
           characters={campaign.characters}
           system={campaign.system}
+          memberAction={(character) =>
+            canRemoveFromCampaign(campaign) ||
+            (character.isMine && canLeaveCampaign(campaign)) ? (
+              <PartyMemberAction campaign={campaign} character={character} />
+            ) : null
+          }
           empty={
             <EmptyState
               title={t('emptyParty.title')}

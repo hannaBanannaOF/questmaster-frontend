@@ -16,12 +16,15 @@ export function CampaignCharacters({
   characters,
   system,
   empty,
+  memberAction,
 }: {
   characters: CampaignCharacter[];
   /** As fichas da campanha são todas do sistema dela. */
   system: GameSystem;
   /** Mostrado no lugar da grade quando a campanha não tem jogadores. */
   empty?: ReactNode;
+  /** Ação abaixo de cada card (sair ou remover), fora do link. */
+  memberAction?: (character: CampaignCharacter) => ReactNode;
 }) {
   const t = useTranslations('campaign');
 
@@ -37,21 +40,28 @@ export function CampaignCharacters({
         empty
       ) : (
         <ul className={styles.grid} aria-labelledby={HEADING_ID}>
-          {characters.map(({ id, slug, name, currentHp, maxHp, isMine }) => (
-            <li key={id}>
-              {slug ? (
-                <CharacterCard
-                  character={{ slug, name, system, currentHp, maxHp }}
-                  tag={isMine && <Badge tone="info">{t('mine')}</Badge>}
-                />
-              ) : (
-                // Sem slug o core ainda não publicou o link da ficha
-                <Card>
-                  <Title order={4}>{name}</Title>
-                </Card>
-              )}
-            </li>
-          ))}
+          {characters.map((character) => {
+            const { id, slug, name, currentHp, maxHp, isMine } = character;
+            const action = memberAction?.(character);
+            return (
+              <li key={id}>
+                <Stack direction="column" align="stretch" gap="xs">
+                  {slug ? (
+                    <CharacterCard
+                      character={{ slug, name, system, currentHp, maxHp }}
+                      tag={isMine && <Badge tone="info">{t('mine')}</Badge>}
+                    />
+                  ) : (
+                    // Sem slug o core ainda não publicou o link da ficha
+                    <Card>
+                      <Title order={4}>{name}</Title>
+                    </Card>
+                  )}
+                  {action && <Stack justify="end">{action}</Stack>}
+                </Stack>
+              </li>
+            );
+          })}
         </ul>
       )}
     </Stack>

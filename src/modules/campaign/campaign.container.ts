@@ -10,6 +10,7 @@ import {
   makeDeletePremadeCharacter,
   makeGetCampaignBySlug,
   makeListCampaigns,
+  makeRemoveCharacterFromCampaign,
   makeUpdateCampaignStatus,
 } from './application';
 import { createCampaignHttpRepository } from './infra/campaign.http-repository';
@@ -28,4 +29,5 @@ export const campaignUseCases = {
   updateCampaignStatus: makeUpdateCampaignStatus(campaigns),
   createPremadeCharacter: makeCreatePremadeCharacter(campaigns),
   deletePremadeCharacter: makeDeletePremadeCharacter(campaigns),
+  removeCharacterFromCampaign: makeRemoveCharacterFromCampaign(campaigns),
 };

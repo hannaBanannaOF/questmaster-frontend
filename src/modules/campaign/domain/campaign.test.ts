@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest';
 import {
   canDeleteCampaign,
   canInviteToCampaign,
+  canLeaveCampaign,
   canManageCampaign,
+  canRemoveFromCampaign,
   isCampaignRole,
   orderStatusCounts,
   totalCampaigns,
@@ -53,6 +55,22 @@ describe('canInviteToCampaign', () => {
       expect(canInviteToCampaign({ isDm: false, status })).toBe(false);
     },
   );
+});
+
+describe('sair e remover da campanha', () => {
+  it.each([
+    [DRAFT, true],
+    [ACTIVE, true],
+    [PAUSED, true],
+    [ARCHIVED, false],
+  ])('em %s, sair → %s e DM remove → %s', (status, expected) => {
+    expect(canLeaveCampaign({ status })).toBe(expected);
+    expect(canRemoveFromCampaign({ isDm: true, status })).toBe(expected);
+  });
+
+  it('jogador nunca remove', () => {
+    expect(canRemoveFromCampaign({ isDm: false, status: ACTIVE })).toBe(false);
+  });
 });
 
 describe('isCampaignRole', () => {

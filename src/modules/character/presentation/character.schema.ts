@@ -31,3 +31,29 @@ export const characterCreateSchema = yup.object({
     .required(key('game_system.errors.required'))
     .oneOf(Object.values(GameSystem), key('game_system.errors.required')),
 });
+
+export const CHARACTER_EDIT_FORM_FIELDS = ['name', 'maxHp'] as const;
+export type CharacterEditFormField =
+  (typeof CHARACTER_EDIT_FORM_FIELDS)[number];
+
+const editKey = (path: string) => `character.edit.form.${path}`;
+
+export const characterEditSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required(editKey('name.errors.required'))
+    .max(255, editKey('name.errors.max')),
+  maxHp: yup
+    .number()
+    // Campo vazio mantém o PV máximo, não é "não é número"
+    .transform((value, original) =>
+      typeof original === 'string' && original.trim() === ''
+        ? undefined
+        : value,
+    )
+    .typeError(editKey('maxHp.errors.type'))
+    .integer(editKey('maxHp.errors.type'))
+    .min(1, editKey('maxHp.errors.min'))
+    .optional(),
+});

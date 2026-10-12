@@ -16,6 +16,7 @@ import {
   makeDeleteCampaign,
   makeGetCampaignBySlug,
   makeListCampaigns,
+  makeRemoveCharacterFromCampaign,
   makeUpdateCampaignStatus,
 } from './use-cases';
 
@@ -39,6 +40,7 @@ function fakeRepository(
     updateStatus: vi.fn(async (_id, status) => status),
     createPremadeCharacter: vi.fn().mockResolvedValue(undefined),
     deletePremadeCharacter: vi.fn().mockResolvedValue(undefined),
+    removeCharacter: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   };
 }
@@ -188,5 +190,15 @@ describe('makeCreatePremadeCharacter', () => {
       name: 'Harvey',
       maxHp: 12,
     });
+  });
+});
+
+describe('makeRemoveCharacterFromCampaign', () => {
+  it('tira a ficha da campanha', async () => {
+    const repository = fakeRepository();
+
+    await makeRemoveCharacterFromCampaign(repository)(7, 3);
+
+    expect(repository.removeCharacter).toHaveBeenCalledWith(7, 3);
   });
 });

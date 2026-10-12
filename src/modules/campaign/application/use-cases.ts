@@ -58,3 +58,8 @@ export const makeCreatePremadeCharacter =
 export const makeDeletePremadeCharacter =
   (campaigns: CampaignRepository) => (characterId: number) =>
     campaigns.deletePremadeCharacter(characterId);
+
+export const makeRemoveCharacterFromCampaign =
+  (campaigns: CampaignRepository) =>
+  (campaignId: number, characterId: number) =>
+    campaigns.removeCharacter(campaignId, characterId);

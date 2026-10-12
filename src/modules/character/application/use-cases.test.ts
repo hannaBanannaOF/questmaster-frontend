@@ -8,6 +8,7 @@ import type { CharacterRepository } from './character.repository';
 import {
   makeCreateCharacter,
   makeDeleteCharacter,
+  makeEditCharacter,
   makeGetCharacterBySlug,
   makeListCharacters,
   makeUpdateCharacterHp,
@@ -23,6 +24,7 @@ function fakeRepository(
     create: vi.fn().mockResolvedValue(undefined),
     delete: vi.fn().mockResolvedValue(undefined),
     updateHp: vi.fn(async (_id, hp) => hp),
+    edit: vi.fn().mockResolvedValue('jao'),
     ...overrides,
   };
 }
@@ -111,5 +113,16 @@ describe('makeUpdateCharacterHp', () => {
       makeUpdateCharacterHp(repository)(1, hp),
     ).rejects.toBeInstanceOf(InvalidHpError);
     expect(repository.updateHp).not.toHaveBeenCalled();
+  });
+});
+
+describe('makeEditCharacter', () => {
+  it('edita e devolve o slug novo', async () => {
+    const repository = fakeRepository();
+
+    await expect(
+      makeEditCharacter(repository)(1, { name: 'Jão', maxHp: 8 }),
+    ).resolves.toBe('jao');
+    expect(repository.edit).toHaveBeenCalledWith(1, { name: 'Jão', maxHp: 8 });
   });
 });

@@ -162,5 +162,37 @@
         }
       }
     }
+  },
+  "party": {
+    "leave": {
+      "trigger": "Sair da campanha",
+      "title": "Sair da campanha",
+      "confirm": "<bold>{name}</bold> sai da campanha e continua com você, sem campanha. Para voltar, use o convite.",
+      "cancel": "Cancelar",
+      "submit": "Sair da campanha"
+    },
+    "remove": {
+      "trigger": "Remover",
+      "title": "Remover da campanha",
+      "confirm": "<bold>{name}</bold> sai da party e continua com o jogador. Ele pode voltar pelo convite.",
+      "cancel": "Cancelar",
+      "submit": "Remover"
+    },
+    "toast": {
+      "error": {
+        "leave": "Não foi possível sair da campanha!",
+        "remove": "Não foi possível remover da campanha!"
+      },
+      "success": {
+        "leave": {
+          "title": "Você saiu da campanha",
+          "message": "A ficha continua com você, sem campanha."
+        },
+        "remove": {
+          "title": "Ficha removida da campanha",
+          "message": "Ela continua com o jogador."
+        }
+      }
+    }
   }
 }

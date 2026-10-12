@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  type ComponentProps,
   createContext,
   type ReactNode,
   useCallback,
@@ -19,6 +20,8 @@ export function useCloseDialog() {
 
 interface DialogButtonProps {
   label: string;
+  /** Estilo do botão que abre o diálogo; padrão sólido. */
+  variant?: ComponentProps<typeof Button>['variant'];
   icon?: ReactNode;
   title: string;
   description?: string;
@@ -30,6 +33,7 @@ interface DialogButtonProps {
 /** Botão que abre um diálogo com o conteúdo recebido (renderizável no servidor). */
 export function DialogButton({
   label,
+  variant,
   icon,
   title,
   description,
@@ -41,7 +45,7 @@ export function DialogButton({
 
   return (
     <>
-      <Button icon={icon} onClick={() => setOpen(true)}>
+      <Button variant={variant} icon={icon} onClick={() => setOpen(true)}>
         {label}
       </Button>
       <Dialog
