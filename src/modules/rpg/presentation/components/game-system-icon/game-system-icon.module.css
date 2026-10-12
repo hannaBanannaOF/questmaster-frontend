@@ -1,3 +1,4 @@
-.callOfCthulhu {
+/* No próprio svg: o tom do IconBox ([data-tone]) é mais específico que a classe na caixa */
+.callOfCthulhu svg {
   color: var(--color-system-coc);
 }
