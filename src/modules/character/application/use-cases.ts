@@ -1,11 +1,6 @@
 import type { PageRequest } from '@/src/lib/pagination';
 
-import {
-  canEditCharacter,
-  CharacterNotEditableError,
-  InvalidHpError,
-  isValidHp,
-} from '../domain';
+import { canEditCharacter, CharacterNotEditableError } from '../domain';
 import type {
   CharacterFilters,
   CharacterRepository,
@@ -32,13 +27,6 @@ export const makeDeleteCharacter =
     if (!canEditCharacter(character)) throw new CharacterNotEditableError();
     await characters.delete(id);
     return character;
-  };
-
-export const makeUpdateCharacterHp =
-  (characters: CharacterRepository) => async (id: number, hp: number) => {
-    // O teto (PV máximo) é validado pela API, que conhece a ficha atual
-    if (!isValidHp(hp)) throw new InvalidHpError();
-    return characters.updateHp(id, hp);
   };
 
 export const makeEditCharacter =

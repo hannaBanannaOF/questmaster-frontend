@@ -1,0 +1,23 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* Celular: os dois botões dividem a largura */
+.footer > * {
+  flex: 1;
+}
+
+@media (min-width: 48rem) {
+  .footer > * {
+    flex: none;
+  }
+}

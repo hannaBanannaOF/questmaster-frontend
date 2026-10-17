@@ -4,5 +4,10 @@ export interface InviteRepository {
   /** Cria (ou recupera) o convite da campanha e devolve o hash. */
   create(campaignId: number): Promise<string>;
   findByHash(hash: string): Promise<Invite>;
-  accept(hash: string, characterSlug: string): Promise<void>;
+  /** Entra com a ficha escolhida e o apelido na campanha. */
+  accept(
+    hash: string,
+    characterSlug: string,
+    playerName: string,
+  ): Promise<void>;
 }

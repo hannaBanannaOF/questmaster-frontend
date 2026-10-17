@@ -50,6 +50,10 @@ export const makeUpdateCampaignStatus =
     return campaigns.updateStatus(id, nextStatus);
   };
 
+export const makeUpdateTableName =
+  (campaigns: CampaignRepository) => (campaignId: number, name: string) =>
+    campaigns.updateTableName(campaignId, name);
+
 export const makeCreatePremadeCharacter =
   (campaigns: CampaignRepository) =>
   (campaignId: number, input: CreatePremadeCharacterInput) =>

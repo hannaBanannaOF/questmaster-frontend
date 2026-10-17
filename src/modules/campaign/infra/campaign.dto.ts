@@ -17,10 +17,12 @@ export interface CampaignListPageResponse {
 export interface CampaignListQuery {
   role?: string;
   status?: string;
+  q?: string;
+  without_players?: boolean;
   sort?: string;
   limit: number;
   offset: number;
-  [key: string]: string | number | undefined;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export type CampaignStatusCountsResponse = Record<string, number>;
@@ -31,6 +33,7 @@ export interface CampaignDetailsResponse {
   invite_hash?: string;
   name: string;
   overview?: string;
+  dm_name?: string | null;
   slug: string;
   status: string;
   system: string;
@@ -42,19 +45,30 @@ export interface CampaignCharacterResponse {
   id: number;
   name: string;
   slug?: string;
-  current_hp?: number | null;
-  max_hp?: number | null;
   is_mine?: boolean;
+  player_name?: string | null;
 }
 
 export interface PremadeCharacterCreateRequest {
   name: string;
-  max_hp?: number;
+}
+
+export interface TableNameRequest {
+  name: string;
+}
+
+export interface TableNameResponse {
+  name: string;
+}
+
+export interface CampaignCreateResponse {
+  slug: string;
 }
 
 export interface CampaignCreateRequest {
   name: string;
   system: string;
+  dm_name: string;
   overview?: string;
 }
 

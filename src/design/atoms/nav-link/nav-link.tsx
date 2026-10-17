@@ -11,7 +11,7 @@ export type NavLinkVariant = 'inline' | 'bottom';
 interface NavLinkProps {
   href: string;
   label: string;
-  /** Ícone decorativo; só aparece na variante `bottom`. */
+  /** Ícone decorativo, ao lado do rótulo ou sobre ele na variante `bottom`. */
   icon?: ReactNode;
   /** Só fica ativo na rota exata (útil para "/"). */
   exact?: boolean;
@@ -38,7 +38,7 @@ export function NavLink({
       data-variant={variant}
       aria-current={isActive ? 'page' : undefined}
     >
-      {variant === 'bottom' && icon && (
+      {icon && (
         <span className={styles.icon} aria-hidden>
           {icon}
         </span>

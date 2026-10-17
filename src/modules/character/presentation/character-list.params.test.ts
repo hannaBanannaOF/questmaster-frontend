@@ -12,6 +12,11 @@ describe('parseCharacterListParams', () => {
     ).toEqual({ page: 6, withoutCampaign: true });
   });
 
+  it('lê a busca sem espaços; vazia vira sem busca', () => {
+    expect(parseCharacterListParams({ q: ' eleanor ' }).q).toBe('eleanor');
+    expect(parseCharacterListParams({ q: '  ' }).q).toBeUndefined();
+  });
+
   it('só "true" liga o filtro', () => {
     expect(parseCharacterListParams({ without_campaign: '1' })).toEqual({
       page: 1,
@@ -24,6 +29,12 @@ describe('characterListHref', () => {
   it('lista sem filtro na primeira página', () => {
     expect(characterListHref({ page: 1, withoutCampaign: false })).toBe(
       '/characters',
+    );
+  });
+
+  it('leva a busca junto do filtro', () => {
+    expect(characterListHref({ q: 'jack', withoutCampaign: true })).toBe(
+      '/characters?q=jack&without_campaign=true',
     );
   });
 

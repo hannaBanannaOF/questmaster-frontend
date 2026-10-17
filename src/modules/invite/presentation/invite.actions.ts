@@ -3,12 +3,22 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import type { ActionResult, FormState } from '@/src/lib/actions';
+import {
+  type ActionResult,
+  type FormState,
+  formValues,
+  validate,
+} from '@/src/lib/actions';
 import { toErrorMessage } from '@/src/lib/actions/action-error';
 import { HttpError } from '@/src/lib/errors';
 import { setFlash } from '@/src/lib/flash/set-flash';
 
 import { inviteUseCases } from '../invite.container';
+import {
+  ACCEPT_INVITE_FIELDS,
+  type AcceptInviteField,
+  acceptInviteSchema,
+} from './invite.schema';
 
 // Server Actions são endpoints públicos: todo argumento é validado aqui
 
@@ -28,32 +38,36 @@ export async function createInviteAction(
 
 export async function acceptInviteAction(
   hash: string,
-  _state: FormState<'character'>,
+  _state: FormState<AcceptInviteField>,
   formData: FormData,
-): Promise<FormState<'character'>> {
-  const characterSlug = formData.get('character');
+): Promise<FormState<AcceptInviteField>> {
   if (typeof hash !== 'string' || !hash) return { status: 'error' };
-  if (typeof characterSlug !== 'string' || !characterSlug) {
-    return {
-      status: 'error',
-      fieldErrors: { character: 'invite.character.required' },
-    };
+
+  const values = formValues(formData, ACCEPT_INVITE_FIELDS);
+  const input = await validate(acceptInviteSchema, values);
+  if (!input.ok) {
+    return { status: 'error', fieldErrors: input.fieldErrors, values };
   }
 
   let campaign: { slug: string; name: string };
   try {
-    const invite = await inviteUseCases.acceptInvite(hash, characterSlug);
+    const invite = await inviteUseCases.acceptInvite(
+      hash,
+      input.data.character,
+      input.data.playerName,
+    );
     campaign = { slug: invite.campaignSlug, name: invite.campaignName };
   } catch (error) {
-    // Outro jogador pegou a ficha pronta antes: a escolha volta sem ela
+    // Outro jogador pegou a ficha pronta antes: a lista volta sem ela
     if (error instanceof HttpError && error.status === 409) {
       revalidatePath(`/join/${hash}`);
+      return {
+        status: 'error',
+        fieldErrors: { character: 'invite.character.taken' },
+        values,
+      };
     }
-    return {
-      status: 'error',
-      message: toErrorMessage(error),
-      values: { character: characterSlug },
-    };
+    return { status: 'error', message: toErrorMessage(error), values };
   }
 
   revalidatePath('/campaigns', 'layout');

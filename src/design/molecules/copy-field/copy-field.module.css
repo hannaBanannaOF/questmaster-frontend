@@ -1,28 +1,24 @@
+/* Link + "Copiar link" (HeroUI): o botão vira "Copiado" por 2 s */
 .copyField {
-  display: inline-flex;
+  display: flex;
+  gap: 0.5rem;
   width: 100%;
-  max-width: 100%;
-}
-
-@media (min-width: 48rem) {
-  .copyField {
-    width: auto;
-  }
+  min-width: 0;
 }
 
 .value {
   display: flex;
   flex: 1;
   align-items: center;
-  min-height: var(--touch-target);
+  min-width: 0;
+  height: var(--touch-target);
+  padding: 0 0.875rem;
   overflow: hidden;
-  padding: var(--spacing-xs) var(--spacing-md);
-  border: 1px solid var(--color-card-border);
-  border-right: 0;
-  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
-  background-color: var(--color-card-fg);
-  color: var(--color-text-muted);
+  border-radius: 0.75rem;
+  background-color: var(--default);
+  color: var(--muted);
   font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -31,27 +27,30 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  min-height: var(--touch-target);
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border: 1px solid var(--color-card-border);
-  border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
-  background-color: var(--color-card-fg);
-  color: var(--color-text-primary);
+  justify-content: center;
+  gap: 0.5rem;
+  height: var(--touch-target);
+  padding: 0 1.125rem;
+  border: 0;
+  border-radius: var(--radius-3xl);
+  background-color: var(--default);
+  color: var(--accent-soft-foreground);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-standard);
+  transition: background-color 100ms var(--ease-out);
 }
 
 .button:hover {
-  filter: brightness(1.2);
+  background-color: var(--default-hover);
 }
 
 .button:active {
-  filter: contrast(1.2);
+  transform: scale(0.97);
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }

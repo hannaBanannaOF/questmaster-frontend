@@ -1,76 +1,110 @@
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
-import { Stack, Text, Title } from '@/src/design';
-import { CreateCampaignButton } from '@/src/modules/campaign';
-import { CreateCharacterButton } from '@/src/modules/character';
+import { ButtonLink } from '@/src/design';
+import { CriticalFailure } from '@/src/modules/shared/presentation';
 import { getCurrentUserOrNull, getDisplayName } from '@/src/modules/user';
 
-import { hasPlayerRole, resolveDashboardTab } from '../../domain';
 import { DashboardTabs } from '../components/dashboard-tabs/dashboard-tabs';
-import { DashboardUnavailable } from '../components/dashboard-unavailable/dashboard-unavailable';
-import { DashboardWelcome } from '../components/dashboard-welcome/dashboard-welcome';
 import { DmPanel } from '../components/dm-panel/dm-panel';
 import { PlayerPanel } from '../components/player-panel/player-panel';
+import { RoleNudge } from '../components/role-nudge/role-nudge';
+import { WelcomeChoices } from '../components/welcome-choices/welcome-choices';
 import { getDashboardData } from '../dashboard.loaders';
+import styles from '../dashboard.module.css';
+import {
+  buildDashboardViewModel,
+  type DashboardVM,
+} from '../dashboard.view-model';
 
-/** Home do app: abas de jogador e mestre sobre os mesmos dados. */
+/** Home do app: busca os dados, monta o ViewModel e entrega para a tela. */
 export async function DashboardView({ view }: { view?: string }) {
-  const [{ campaigns, characters, idleCharacters }, user, t] =
-    await Promise.all([
-      getDashboardData(),
-      getCurrentUserOrNull(),
-      getTranslations('dashboard'),
-    ]);
-
-  const campaignData = campaigns.ok ? campaigns.data : undefined;
-  const hasPlayer =
-    characters.ok &&
-    hasPlayerRole(characters.data.total, campaignData?.playerTotal ?? 0);
-  const hasDm = (campaignData?.dmTotal ?? 0) > 0;
-
-  // Tudo falhou: mostrar abas com dois erros empilhados só confundiria
-  if (!campaigns.ok && !characters.ok) {
-    return <DashboardUnavailable />;
-  }
-
-  // Só é "primeiro acesso" quando as buscas responderam e não há nada
-  if (campaigns.ok && characters.ok && !hasPlayer && !hasDm) {
-    return <DashboardWelcome />;
-  }
-
-  const active = resolveDashboardTab(view, { hasPlayer, hasDm });
+  const [data, user] = await Promise.all([
+    getDashboardData(),
+    getCurrentUserOrNull(),
+  ]);
 
   return (
-    <Stack direction="column" align="stretch" gap="lg">
-      <Stack as="header" align="end" justify="space-between" wrap>
-        <Stack direction="column" gap="xs">
-          <Title>
-            {user
-              ? t('greetingNamed', { name: getDisplayName(user) })
-              : t('greeting')}
-          </Title>
-          <Text tone="muted">
-            {active === 'player' ? t('player.subtitle') : t('dm.subtitle')}
-          </Text>
-        </Stack>
-        {active === 'player' ? (
-          <CreateCharacterButton label={t('player.newCharacter')} />
-        ) : (
-          <CreateCampaignButton label={t('dm.newCampaign')} />
-        )}
-      </Stack>
+    <DashboardScreen
+      vm={buildDashboardViewModel(data, view)}
+      name={user ? getDisplayName(user) : undefined}
+    />
+  );
+}
 
-      <DashboardTabs active={active} />
+/** Só desenha o estado que o ViewModel decidiu. */
+function DashboardScreen({ vm, name }: { vm: DashboardVM; name?: string }) {
+  const t = useTranslations('dashboard');
 
-      {active === 'player' ? (
-        <PlayerPanel
-          campaigns={campaignData}
-          characters={characters}
-          idleCharacters={idleCharacters}
+  if (vm.kind === 'welcome') {
+    return (
+      <div className={styles.page}>
+        <Greeting
+          title={
+            name ? t('welcome.greetingNamed', { name }) : t('welcome.greeting')
+          }
+          subtitle={t('welcome.subtitle')}
         />
-      ) : (
-        <DmPanel campaigns={campaignData} hasPlayerRole={hasPlayer} />
-      )}
-    </Stack>
+        <WelcomeChoices />
+      </div>
+    );
+  }
+
+  const greeting = name ? t('greetingNamed', { name }) : t('greeting');
+
+  if (vm.kind === 'unavailable') {
+    return (
+      <div className={styles.page}>
+        <Greeting title={greeting} subtitle={t('subtitle')} />
+        <CriticalFailure
+          title={t('unavailable.title')}
+          message={t('unavailable.message')}
+          hint={t('unavailable.hint')}
+          secondaryAction={
+            <ButtonLink href="/characters" variant="tertiary">
+              {t('unavailable.openCharacters')}
+            </ButtonLink>
+          }
+        />
+      </div>
+    );
+  }
+
+  const { panel } = vm;
+
+  return (
+    <div className={styles.page}>
+      <Greeting title={greeting} subtitle={t('subtitle')}>
+        {vm.tabs && <DashboardTabs active={panel.tab} />}
+      </Greeting>
+      <div className={styles.panel}>
+        {panel.tab === 'dm' ? (
+          <DmPanel vm={panel} />
+        ) : (
+          <PlayerPanel vm={panel} />
+        )}
+        {vm.nudge && <RoleNudge role={vm.nudge} />}
+      </div>
+    </div>
+  );
+}
+
+function Greeting({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children?: ReactNode;
+}) {
+  return (
+    <header className={styles.hello}>
+      <div>
+        <h1>{title}</h1>
+        <p className={styles.subtitle}>{subtitle}</p>
+      </div>
+      {children}
+    </header>
   );
 }

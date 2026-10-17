@@ -17,14 +17,13 @@ export const toInvite = (response: InviteDetailsResponse): Invite => ({
   campaignOverview: response.campaign_overview,
   campaignPlayerCount: response.campaign_player_count,
   campaignSystem: response.campaign_system as GameSystem,
+  dmName: response.dm_name ?? undefined,
   isDm: response.is_dm ?? false,
   premadeCharacters: (response.premade_characters ?? []).map((character) => ({
     slug: character.slug,
     name: character.name,
     // As fichas prontas são do sistema da campanha
     system: response.campaign_system as GameSystem,
-    currentHp: character.current_hp ?? undefined,
-    maxHp: character.max_hp ?? undefined,
   })),
 });
 
@@ -46,9 +45,10 @@ export const createInviteHttpRepository = (
     );
   },
 
-  async accept(hash, characterSlug) {
+  async accept(hash, characterSlug, playerName) {
     await http.post<void>(`invite/${encodeURIComponent(hash)}/accept`, {
       character_slug: characterSlug,
+      player_name: playerName,
     } satisfies AcceptInviteRequest);
   },
 });

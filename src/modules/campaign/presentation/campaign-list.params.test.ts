@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { CampaignStatus } from '../domain';
 import {
   campaignListHref,
+  getHiddenBy,
   hasCampaignFilters,
   parseCampaignListParams,
 } from './campaign-list.params';
@@ -26,6 +27,15 @@ describe('parseCampaignListParams', () => {
     expect(
       parseCampaignListParams({ page: 'x', role: 'admin', status: 'paused' }),
     ).toEqual({ page: 1, role: undefined, status: undefined });
+  });
+
+  it('lê a busca sem espaços nas pontas; vazia vira sem busca', () => {
+    expect(parseCampaignListParams({ q: '  boston ' }).q).toBe('boston');
+    expect(parseCampaignListParams({ q: '   ' }).q).toBeUndefined();
+  });
+
+  it('corta a busca no limite do core', () => {
+    expect(parseCampaignListParams({ q: 'a'.repeat(150) }).q).toHaveLength(100);
   });
 
   it('usa o primeiro valor quando o parâmetro se repete', () => {
@@ -71,5 +81,24 @@ describe('hasCampaignFilters', () => {
     expect(hasCampaignFilters({ page: 1, status: CampaignStatus.DRAFT })).toBe(
       true,
     );
+  });
+});
+
+describe('campaignListHref · busca', () => {
+  it('leva a busca junto dos filtros', () => {
+    expect(campaignListHref({ q: 'boston', role: 'dm' })).toBe(
+      '/campaigns?q=boston&role=dm',
+    );
+  });
+});
+
+describe('getHiddenBy', () => {
+  it('diz se foi a busca, os filtros ou os dois', () => {
+    expect(getHiddenBy({ page: 1 })).toBeNull();
+    expect(getHiddenBy({ page: 1, q: 'x' })).toBe('search');
+    expect(getHiddenBy({ page: 1, role: 'dm' })).toBe('filters');
+    expect(
+      getHiddenBy({ page: 1, q: 'x', status: CampaignStatus.PAUSED }),
+    ).toBe('both');
   });
 });

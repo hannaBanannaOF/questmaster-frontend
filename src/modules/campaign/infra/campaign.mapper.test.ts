@@ -70,6 +70,20 @@ describe('toCampaignListQuery', () => {
     ).toEqual({ role: 'player', status: 'PAUSED', limit: 10, offset: 30 });
   });
 
+  it('leva o filtro de campanhas sem jogadores só quando pedido', () => {
+    const page = { limit: 5, offset: 0 };
+    expect(
+      toCampaignListQuery({ withoutPlayers: true }, page).without_players,
+    ).toBe(true);
+    expect(toCampaignListQuery({}, page).without_players).toBeUndefined();
+  });
+
+  it('leva a busca pelo nome', () => {
+    expect(
+      toCampaignListQuery({ q: 'boston' }, { limit: 12, offset: 0 }).q,
+    ).toBe('boston');
+  });
+
   it('leva sort=recent só quando pedido', () => {
     expect(
       toCampaignListQuery({ sort: 'recent' }, { limit: 5, offset: 0 }).sort,
@@ -118,6 +132,28 @@ describe('toCampaignDetails', () => {
     });
   });
 
+  it('leva os nomes do mestre e dos jogadores quando o core manda', () => {
+    const details = toCampaignDetails({
+      id: 1,
+      slug: 'innsmouth',
+      name: 'Innsmouth',
+      is_dm: false,
+      status: 'ACTIVE',
+      system: 'CALL_OF_CTHULHU',
+      dm_name: 'Ana',
+      characters: [
+        { id: 1, name: 'Eleanor', player_name: 'Rafa' },
+        { id: 2, name: 'Pete', player_name: null },
+      ],
+    });
+
+    expect(details.dmName).toBe('Ana');
+    expect(details.characters.map((c) => c.playerName)).toEqual([
+      'Rafa',
+      undefined,
+    ]);
+  });
+
   it('converte os personagens da party, com e sem os campos novos', () => {
     const { characters } = toCampaignDetails({
       id: 1,
@@ -131,11 +167,9 @@ describe('toCampaignDetails', () => {
           id: 1,
           name: 'Harvey',
           slug: 'harvey',
-          current_hp: 8,
-          max_hp: 12,
           is_mine: true,
         },
-        { id: 2, name: 'Jenny', slug: 'jenny', current_hp: null, max_hp: null },
+        { id: 2, name: 'Jenny', slug: 'jenny' },
         { id: 3, name: 'Velho' },
       ],
     });
@@ -145,8 +179,6 @@ describe('toCampaignDetails', () => {
         id: 1,
         name: 'Harvey',
         slug: 'harvey',
-        currentHp: 8,
-        maxHp: 12,
         isMine: true,
       },
       { id: 2, name: 'Jenny', slug: 'jenny', isMine: false },
@@ -169,17 +201,13 @@ describe('toCampaignDetails', () => {
     expect(
       toCampaignDetails({
         ...base,
-        premade_characters: [
-          { id: 4, name: 'Pronta', slug: 'pronta', current_hp: 9, max_hp: 9 },
-        ],
+        premade_characters: [{ id: 4, name: 'Pronta', slug: 'pronta' }],
       }).premadeCharacters,
     ).toEqual([
       {
         id: 4,
         name: 'Pronta',
         slug: 'pronta',
-        currentHp: 9,
-        maxHp: 9,
         isMine: false,
       },
     ]);
@@ -192,10 +220,12 @@ describe('toCampaignCreateRequest', () => {
       toCampaignCreateRequest({
         name: 'Nova',
         system: GameSystem.CALL_OF_CTHULHU,
+        dmName: 'Hanna',
       }),
     ).toEqual({
       name: 'Nova',
       system: 'CALL_OF_CTHULHU',
+      dm_name: 'Hanna',
       overview: undefined,
     });
   });

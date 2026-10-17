@@ -1,41 +1,72 @@
 {
-  "copy": "Copiar",
-  "copied": "Copiado!",
+  "copy": "Copiar link",
+  "copied": "Copiado",
   "create": "Criar convite",
   "invited": "Você foi convidado para",
   "players": "{count, plural, =0 {Nenhum jogador ainda} one {# jogador} other {# jogadores}}",
   "toast": {
     "success": {
       "create": {
-        "title": "Convite criado!",
-        "message": "Copie o link de convite e envie para a sua party."
+        "title": "Convite criado",
+        "message": "Copie o link e mande para a sua party."
       },
       "join": {
-        "title": "Convite aceito!",
-        "message": "Você se juntou a campanha \"{name}\""
+        "title": "Você entrou na campanha",
+        "message": "Boas-vindas a \"{name}\"."
       }
     },
     "error": {
-      "create": "Não foi possível criar o convite!",
-      "detail": "Não foi possível acessar o convite!",
-      "join": "Não foi possível se juntar a campanha!"
+      "create": "Não deu para criar o convite",
+      "detail": "Não deu para abrir o convite",
+      "join": "Não deu para entrar na campanha",
+      "taken": "Essa ficha já foi escolhida"
     }
   },
   "character": {
     "choose": "Escolha seu personagem",
-    "required": "Escolha um personagem para entrar na campanha.",
+    "help": "A ficha escolhida entra na party de {campaign}.",
+    "required": "Escolha uma ficha para entrar na campanha.",
+    "taken": "Outra pessoa entrou com {name}. Escolha outra ficha.",
     "mine": "Suas fichas",
-    "premade": "Fichas prontas do mestre"
+    "premade": "Fichas prontas do mestre",
+    "mineSub": "Sem campanha",
+    "premadeSub": "Ficha pronta",
+    "noneMine": "Você ainda não tem fichas de {system}.",
+    "create": "Criar personagem"
   },
-  "join": "Juntar-se a campanha",
+  "join": "Juntar-se à campanha",
   "notFound": {
     "title": "Convite não encontrado",
-    "message": "O link pode estar errado ou o convite expirou.",
+    "message": "O link pode estar errado ou o convite expirou. Peça um novo link para quem mestra a campanha.",
     "back": "Voltar ao início"
   },
   "dm": {
-    "title": "Você é o mestre desta campanha",
-    "message": "Mestres não entram na própria campanha como jogador. Mande este link pra sua party.",
+    "title": "Esta campanha é sua",
+    "message": "Você mestra {campaign}. Mande este link para a party: cada pessoa escolhe uma ficha e entra.",
     "action": "Ir para a campanha"
-  }
+  },
+  "block": {
+    "title": "Convite",
+    "description": "Quem abrir o link escolhe uma ficha e entra na party.",
+    "link": "Link do convite"
+  },
+  "dmBy": "mestrada por {name}",
+  "playerName": {
+    "title": "Como a party vai te chamar",
+    "label": "Seu apelido na campanha",
+    "description": "Aparece para a party e para quem mestra. Não muda o nome da ficha. Dá para trocar depois na campanha.",
+    "errors": {
+      "required": "Escolha um apelido.",
+      "max": "O apelido deve ter no máximo 50 caracteres."
+    }
+  },
+  "summary": {
+    "pick": "Escolha uma ficha para continuar",
+    "as": "Você entra como <strong>{name}</strong>, com <strong>{character}</strong>"
+  },
+  "empty": {
+    "title": "Ainda sem heróis",
+    "message": "Crie um personagem de {system} para entrar em {campaign}. Quando terminar, você volta direto para este convite."
+  },
+  "loading": "Carregando convite…"
 }

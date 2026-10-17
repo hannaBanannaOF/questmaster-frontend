@@ -1,50 +1,72 @@
 .navLink {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   min-height: var(--touch-target);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
+  padding: 0 0.875rem;
+  border-radius: var(--radius-3xl);
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 700;
   text-decoration: none;
-  transition: all var(--duration-fast) var(--ease-standard);
+  transition: background-color 150ms var(--ease-smooth);
 }
 
 .navLink:hover {
-  color: var(--color-text-primary);
+  background-color: var(--default);
 }
 
 .navLink[aria-current='page'] {
-  background-color: var(--color-primary-soft);
-  color: var(--color-primary);
+  background-color: var(--default);
+  color: var(--foreground);
+}
+
+.navLink[aria-current='page'] .icon {
+  color: var(--accent);
 }
 
 .navLink:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
-}
-
-/* Barra inferior: ícone sobre o rótulo, área de toque de 48px */
-.navLink[data-variant='bottom'] {
-  flex-direction: column;
-  justify-content: center;
-  gap: var(--spacing-xxs);
-  width: 100%;
-  min-height: 3rem;
-  padding: var(--spacing-xxs);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-}
-
-.navLink[data-variant='bottom'][aria-current='page'] {
-  background-color: transparent;
 }
 
 .icon {
   display: flex;
-  padding: 2px var(--spacing-md);
-  border-radius: var(--radius-full);
 }
 
-.navLink[aria-current='page'] .icon {
-  background-color: var(--color-primary-soft);
+.icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Barra inferior: ícone numa pílula sobre o rótulo, área de toque de 48px */
+.navLink[data-variant='bottom'] {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.navLink[data-variant='bottom']:hover,
+.navLink[data-variant='bottom'][aria-current='page'] {
+  background-color: transparent;
+}
+
+.navLink[data-variant='bottom'] .icon {
+  padding: 0.25rem 1.125rem;
+  border-radius: 999px;
+}
+
+.navLink[data-variant='bottom'] .icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.navLink[data-variant='bottom'][aria-current='page'] .icon {
+  background-color: var(--accent-soft);
+  color: var(--accent-soft-foreground);
 }

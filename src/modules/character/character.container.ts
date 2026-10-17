@@ -8,7 +8,6 @@ import {
   makeEditCharacter,
   makeGetCharacterBySlug,
   makeListCharacters,
-  makeUpdateCharacterHp,
 } from './application';
 import { createCharacterHttpRepository } from './infra/character.http-repository';
 
@@ -22,6 +21,5 @@ export const characterUseCases = {
   getCharacterBySlug: makeGetCharacterBySlug(characters),
   createCharacter: makeCreateCharacter(characters),
   deleteCharacter: makeDeleteCharacter(characters),
-  updateCharacterHp: makeUpdateCharacterHp(characters),
   editCharacter: makeEditCharacter(characters),
 };

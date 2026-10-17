@@ -6,8 +6,6 @@ import type {
   CharacterDetailsResponse,
   CharacterEditRequest,
   CharacterEditResponse,
-  CharacterHpRequest,
-  CharacterHpResponse,
   CharacterListPageResponse,
   SlugResolveResponse,
 } from './character.dto';
@@ -43,28 +41,21 @@ export const createCharacterHttpRepository = (
   },
 
   async create(input) {
-    await http.post<void>('character', toCharacterCreateRequest(input));
+    const response = await http.post<{ slug: string }>(
+      'character',
+      toCharacterCreateRequest(input),
+    );
+    return response.slug;
   },
 
   async delete(id) {
     await http.delete(`character/${id}`);
   },
 
-  async updateHp(id, hp) {
-    const response = await http.patch<CharacterHpResponse>(
-      `character/${id}/hp`,
-      { new_hp: hp } satisfies CharacterHpRequest,
-    );
-    return response.current_hp;
-  },
-
   async edit(id, input) {
     const response = await http.patch<CharacterEditResponse>(
       `character/${id}`,
-      {
-        name: input.name,
-        max_hp: input.maxHp,
-      } satisfies CharacterEditRequest,
+      { name: input.name } satisfies CharacterEditRequest,
     );
     return response.slug;
   },

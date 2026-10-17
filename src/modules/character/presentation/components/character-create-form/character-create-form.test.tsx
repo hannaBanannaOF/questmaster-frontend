@@ -40,28 +40,28 @@ describe('CharacterCreateForm', () => {
       status: 'error',
       fieldErrors: {
         name: key('name.errors.required'),
-        hp: key('hp.errors.min'),
         system: key('game_system.errors.required'),
       },
-      values: { name: '', hp: '0' },
+      values: { name: 'Harv' },
     } satisfies FormState<CharacterFormField>);
     const user = await openForm();
 
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar personagem' }));
 
     expect(
-      await screen.findByText('Campo "Nome do personagem" é obrigatório!'),
+      await screen.findByText('Dê um nome ao personagem.'),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('O valor informado deve ser maior que 0!'),
+      screen.getByText('Escolha o sistema do personagem.'),
     ).toBeInTheDocument();
+    // O erro fica ligado ao campo e substitui a ajuda
     expect(
-      screen.getByText('Campo "Sistema de jogo" é obrigatório!'),
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText(/Pontos de vida/)).toHaveValue(0);
+      screen.getByLabelText(/Sistema de jogo/),
+    ).toHaveAccessibleDescription('Escolha o sistema do personagem.');
+    expect(screen.getByLabelText(/Nome do personagem/)).toHaveValue('Harv');
     // Erro de campo não vira toast
     expect(
-      screen.queryByText('Não foi possível criar personagem!'),
+      screen.queryByText('Não deu para criar o personagem'),
     ).not.toBeInTheDocument();
   });
 
@@ -70,49 +70,42 @@ describe('CharacterCreateForm', () => {
     const user = await openForm();
 
     await user.type(screen.getByLabelText(/Nome do personagem/), 'Harvey');
-    await user.type(screen.getByLabelText(/Pontos de vida/), '12');
     await user.selectOptions(
       screen.getByLabelText(/Sistema de jogo/),
       'CALL_OF_CTHULHU',
     );
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar personagem' }));
 
     const formData = action.mock.calls[0][1];
     expect(Object.fromEntries(formData)).toEqual({
       name: 'Harvey',
-      hp: '12',
       system: 'CALL_OF_CTHULHU',
     });
   });
 
-  it('ao criar, fecha o modal e avisa', async () => {
-    action.mockResolvedValue({
-      status: 'success',
-      values: { name: 'Harvey' },
-    });
-    const user = await openForm();
+  it('o sistema começa sem escolha e explica a regra', async () => {
+    await openForm();
 
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
-
-    expect(await screen.findByText('Novo personagem!')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Sistema de jogo/)).toHaveValue('');
     expect(
-      screen.getByText('"Harvey" se junta a aventura.'),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Criar' }),
-    ).not.toBeInTheDocument();
+      screen.getByLabelText(/Sistema de jogo/),
+    ).toHaveAccessibleDescription(
+      'A ficha só entra em campanhas do mesmo sistema.',
+    );
   });
 
   it('avisa quando a API falha', async () => {
     action.mockResolvedValue({ status: 'error', message: 'API fora do ar' });
     const user = await openForm();
 
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar personagem' }));
 
     expect(
-      await screen.findByText('Não foi possível criar personagem!'),
+      await screen.findByText('Não deu para criar o personagem'),
     ).toBeInTheDocument();
-    expect(screen.getByText('API fora do ar')).toBeInTheDocument();
+    expect(
+      screen.getByText('Verifique a conexão e tente de novo.'),
+    ).toBeInTheDocument();
   });
 
   it('cancelar fecha o modal sem enviar', async () => {
@@ -121,7 +114,7 @@ describe('CharacterCreateForm', () => {
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     expect(
-      screen.queryByRole('button', { name: 'Criar' }),
+      screen.queryByRole('button', { name: 'Criar personagem' }),
     ).not.toBeInTheDocument();
     expect(action).not.toHaveBeenCalled();
   });

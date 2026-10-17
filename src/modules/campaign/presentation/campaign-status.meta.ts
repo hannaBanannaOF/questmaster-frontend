@@ -1,4 +1,4 @@
-import type { BadgeTone } from '@/src/design';
+import type { BadgeTone, ChipTone } from '@/src/design';
 
 import { CampaignStatus } from '../domain';
 
@@ -6,12 +6,28 @@ import { CampaignStatus } from '../domain';
 
 const STATUS_META: Record<
   CampaignStatus,
-  { labelKey: string; tone: BadgeTone }
+  { labelKey: string; tone: BadgeTone; chipTone: ChipTone }
 > = {
-  [CampaignStatus.DRAFT]: { labelKey: 'status.draft', tone: 'info' },
-  [CampaignStatus.ACTIVE]: { labelKey: 'status.active', tone: 'success' },
-  [CampaignStatus.PAUSED]: { labelKey: 'status.paused', tone: 'warning' },
-  [CampaignStatus.ARCHIVED]: { labelKey: 'status.archived', tone: 'neutral' },
+  [CampaignStatus.DRAFT]: {
+    labelKey: 'status.draft',
+    tone: 'info',
+    chipTone: 'default',
+  },
+  [CampaignStatus.ACTIVE]: {
+    labelKey: 'status.active',
+    tone: 'success',
+    chipTone: 'success',
+  },
+  [CampaignStatus.PAUSED]: {
+    labelKey: 'status.paused',
+    tone: 'warning',
+    chipTone: 'warning',
+  },
+  [CampaignStatus.ARCHIVED]: {
+    labelKey: 'status.archived',
+    tone: 'neutral',
+    chipTone: 'archived',
+  },
 };
 
 export function getCampaignStatusMeta(status: CampaignStatus) {

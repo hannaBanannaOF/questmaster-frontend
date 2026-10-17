@@ -1,6 +1,8 @@
+export * from './avatar/avatar';
 export * from './badge/badge';
 export * from './button/button';
 export * from './card/card';
+export * from './chip/chip';
 export * from './divider/divider';
 export * from './icon-box/icon-box';
 export * from './icon-text/icon-text';
@@ -13,6 +15,8 @@ export * from './select/select';
 export * from './skeleton/skeleton';
 export * from './spinner/spinner';
 export * from './stack/stack';
+export * from './surface/surface';
 export * from './text/text';
+export * from './text-link/text-link';
 export * from './textarea/textarea';
 export * from './title/title';

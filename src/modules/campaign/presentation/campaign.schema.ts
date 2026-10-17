@@ -2,8 +2,16 @@ import * as yup from 'yup';
 
 import { GameSystem } from '@/src/modules/rpg/domain';
 
-export const CAMPAIGN_FORM_FIELDS = ['name', 'system', 'overview'] as const;
+export const CAMPAIGN_FORM_FIELDS = [
+  'name',
+  'system',
+  'dmName',
+  'overview',
+] as const;
 export type CampaignFormField = (typeof CAMPAIGN_FORM_FIELDS)[number];
+
+/** Limite do apelido na campanha (core: table-names). */
+export const TABLE_NAME_MAX = 50;
 
 // Mensagens são chaves de tradução (traduzidas no form)
 const key = (path: string) => `campaign.create.form.${path}`;
@@ -18,6 +26,12 @@ export const campaignCreateSchema = yup.object({
     .mixed<GameSystem>()
     .required(key('game_system.errors.required'))
     .oneOf(Object.values(GameSystem), key('game_system.errors.required')),
+  // Apelido do mestre nesta campanha (1 a 50, como no core)
+  dmName: yup
+    .string()
+    .trim()
+    .required(key('dm_name.errors.required'))
+    .max(TABLE_NAME_MAX, key('dm_name.errors.max')),
   overview: yup
     .string()
     .trim()
@@ -25,7 +39,7 @@ export const campaignCreateSchema = yup.object({
     .optional(),
 });
 
-export const PREMADE_CHARACTER_FORM_FIELDS = ['name', 'maxHp'] as const;
+export const PREMADE_CHARACTER_FORM_FIELDS = ['name'] as const;
 export type PremadeCharacterFormField =
   (typeof PREMADE_CHARACTER_FORM_FIELDS)[number];
 
@@ -37,16 +51,15 @@ export const premadeCharacterSchema = yup.object({
     .trim()
     .required(premadeKey('name.errors.required'))
     .max(255, premadeKey('name.errors.max')),
-  maxHp: yup
-    .number()
-    // Campo vazio é "sem PV", não "não é número"
-    .transform((value, original) =>
-      typeof original === 'string' && original.trim() === ''
-        ? undefined
-        : value,
-    )
-    .typeError(premadeKey('maxHp.errors.type'))
-    .integer(premadeKey('maxHp.errors.type'))
-    .min(1, premadeKey('maxHp.errors.min'))
-    .optional(),
+});
+
+export const TABLE_NAME_FORM_FIELDS = ['name'] as const;
+export type TableNameFormField = (typeof TABLE_NAME_FORM_FIELDS)[number];
+
+export const tableNameSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .required('campaign.tableName.form.errors.required')
+    .max(TABLE_NAME_MAX, 'campaign.tableName.form.errors.max'),
 });

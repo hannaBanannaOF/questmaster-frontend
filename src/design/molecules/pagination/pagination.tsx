@@ -2,8 +2,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import { Text } from '../../atoms/text/text';
-import { getPageWindow } from '../../utils';
+import { cx, getPageWindow } from '../../utils';
 import styles from './pagination.module.css';
 
 interface PaginationProps {
@@ -36,22 +35,18 @@ export function Pagination({
 
   const edge = (target: number, disabled: boolean, content: ReactNode) =>
     disabled ? (
-      <span className={styles.item} aria-disabled="true">
+      <span className={cx(styles.item, styles.nav)} aria-disabled="true">
         {content}
       </span>
     ) : (
-      <Link className={styles.item} href={hrefFor(target)}>
+      <Link className={cx(styles.item, styles.nav)} href={hrefFor(target)}>
         {content}
       </Link>
     );
 
   return (
     <nav className={styles.pagination} aria-label={labels.nav}>
-      {summary && (
-        <Text tone="muted" small>
-          {summary}
-        </Text>
-      )}
+      {summary && <p className={styles.summary}>{summary}</p>}
       <ul className={styles.pages}>
         <li>
           {edge(

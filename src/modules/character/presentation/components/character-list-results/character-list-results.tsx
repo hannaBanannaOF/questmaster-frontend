@@ -1,74 +1,102 @@
-import { UserCheck, Users } from 'lucide-react';
+import { ArrowLeft, SearchX, UserCheck } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { ButtonLink, EmptyState } from '@/src/design';
+import { ButtonLink, CollectionResults, ListState } from '@/src/design';
 import { countPages } from '@/src/lib/pagination';
-import {
-  ListPagination,
-  PageOutOfRange,
-} from '@/src/modules/shared/presentation';
+import { ListPagination } from '@/src/modules/shared/presentation';
 
 import { getCharacters } from '../../character.loaders';
 import {
+  CHARACTER_PAGE_SIZE,
   characterListHref,
   type CharacterListParams,
+  getCharactersHiddenBy,
 } from '../../character-list.params';
-import { CharacterList } from '../character-list/character-list';
-import { CreateCharacterButton } from '../create-character-button/create-character-button';
+import { CharacterResultsList } from './character-results-list';
 
-/** A página pedida da lista, com o paginador; o filtro fica fora e não pisca. */
-export async function CharacterListResults({
-  page,
-  withoutCampaign,
-}: CharacterListParams) {
+/** A página pedida da lista; cabeçalho e filtros ficam fora e não piscam. */
+export async function CharacterListResults(params: CharacterListParams) {
+  const { page, withoutCampaign, q } = params;
   const [{ items, total }, t] = await Promise.all([
-    getCharacters({ withoutCampaign: withoutCampaign || undefined }, page),
+    getCharacters(
+      { withoutCampaign: withoutCampaign || undefined, q, sort: 'recent' },
+      page,
+      CHARACTER_PAGE_SIZE,
+    ),
     getTranslations('character.list'),
   ]);
+  const pages = countPages(total, CHARACTER_PAGE_SIZE);
 
-  if (total === 0) {
-    return withoutCampaign ? (
-      <EmptyState
-        title={t('filtered.empty.title')}
-        message={t('filtered.empty.message')}
-        icon={<UserCheck size={48} />}
-        action={
-          <ButtonLink href={characterListHref({})} variant="outline">
-            {t('filtered.empty.clear')}
+  // A view só chega aqui com fichas: zero é a busca ou o filtro
+  const hiddenBy = total === 0 ? getCharactersHiddenBy(params) : null;
+  if (hiddenBy) {
+    // Só há busca e um filtro: limpar o que escondeu é sempre a lista toda
+    const clearHref = characterListHref({});
+    return (
+      <ListState
+        id="characters-no-results"
+        live
+        icon={hiddenBy === 'filter' ? <UserCheck /> : <SearchX />}
+        title={t(`noResults.${hiddenBy}.title`, { q: q ?? '' })}
+        message={t(`noResults.${hiddenBy}.message`)}
+        actions={
+          <ButtonLink href={clearHref} variant="secondary">
+            {t(`noResults.${hiddenBy}.clear`)}
           </ButtonLink>
         }
       />
-    ) : (
-      <EmptyState
-        title={t('empty.title')}
-        message={t('empty.message')}
-        icon={<Users size={48} />}
-        action={<CreateCharacterButton label={t('empty.create')} />}
+    );
+  }
+
+  // Há fichas, mas não nessa página: o link aponta além do fim
+  if (items.length === 0) {
+    const tPagination = await getTranslations('common.pagination.outOfRange');
+    return (
+      <ListState
+        id="characters-out-of-range"
+        icon={<SearchX />}
+        title={tPagination('title')}
+        message={tPagination('message', { count: pages })}
+        actions={
+          <ButtonLink
+            href={characterListHref({ q, withoutCampaign })}
+            variant="secondary"
+          >
+            <ArrowLeft size={18} aria-hidden />
+            {tPagination('action')}
+          </ButtonLink>
+        }
       />
     );
   }
 
-  // Há personagens, mas não nessa página: o link aponta além do fim
-  if (items.length === 0) {
-    return (
-      <PageOutOfRange
-        pageCount={countPages(total)}
-        firstPageHref={characterListHref({ withoutCampaign })}
-      />
-    );
-  }
+  const nextParams: Record<string, string> = {};
+  if (q) nextParams.q = q;
+  if (withoutCampaign) nextParams.without_campaign = 'true';
 
   return (
-    <>
-      <CharacterList characters={items} />
-      <ListPagination
-        page={page}
+    <CollectionResults
+      heading={t('page', { page, pages })}
+      pagination={
+        <ListPagination
+          page={page}
+          total={total}
+          pageSize={CHARACTER_PAGE_SIZE}
+          hrefFor={(target) =>
+            characterListHref({ q, withoutCampaign, page: target })
+          }
+          summary={(range) => t('range', range)}
+        />
+      }
+    >
+      <CharacterResultsList
+        key={`${q}-${withoutCampaign}-${page}`}
+        initialItems={items}
         total={total}
-        hrefFor={(target) =>
-          characterListHref({ withoutCampaign, page: target })
-        }
-        summary={(range) => t('range', range)}
+        firstShown={(page - 1) * CHARACTER_PAGE_SIZE}
+        page={page}
+        params={nextParams}
       />
-    </>
+    </CollectionResults>
   );
 }

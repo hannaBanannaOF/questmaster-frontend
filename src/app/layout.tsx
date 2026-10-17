@@ -1,11 +1,11 @@
 import '@/src/design/foundations/global.css';
 
-import { LayoutDashboard, ScrollText, Users } from 'lucide-react';
+import { LayoutDashboard, MapIcon, Users } from 'lucide-react';
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getTranslations } from 'next-intl/server';
 import NextTopLoader from 'nextjs-toploader';
-import { type ReactNode, Suspense } from 'react';
+import type { ReactNode } from 'react';
 
 import {
   AppShell,
@@ -17,7 +17,6 @@ import {
   ToastProvider,
 } from '@/src/design';
 import { FlashToaster } from '@/src/lib/flash/flash-toaster';
-import { UserGreeting, UserGreetingSkeleton } from '@/src/modules/user';
 
 export const metadata: Metadata = {
   title: { default: 'QuestMaster', template: '%s · QuestMaster' },
@@ -40,9 +39,10 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  const [locale, t] = await Promise.all([
+  const [locale, t, tActions] = await Promise.all([
     getLocale(),
     getTranslations('common.header'),
+    getTranslations('common.actions'),
   ]);
 
   const navItems = [
@@ -55,7 +55,7 @@ export default async function RootLayout({
     {
       href: '/campaigns',
       label: t('campaigns'),
-      icon: <ScrollText size={22} />,
+      icon: <MapIcon size={22} />,
     },
     { href: '/characters', label: t('characters'), icon: <Users size={22} /> },
   ];
@@ -76,24 +76,12 @@ export default async function RootLayout({
           speed={200}
         />
         <NextIntlClientProvider>
-          <ToastProvider>
+          <ToastProvider dismissLabel={tActions('dismiss')}>
             <AppShell
               header={
                 <Header
-                  brand={
-                    <Brand
-                      name="Questmaster"
-                      subtitle="MANAGEMENT HUB"
-                      icon={<ScrollText size={24} />}
-                    />
-                  }
+                  brand={<Brand name="Questmaster" />}
                   nav={<Nav label={t('navLabel')} items={navItems} />}
-                  actions={
-                    // O header renderiza na hora; o usuário chega por streaming
-                    <Suspense fallback={<UserGreetingSkeleton />}>
-                      <UserGreeting />
-                    </Suspense>
-                  }
                 />
               }
               bottomNav={

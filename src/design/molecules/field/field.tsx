@@ -1,16 +1,18 @@
+import { CircleAlert } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
 
 import { Input } from '../../atoms/input/input';
 import { Label } from '../../atoms/label/label';
 import { Select, type SelectOption } from '../../atoms/select/select';
-import { Stack } from '../../atoms/stack/stack';
-import { Text } from '../../atoms/text/text';
 import { TextArea } from '../../atoms/textarea/textarea';
+import styles from './field.module.css';
 
 interface FieldBaseProps {
   label?: string;
   /** Mensagem de erro já traduzida. */
   error?: string;
+  /** Ajuda abaixo do campo (some quando há erro). */
+  description?: string;
 }
 
 interface FieldProps extends FieldBaseProps {
@@ -19,38 +21,58 @@ interface FieldProps extends FieldBaseProps {
   children: ReactNode;
 }
 
-/** Label + controle + mensagem de erro, com os vínculos de acessibilidade. */
-export function Field({ id, label, required, error, children }: FieldProps) {
+/** Label + controle + ajuda ou erro, com os vínculos de acessibilidade. */
+export function Field({
+  id,
+  label,
+  required,
+  error,
+  description,
+  children,
+}: FieldProps) {
   return (
-    <Stack direction="column" align="stretch" gap="xxs">
+    <div className={styles.field}>
       {label && (
         <Label htmlFor={id} required={required}>
           {label}
         </Label>
       )}
       {children}
-      {error && (
-        <Text id={errorId(id)} tone="danger" small role="alert">
+      {error ? (
+        <p id={errorId(id)} className={styles.error} role="alert">
+          <CircleAlert aria-hidden />
           {error}
-        </Text>
+        </p>
+      ) : (
+        description && (
+          <p id={descriptionId(id)} className={styles.description}>
+            {description}
+          </p>
+        )
       )}
-    </Stack>
+    </div>
   );
 }
 
 const errorId = (id: string) => `${id}-error`;
+const descriptionId = (id: string) => `${id}-description`;
 
-function a11yProps(id: string, error?: string) {
+function a11yProps(id: string, error?: string, description?: string) {
   return {
     id,
     'aria-invalid': error ? true : undefined,
-    'aria-describedby': error ? errorId(id) : undefined,
+    'aria-describedby': error
+      ? errorId(id)
+      : description
+        ? descriptionId(id)
+        : undefined,
   };
 }
 
 export function TextField({
   label,
   error,
+  description,
   id,
   name,
   required,
@@ -58,11 +80,17 @@ export function TextField({
 }: FieldBaseProps & ComponentProps<'input'>) {
   const fieldId = id ?? name ?? '';
   return (
-    <Field id={fieldId} label={label} required={required} error={error}>
+    <Field
+      id={fieldId}
+      label={label}
+      required={required}
+      error={error}
+      description={description}
+    >
       <Input
         name={name}
         required={required}
-        {...a11yProps(fieldId, error)}
+        {...a11yProps(fieldId, error, description)}
         {...props}
       />
     </Field>
@@ -72,6 +100,7 @@ export function TextField({
 export function TextAreaField({
   label,
   error,
+  description,
   id,
   name,
   required,
@@ -79,11 +108,17 @@ export function TextAreaField({
 }: FieldBaseProps & ComponentProps<'textarea'>) {
   const fieldId = id ?? name ?? '';
   return (
-    <Field id={fieldId} label={label} required={required} error={error}>
+    <Field
+      id={fieldId}
+      label={label}
+      required={required}
+      error={error}
+      description={description}
+    >
       <TextArea
         name={name}
         required={required}
-        {...a11yProps(fieldId, error)}
+        {...a11yProps(fieldId, error, description)}
         {...props}
       />
     </Field>
@@ -93,6 +128,7 @@ export function TextAreaField({
 export function SelectField({
   label,
   error,
+  description,
   id,
   name,
   required,
@@ -101,14 +137,21 @@ export function SelectField({
   ComponentProps<'select'> & {
     options: SelectOption[];
     placeholder?: string;
+    startContent?: ReactNode;
   }) {
   const fieldId = id ?? name ?? '';
   return (
-    <Field id={fieldId} label={label} required={required} error={error}>
+    <Field
+      id={fieldId}
+      label={label}
+      required={required}
+      error={error}
+      description={description}
+    >
       <Select
         name={name}
         required={required}
-        {...a11yProps(fieldId, error)}
+        {...a11yProps(fieldId, error, description)}
         {...props}
       />
     </Field>

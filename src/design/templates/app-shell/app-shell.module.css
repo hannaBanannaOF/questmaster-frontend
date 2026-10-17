@@ -1,27 +1,27 @@
 .main {
   max-width: 1200px;
-  margin: var(--spacing-sm) auto 0;
-  padding: var(--spacing-md);
+  margin: 0 auto;
+  padding: 1.25rem 1rem 1.75rem;
 }
 
 /* O fim da página aparece inteiro acima da barra inferior */
 .main[data-bottom-nav] {
-  padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-md));
+  padding-bottom: calc(var(--bottom-nav-height) + 1.75rem);
 }
 
 .bottomNav {
   position: fixed;
   inset: auto 0 0;
   z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
-  border-top: 1px solid var(--color-card-border);
-  background-color: var(--color-card-bg);
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--separator);
+  background-color: var(--surface);
 }
 
 @media (min-width: 48rem) {
   .main,
   .main[data-bottom-nav] {
-    padding: var(--spacing-xl);
+    padding: 2.25rem 2rem 2.5rem;
   }
 
   .bottomNav {

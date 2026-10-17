@@ -1,95 +1,102 @@
-import { Crown } from 'lucide-react';
-import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
-import type { ReactNode } from 'react';
+import { Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-import { List, ListItem, Stack, Title } from '@/src/design';
+import { ButtonLink, SectionHeader, TextLink } from '@/src/design';
 import {
-  CampaignCard,
   campaignListHref,
+  CampaignRow,
+  CampaignStatusChip,
   CreateCampaignButton,
 } from '@/src/modules/campaign';
+import { CriticalFailure } from '@/src/modules/shared/presentation';
 
-import type { DashboardCampaigns } from '../../dashboard.loaders';
-import { CrossRoleBanner } from '../cross-role-banner/cross-role-banner';
-import { RoleEmptyState } from '../role-empty-state/role-empty-state';
-import { SectionError } from '../section-error/section-error';
-import { StatusCountGrid } from '../status-count-grid/status-count-grid';
+import styles from '../../dashboard.module.css';
+import type { DmPanelVM } from '../../dashboard.view-model';
+import { ContinueCard } from '../continue-card/continue-card';
 
-interface DmPanelProps {
-  /** Ausente quando a busca de campanhas falhou. */
-  campaigns?: DashboardCampaigns;
-  hasPlayerRole: boolean;
-}
+/** Aba Mestrando: destaque, campanhas e as que ainda precisam de jogadores. */
+export function DmPanel({ vm }: { vm: DmPanelVM }) {
+  const t = useTranslations('dashboard');
 
-export async function DmPanel({ campaigns, hasPlayerRole }: DmPanelProps) {
-  const [t, tCampaign] = await Promise.all([
-    getTranslations('dashboard'),
-    getTranslations('campaign'),
-  ]);
-
-  const crossRole = hasPlayerRole && (
-    <CrossRoleBanner
-      title={t('crossRole.toPlayer.title')}
-      hint={t('crossRole.toPlayer.hint')}
-      href="/?view=player"
-      action={t('crossRole.toPlayer.action')}
-    />
-  );
-
-  if (!campaigns) {
+  if (!vm.ok) {
     return (
-      <>
-        <SectionError title={tCampaign('toast.error.list')} />
-        {crossRole}
-      </>
+      <CriticalFailure
+        title={t('dm.error.title')}
+        message={t('dm.error.message')}
+        secondaryAction={
+          <ButtonLink href="/?view=player" variant="tertiary">
+            {t('dm.error.toPlayer')}
+          </ButtonLink>
+        }
+      />
     );
   }
 
-  if (campaigns.dmTotal === 0) {
-    const bold = (chunks: ReactNode) => <strong>{chunks}</strong>;
-    return (
-      <>
-        <RoleEmptyState
-          icon={<Crown size={32} />}
-          title={t('dm.empty.title')}
-          message={t('dm.empty.message')}
-          stepsLabel={t('steps')}
-          steps={[
-            t.rich('dm.empty.steps.create', { bold }),
-            t('dm.empty.steps.invite'),
-            t.rich('dm.empty.steps.start', { bold }),
-          ]}
-          action={<CreateCampaignButton label={t('dm.empty.action')} />}
-        />
-        {crossRole}
-      </>
-    );
-  }
+  const { hero, campaigns, needsYou } = vm;
 
   return (
     <>
-      <StatusCountGrid counts={campaigns.dmCounts} />
+      {hero && (
+        <ContinueCard
+          campaign={hero}
+          eyebrow={t('dm.continue')}
+          action={t('dm.openCampaign')}
+        >
+          <CampaignStatusChip status={hero.status} />
+          <span className={styles.party}>
+            <Users aria-hidden />
+            {t('dm.players', { count: hero.playerCount })}
+          </span>
+        </ContinueCard>
+      )}
 
-      <Stack as="section" direction="column" align="stretch">
-        <Stack align="center" justify="space-between">
-          <Title order={3}>{t('dm.campaigns')}</Title>
-          {campaigns.dmTotal > campaigns.dmPreview.items.length && (
-            <Link href={campaignListHref({ role: 'dm' })}>
-              {t('dm.seeAll', { count: campaigns.dmTotal })}
-            </Link>
-          )}
-        </Stack>
-        <List>
-          {campaigns.dmPreview.items.map((campaign) => (
-            <ListItem key={campaign.slug}>
-              <CampaignCard campaign={campaign} />
-            </ListItem>
-          ))}
-        </List>
-      </Stack>
+      <div className={needsYou.total > 0 ? styles.columns : undefined}>
+        <section className={styles.section} aria-labelledby="dash-dm">
+          <SectionHeader
+            id="dash-dm"
+            title={t('dm.campaigns')}
+            count={campaigns.total}
+            countLabel={t('count', { count: campaigns.total })}
+            actions={
+              <>
+                <CreateCampaignButton
+                  label={t('dm.newCampaign')}
+                  variant="ghost"
+                  compactLabel
+                />
+                <TextLink href={campaignListHref({ role: 'dm' })}>
+                  {t('seeAllFem')}
+                </TextLink>
+              </>
+            }
+          />
+          <ul className={styles.rows} aria-label={t('dm.campaigns')}>
+            {campaigns.items.map((campaign) => (
+              <li key={campaign.slug}>
+                <CampaignRow campaign={campaign} />
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      {crossRole}
+        {needsYou.total > 0 && (
+          <section className={styles.section} aria-labelledby="dash-needs-you">
+            <SectionHeader
+              id="dash-needs-you"
+              title={t('dm.needsYou')}
+              count={needsYou.total}
+              countLabel={t('count', { count: needsYou.total })}
+            />
+            <ul className={styles.rows} aria-label={t('dm.needsYouList')}>
+              {needsYou.items.map((campaign) => (
+                <li key={campaign.slug}>
+                  <CampaignRow campaign={campaign} needsInvite />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
     </>
   );
 }

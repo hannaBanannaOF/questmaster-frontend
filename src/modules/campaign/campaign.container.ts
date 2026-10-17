@@ -12,6 +12,7 @@ import {
   makeListCampaigns,
   makeRemoveCharacterFromCampaign,
   makeUpdateCampaignStatus,
+  makeUpdateTableName,
 } from './application';
 import { createCampaignHttpRepository } from './infra/campaign.http-repository';
 
@@ -27,6 +28,7 @@ export const campaignUseCases = {
   createCampaign: makeCreateCampaign(campaigns),
   deleteCampaign: makeDeleteCampaign(campaigns),
   updateCampaignStatus: makeUpdateCampaignStatus(campaigns),
+  updateTableName: makeUpdateTableName(campaigns),
   createPremadeCharacter: makeCreatePremadeCharacter(campaigns),
   deletePremadeCharacter: makeDeletePremadeCharacter(campaigns),
   removeCharacterFromCampaign: makeRemoveCharacterFromCampaign(campaigns),

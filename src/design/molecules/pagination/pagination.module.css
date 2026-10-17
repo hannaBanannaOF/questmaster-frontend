@@ -1,17 +1,22 @@
+/* Pagination do HeroUI v3 */
 .pagination {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-sm);
-  padding-top: var(--spacing-xs);
+  gap: 0.75rem;
+}
+
+.summary {
+  color: var(--muted);
+  font-size: var(--font-size-sm);
 }
 
 .pages {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--spacing-xxs);
+  gap: 0.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -21,35 +26,43 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xxs);
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: 1px solid var(--color-card-border);
-  border-radius: var(--radius-md);
-  background-color: var(--color-card-bg);
-  color: var(--color-text-primary);
+  gap: 6px;
+  min-width: var(--touch-target);
+  height: var(--touch-target);
+  padding: 0 6px;
+  border-radius: var(--radius-3xl);
+  color: var(--foreground);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  transition: all var(--duration-fast) var(--ease-standard);
+  font-variant-numeric: tabular-nums;
+  transition: background-color 100ms var(--ease-out);
+}
+
+.item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.nav {
+  padding: 0 0.75rem;
 }
 
 a.item:hover {
-  border-color: var(--color-primary);
+  background-color: var(--default-hover);
 }
 
 .item[aria-current='page'] {
-  border-color: var(--color-primary);
-  background-color: var(--color-primary-soft);
-  color: var(--color-primary);
+  background-color: var(--default);
 }
 
+/* Fora de alcance: span sem link, não recebe foco nem age */
 .item[aria-disabled='true'] {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .item:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -57,5 +70,5 @@ a.item:hover {
   display: inline-flex;
   justify-content: center;
   min-width: 2rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
 }

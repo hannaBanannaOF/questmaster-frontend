@@ -1,95 +1,90 @@
 {
   "title": "Dashboard",
-  "loading": "Preparando sua mesa...",
-  "greeting": "Bem-vindo de volta",
-  "greetingNamed": "Bem-vindo de volta, {name}",
-  "eyebrow": {
-    "continue": "Continuar jogando",
-    "ready": "Pronto pra aventura"
-  },
+  "loading": "Carregando seu dashboard…",
+  "greeting": "Olá",
+  "greetingNamed": "Olá, {name}",
+  "subtitle": "Sua mesa te espera.",
+  "count": "{count, number} no total",
+  "seeAll": "Ver todos",
+  "seeAllFem": "Ver todas",
   "tabs": {
     "label": "Visão do dashboard",
     "player": "Jogando",
     "dm": "Mestrando"
   },
   "player": {
-    "subtitle": "Suas aventuras como jogador.",
-    "newCharacter": "Novo personagem",
-    "openCampaign": "Ver campanha",
-    "campaigns": "Campanhas recentes",
-    "seeAllCampaigns": "Ver todas ({count, number})",
-    "characters": "Personagens recentes",
-    "seeAll": "Ver todos ({count, number})",
-    "nextSteps": "Próximos passos",
+    "continue": "Continuar jogando",
+    "as": "como <strong>{names}</strong>",
+    "openSession": "Continuar sessão",
+    "characters": "Personagens",
+    "campaigns": "Campanhas",
+    "newCharacter": "Novo",
     "ready": {
-      "title": "Seus personagens ainda não estão em nenhuma campanha",
-      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar."
+      "eyebrow": "Pronto para a aventura",
+      "title": "Seus personagens ainda não estão em nenhuma mesa",
+      "message": "Peça o link de convite a quem mestra. Ao abrir o link, você escolhe qual personagem entra na campanha."
     },
-    "idle": {
-      "title": "{count, plural, one {# personagem sem campanha} other {# personagens sem campanha}}",
-      "message": "Peça o link de convite pro mestre. Ao abrir o link, você escolhe com qual personagem entrar.",
-      "more": "e mais {count, number}"
-    },
-    "becomeDm": {
-      "title": "Quer mestrar?",
+    "error": {
+      "characters": "Não conseguimos carregar seus personagens.",
+      "campaigns": "Não conseguimos carregar suas campanhas.",
+      "hint": "O resto do dashboard funciona normalmente."
+    }
+  },
+  "dm": {
+    "continue": "Continuar mestrando",
+    "players": "{count, plural, =0 {Nenhum jogador} one {# jogador} other {# jogadores}}",
+    "openCampaign": "Abrir campanha",
+    "campaigns": "Campanhas",
+    "newCampaign": "Nova",
+    "needsYou": "Precisa de você",
+    "needsYouList": "Campanhas sem jogadores",
+    "error": {
+      "title": "Não conseguimos carregar suas campanhas",
+      "message": "Suas campanhas continuam salvas. A aba Jogando funciona normalmente.",
+      "toPlayer": "Ir para Jogando"
+    }
+  },
+  "nudge": {
+    "dm": {
+      "title": "Quer mestrar uma mesa?",
       "message": "Crie uma campanha e convide sua party.",
       "action": "Criar campanha"
     },
-    "empty": {
-      "title": "Você ainda não tem personagens",
-      "message": "Crie uma ficha pra entrar nas campanhas como jogador. Dá pra jogar e mestrar ao mesmo tempo.",
-      "steps": {
-        "create": "Crie o personagem e escolha o sistema.",
-        "invite": "Peça o link de convite pro mestre da mesa.",
-        "join": "Abra o link e escolha com qual ficha entrar."
-      },
+    "player": {
+      "title": "Quer jogar também?",
+      "message": "Crie um personagem para entrar na mesa de alguém.",
       "action": "Criar personagem"
-    },
-    "playingWith": "Com {names}"
-  },
-  "dm": {
-    "subtitle": "As campanhas que você mestra, num lugar só.",
-    "newCampaign": "Nova campanha",
-    "summary": "Resumo por status",
-    "campaigns": "Campanhas recentes",
-    "empty": {
-      "title": "Você ainda não mestra nenhuma campanha",
-      "message": "Que tal conduzir a próxima aventura? Crie uma campanha, escolha o sistema e convide sua party.",
-      "steps": {
-        "create": "Crie a campanha. Ela começa como <bold>Rascunho</bold>.",
-        "invite": "Gere o link de convite e mande pra party.",
-        "start": "Clique em <bold>Iniciar</bold> quando todo mundo entrar."
-      },
-      "action": "Criar campanha"
-    },
-    "seeAll": "Ver todas ({count, number})"
-  },
-  "steps": "Como começar",
-  "crossRole": {
-    "toDm": {
-      "title": "Você mestra {count, plural, one {# campanha} other {# campanhas}}.",
-      "hint": "Elas estão na visão de mestre.",
-      "action": "Ir pra Mestrando"
-    },
-    "toPlayer": {
-      "title": "Você também joga.",
-      "hint": "Suas fichas estão na visão de jogador.",
-      "action": "Ir pra Jogando"
     }
   },
   "welcome": {
-    "title": "Bem-vindo ao Questmaster",
-    "message": "Seu livro de aventuras está em branco. Por onde você quer começar?",
-    "dm": {
-      "title": "Vou mestrar",
-      "message": "Crie uma campanha, escolha o sistema e gere um link de convite pra sua party.",
-      "action": "Criar campanha"
-    },
+    "greeting": "Boas-vindas",
+    "greetingNamed": "Boas-vindas, {name}",
+    "subtitle": "Como você quer começar sua primeira aventura?",
     "player": {
       "title": "Vou jogar",
-      "message": "Crie seu personagem agora. Quando o mestre mandar o link de convite, é só abrir e escolher a ficha.",
+      "steps": {
+        "create": "Crie a ficha do seu investigador.",
+        "join": "Entre na campanha pelo convite de quem mestra."
+      },
       "action": "Criar personagem"
     },
-    "inviteHint": "Já recebeu um link de convite? Abra o link direto: ele te traz pra cá com a campanha pronta."
+    "dm": {
+      "title": "Vou mestrar",
+      "steps": {
+        "create": "Crie a campanha.",
+        "invite": "Mande o convite para sua party."
+      },
+      "action": "Criar campanha"
+    },
+    "invite": {
+      "title": "Recebeu um link de convite?",
+      "message": "Abra o link: ele leva você direto para a campanha."
+    }
+  },
+  "unavailable": {
+    "title": "Não conseguimos carregar seu dashboard",
+    "message": "A conexão com o servidor falhou. Suas fichas e campanhas continuam salvas.",
+    "openCharacters": "Abrir personagens",
+    "hint": "Se continuar, tente de novo em alguns minutos."
   }
 }

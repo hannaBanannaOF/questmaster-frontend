@@ -1,5 +1,5 @@
-import { DetailPageSkeleton } from '@/src/modules/shared/presentation';
+import { CharacterSheetSkeleton } from '@/src/modules/character';
 
 export default function CharacterLoading() {
-  return <DetailPageSkeleton />;
+  return <CharacterSheetSkeleton />;
 }

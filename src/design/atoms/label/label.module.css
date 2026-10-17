@@ -1,7 +1,8 @@
 .label {
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
 }
 
 .required {
-  color: var(--color-destructive);
+  color: var(--danger-soft-foreground);
 }

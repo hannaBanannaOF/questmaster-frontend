@@ -9,6 +9,8 @@ export interface Invite {
   campaignOverview?: string;
   campaignPlayerCount: number;
   campaignSystem: GameSystem;
+  /** Apelido de quem mestra; ausente antes de invite-details-dm-name no core. */
+  dmName?: string;
   /** Quem abriu o convite é o mestre da campanha (e não pode entrar como jogador). */
   isDm: boolean;
   /** Fichas prontas do mestre que ninguém escolheu, por nome. */

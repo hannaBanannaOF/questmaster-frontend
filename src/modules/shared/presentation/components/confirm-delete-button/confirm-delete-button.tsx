@@ -1,12 +1,12 @@
 'use client';
 
 import { Trash2 } from 'lucide-react';
-import { type ReactNode, useActionState, useState } from 'react';
+import { type ReactNode, useState } from 'react';
 
-import { Button, Dialog, Stack, SubmitButton, Text } from '@/src/design';
-import { type FormState, initialFormState } from '@/src/lib/actions';
+import { Button } from '@/src/design';
+import type { FormState } from '@/src/lib/actions';
 
-import { useFormErrorToast } from '../../hooks/use-action-feedback';
+import { ConfirmDialog } from '../confirm-dialog/confirm-dialog';
 
 interface ConfirmDeleteButtonProps {
   /** Server Action já vinculada ao id do recurso (bind no servidor). */
@@ -23,50 +23,46 @@ interface ConfirmDeleteButtonProps {
   description: ReactNode;
   /** Ícone do botão que abre a confirmação; padrão lixeira. */
   icon?: ReactNode;
+  /** Visual do botão que abre; padrão vermelho suave. */
+  triggerVariant?: 'danger-soft' | 'ghost';
+  className?: string;
 }
 
-/** Botão de excluir que pede confirmação num diálogo antes de chamar a action. */
+/** Botão vermelho suave que pede confirmação (AlertDialog) antes de chamar a action. */
 export function ConfirmDeleteButton({
   action,
   labels,
   errorTitleKey,
   description,
-  icon = <Trash2 size={12} />,
+  icon = <Trash2 size={18} />,
+  triggerVariant = 'danger-soft',
+  className,
 }: ConfirmDeleteButtonProps) {
   const [open, setOpen] = useState(false);
-  const [state, formAction] = useActionState(action, initialFormState);
-  useFormErrorToast(state, errorTitleKey);
-
-  const close = () => setOpen(false);
 
   return (
     <>
       <Button
-        variant="outline"
-        color="danger"
+        variant={triggerVariant}
         icon={icon}
+        className={className}
+        aria-haspopup="dialog"
         onClick={() => setOpen(true)}
       >
         {labels.trigger}
       </Button>
-      <Dialog
+      <ConfirmDialog
         open={open}
-        onClose={close}
+        onClose={() => setOpen(false)}
+        action={action}
         title={labels.title}
+        description={description}
+        confirmLabel={labels.confirm}
+        cancelLabel={labels.cancel}
         closeLabel={labels.close}
-      >
-        <form action={formAction}>
-          <Stack direction="column" align="stretch">
-            <Text>{description}</Text>
-            <Stack justify="end">
-              <Button variant="text" onClick={close}>
-                {labels.cancel}
-              </Button>
-              <SubmitButton color="danger">{labels.confirm}</SubmitButton>
-            </Stack>
-          </Stack>
-        </form>
-      </Dialog>
+        errorTitleKey={errorTitleKey}
+        icon={icon}
+      />
     </>
   );
 }

@@ -12,15 +12,18 @@ interface CopyFieldProps {
   value: string | (() => string);
   copyLabel: string;
   copiedLabel: string;
+  /** Nome acessível do texto exibido (ex.: "Link do convite"). */
+  valueLabel?: string;
 }
 
-const RESET_AFTER_MS = 3000;
+const RESET_AFTER_MS = 2000;
 
 export function CopyField({
   display,
   value,
   copyLabel,
   copiedLabel,
+  valueLabel,
 }: CopyFieldProps) {
   const [copied, setCopied] = useState(false);
 
@@ -46,11 +49,19 @@ export function CopyField({
 
   return (
     <span className={styles.copyField}>
-      <span className={styles.value} onCopy={handleCopy}>
+      <span
+        className={styles.value}
+        onCopy={handleCopy}
+        aria-label={valueLabel}
+      >
         {display}
       </span>
       <button type="button" className={styles.button} onClick={handleClick}>
-        {copied ? <Check size={12} /> : <Copy size={12} />}
+        {copied ? (
+          <Check size={18} aria-hidden />
+        ) : (
+          <Copy size={18} aria-hidden />
+        )}
         <span aria-live="polite">{copied ? copiedLabel : copyLabel}</span>
       </button>
     </span>

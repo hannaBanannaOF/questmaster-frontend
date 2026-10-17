@@ -6,6 +6,6 @@
  */
 :root {
   /* Barra de navegação inferior do celular, com a área segura do aparelho */
-  --bottom-nav-height: calc(4rem + env(safe-area-inset-bottom));
+  --bottom-nav-height: calc(4.75rem + env(safe-area-inset-bottom));
   --touch-target: 2.75rem;
 }

@@ -8,12 +8,15 @@ import { InterlacedTentaclesIcon } from './components/interlaced-tentacles-icon/
 
 interface GameSystemMeta {
   label: string;
+  /** Rótulo curto para linhas densas; o leitor de tela recebe o `label`. */
+  shortLabel: string;
   icon: ComponentType<{ size?: number }>;
 }
 
 const GAME_SYSTEM_META: Record<GameSystem, GameSystemMeta> = {
   [GameSystem.CALL_OF_CTHULHU]: {
     label: 'Call of Cthulhu 7e',
+    shortLabel: 'CoC 7e',
     icon: InterlacedTentaclesIcon,
   },
 };
@@ -21,6 +24,7 @@ const GAME_SYSTEM_META: Record<GameSystem, GameSystemMeta> = {
 /** Sistemas que a API conhece mas o front ainda não: mostra o código cru. */
 const fallbackMeta = (system: string): GameSystemMeta => ({
   label: system,
+  shortLabel: system,
   icon: Dices,
 });
 

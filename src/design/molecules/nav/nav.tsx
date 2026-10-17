@@ -6,7 +6,7 @@ import styles from './nav.module.css';
 export interface NavItem {
   href: string;
   label: string;
-  /** Ícone decorativo; aparece na barra inferior do celular. */
+  /** Ícone decorativo ao lado do rótulo. */
   icon?: ReactNode;
   exact?: boolean;
 }

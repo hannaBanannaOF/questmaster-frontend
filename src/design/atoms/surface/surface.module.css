@@ -1,0 +1,37 @@
+.surface {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  /* clip, não hidden: a marca d'água vaza da borda e o foco rolaria a caixa */
+  overflow: clip;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+  box-shadow: var(--surface-shadow);
+  color: var(--foreground);
+}
+
+.surface[data-variant='secondary'] {
+  background-color: var(--surface-secondary);
+}
+
+.link {
+  transition:
+    background-color 150ms var(--ease-smooth),
+    transform 250ms var(--ease-smooth);
+}
+
+.link:hover {
+  background-color: var(--surface-secondary);
+}
+
+.link:active {
+  transform: scale(0.985);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

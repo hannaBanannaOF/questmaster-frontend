@@ -3,19 +3,15 @@ import 'server-only';
 import { unstable_rethrow } from 'next/navigation';
 import { cache } from 'react';
 
-import {
-  CampaignStatus,
-  getCampaignCounts,
-  getCampaigns,
-  totalCampaigns,
-} from '@/src/modules/campaign';
+import { CampaignStatus, getCampaigns } from '@/src/modules/campaign';
 import { getCharacters } from '@/src/modules/character';
 
-/** Quantos itens cada prévia mostra antes do "Ver todos". */
-export const PREVIEW_SIZE = 5;
+import type { DashboardCampaigns, Loaded } from './dashboard.view-model';
 
-/** Resultado de uma busca que pode falhar sem derrubar a página inteira. */
-export type Loaded<T> = { ok: true; data: T } | { ok: false };
+/** Linhas de campanha antes do "Ver todas". */
+export const CAMPAIGN_PREVIEW_SIZE = 5;
+/** Uma fileira da grade de personagens no desktop. */
+export const CHARACTER_PREVIEW_SIZE = 3;
 
 async function settle<T>(promise: Promise<T>): Promise<Loaded<T>> {
   try {
@@ -28,38 +24,39 @@ async function settle<T>(promise: Promise<T>): Promise<Loaded<T>> {
   }
 }
 
-// Só o que a tela mostra, na ordem do último acesso: contagens, prévias e a
-// campanha em andamento aberta por último (que pode não estar entre as 5 recentes)
-async function loadCampaigns() {
-  const [dmCounts, playerCounts, dmPreview, playerPreview, active] =
+// Prévias na ordem do último acesso (o total delas é o total do papel) e a
+// campanha em andamento aberta por último em cada papel, para os destaques
+async function loadCampaigns(): Promise<DashboardCampaigns> {
+  const recent = { sort: 'recent', status: CampaignStatus.ACTIVE } as const;
+  const [dm, dmWithoutPlayers, player, dmActive, playerActive] =
     await Promise.all([
-      getCampaignCounts('dm'),
-      getCampaignCounts('player'),
-      getCampaigns({ role: 'dm', sort: 'recent' }, 1, PREVIEW_SIZE),
-      getCampaigns({ role: 'player', sort: 'recent' }, 1, PREVIEW_SIZE),
+      getCampaigns({ role: 'dm', sort: 'recent' }, 1, CAMPAIGN_PREVIEW_SIZE),
       getCampaigns(
-        { role: 'player', status: CampaignStatus.ACTIVE, sort: 'recent' },
+        { role: 'dm', withoutPlayers: true, sort: 'recent' },
         1,
-        1,
+        CAMPAIGN_PREVIEW_SIZE,
       ),
+      getCampaigns(
+        { role: 'player', sort: 'recent' },
+        1,
+        CAMPAIGN_PREVIEW_SIZE,
+      ),
+      getCampaigns({ role: 'dm', ...recent }, 1, 1),
+      getCampaigns({ role: 'player', ...recent }, 1, 1),
     ]);
   return {
-    dmCounts,
-    dmTotal: totalCampaigns(dmCounts),
-    playerTotal: totalCampaigns(playerCounts),
-    dmPreview,
-    playerPreview,
-    continueCampaign: active.items.at(0),
+    dm,
+    dmWithoutPlayers,
+    player,
+    dmContinue: dmActive.items.at(0),
+    playerContinue: playerActive.items.at(0),
   };
 }
 
-export type DashboardCampaigns = Awaited<ReturnType<typeof loadCampaigns>>;
-
 export const getDashboardData = cache(async () => {
-  const [campaigns, characters, idleCharacters] = await Promise.all([
+  const [campaigns, characters] = await Promise.all([
     settle(loadCampaigns()),
-    settle(getCharacters({ sort: 'recent' }, 1, PREVIEW_SIZE)),
-    settle(getCharacters({ withoutCampaign: true }, 1, PREVIEW_SIZE)),
+    settle(getCharacters({ sort: 'recent' }, 1, CHARACTER_PREVIEW_SIZE)),
   ]);
-  return { campaigns, characters, idleCharacters };
+  return { campaigns, characters };
 });

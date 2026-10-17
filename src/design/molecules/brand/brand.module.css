@@ -1,0 +1,33 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: var(--touch-target);
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.brand:focus-visible {
+  border-radius: 0.75rem;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

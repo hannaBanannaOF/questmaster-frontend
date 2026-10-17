@@ -1,8 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { CharacterListLoading } from '@/src/modules/character';
 
-import { Loader } from '@/src/design';
-
-export default async function Loading() {
-  const t = await getTranslations('character.list');
-  return <Loader size="lg" message={t('loading')} />;
+export default function Loading() {
+  return <CharacterListLoading />;
 }

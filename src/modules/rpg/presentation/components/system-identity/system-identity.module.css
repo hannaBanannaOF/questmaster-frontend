@@ -1,0 +1,94 @@
+.callOfCthulhu {
+  --sys: var(--color-system-coc);
+  --sys-fg: var(--color-system-coc-fg);
+}
+
+.tag,
+.seal,
+.watermark {
+  --sys-soft: color-mix(in oklab, var(--sys, var(--muted)) 15%, transparent);
+}
+
+.glyph {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--sys, var(--muted));
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  color: var(--sys-fg, var(--muted));
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.tag[data-chip] {
+  padding: 2px 10px 2px 6px;
+  border-radius: 1rem;
+  background-color: var(--sys-soft);
+}
+
+.seal {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.875rem;
+  background-color: var(--sys-soft);
+}
+
+.badge {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 99px;
+  background-color: var(--default);
+  box-shadow: 0 0 0 2px var(--surface);
+  color: var(--foreground);
+}
+
+.badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.badge[data-tone='accent'] {
+  color: var(--accent-soft-foreground);
+}
+
+.badge[data-tone='warning'] {
+  background-color: var(--warning);
+  color: var(--accent-foreground);
+}
+
+.watermark {
+  position: absolute;
+  z-index: -1;
+  right: -44px;
+  bottom: -56px;
+  width: 220px;
+  height: 220px;
+  color: var(--sys);
+  opacity: var(--watermark-opacity);
+  transform: rotate(-45deg);
+  pointer-events: none;
+  mask-image: radial-gradient(circle at 70% 70%, #000 35%, transparent 72%);
+}
+
+.watermark svg {
+  width: 100%;
+  height: 100%;
+}

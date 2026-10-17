@@ -1,41 +1,53 @@
+import type { CampaignStatus } from '@/src/modules/campaign/domain';
 import type { GameSystem } from '@/src/modules/rpg/domain';
+
+/** Campanha em que a ficha está, só o necessário para mostrar e linkar. */
+export interface CharacterCampaignRef {
+  slug: string;
+  name: string;
+}
 
 export interface CharacterSummary {
   slug: string;
   name: string;
   system: GameSystem;
-  currentHp?: number;
-  maxHp?: number;
+  /** `null`: a ficha não está em campanha; ausente: a API não informou. */
+  campaign?: CharacterCampaignRef | null;
   /** Última vez que o usuário abriu a ficha; ausente se nunca abriu. */
   lastAccessedAt?: Date;
 }
 
-export interface CharacterDetails extends CharacterSummary {
+/** Campanha da ficha vista no detalhe, com o papel de quem vê. */
+export interface CharacterDetailsCampaign extends CharacterCampaignRef {
+  id: number;
+  status: CampaignStatus;
+  /** Quem vê a ficha mestra a campanha dela. */
+  isDm: boolean;
+  /** Apelido de quem mestra. */
+  dmName?: string;
+}
+
+export interface CharacterDetails extends Omit<CharacterSummary, 'campaign'> {
   id: number;
   /** O usuário logado é o jogador dono da ficha. */
   isPlayer: boolean;
+  /** `null`: sem campanha; ausente: core anterior a character-details-context. */
+  campaign?: CharacterDetailsCampaign | null;
+  /** Apelido de quem joga com a ficha, na campanha dela. */
+  playerName?: string;
+  /** Ficha pronta que ninguém escolheu ainda. */
+  isPremade?: boolean;
 }
 
-/** PV máximo assumido quando a ficha ainda não define um. */
-export const DEFAULT_MAX_HP = 100;
-
-export function getMaxHp(character: Pick<CharacterSummary, 'maxHp'>) {
-  return character.maxHp ?? DEFAULT_MAX_HP;
-}
-
-/** Só o dono da ficha altera PV ou exclui o personagem. */
+/**
+ * Edita (nome) e exclui a ficha: a dona, ou o mestre numa ficha pronta que
+ * ninguém escolheu (a mesma regra do core).
+ */
 export function canEditCharacter(
-  character: Pick<CharacterDetails, 'isPlayer'>,
+  character: Pick<CharacterDetails, 'isPlayer' | 'isPremade' | 'campaign'>,
 ) {
-  return character.isPlayer;
-}
-
-export function isValidHp(hp: number, maxHp?: number) {
   return (
-    Number.isInteger(hp) && hp >= 0 && (maxHp === undefined || hp <= maxHp)
+    character.isPlayer ||
+    Boolean(character.isPremade && character.campaign?.isDm)
   );
-}
-
-export function clampHp(hp: number, maxHp: number) {
-  return Math.min(Math.max(hp, 0), maxHp);
 }

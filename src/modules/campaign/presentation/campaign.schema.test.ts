@@ -6,6 +6,7 @@ import { GameSystem } from '@/src/modules/rpg/domain';
 import {
   campaignCreateSchema,
   premadeCharacterSchema,
+  tableNameSchema,
 } from './campaign.schema';
 
 const key = (path: string) => `campaign.create.form.${path}`;
@@ -16,11 +17,16 @@ describe('campaignCreateSchema', () => {
       validate(campaignCreateSchema, {
         name: ' Máscaras ',
         system: GameSystem.CALL_OF_CTHULHU,
+        dmName: ' Hanna ',
         overview: '   ',
       }),
     ).resolves.toEqual({
       ok: true,
-      data: { name: 'Máscaras', system: GameSystem.CALL_OF_CTHULHU },
+      data: {
+        name: 'Máscaras',
+        system: GameSystem.CALL_OF_CTHULHU,
+        dmName: 'Hanna',
+      },
     });
   });
 
@@ -28,6 +34,7 @@ describe('campaignCreateSchema', () => {
     const result = await validate(campaignCreateSchema, {
       name: 'Máscaras',
       system: GameSystem.CALL_OF_CTHULHU,
+      dmName: 'Hanna',
       overview: ' Nova York, 1925. ',
     });
 
@@ -37,12 +44,13 @@ describe('campaignCreateSchema', () => {
     });
   });
 
-  it('exige nome e sistema', async () => {
+  it('exige nome, sistema e apelido', async () => {
     await expect(validate(campaignCreateSchema, {})).resolves.toEqual({
       ok: false,
       fieldErrors: {
         name: key('name.errors.required'),
         system: key('game_system.errors.required'),
+        dmName: key('dm_name.errors.required'),
       },
     });
   });
@@ -51,29 +59,39 @@ describe('campaignCreateSchema', () => {
 describe('premadeCharacterSchema', () => {
   const premade = (path: string) => `campaign.premade.form.${path}`;
 
-  it('aceita nome com PV máximo e sem PV', async () => {
+  it('aceita só o nome', async () => {
     await expect(
-      validate(premadeCharacterSchema, { name: ' Harvey ', maxHp: '12' }),
-    ).resolves.toEqual({ ok: true, data: { name: 'Harvey', maxHp: 12 } });
-    await expect(
-      validate(premadeCharacterSchema, { name: 'Harvey', maxHp: ' ' }),
+      validate(premadeCharacterSchema, { name: ' Harvey ' }),
     ).resolves.toEqual({ ok: true, data: { name: 'Harvey' } });
   });
 
-  it('exige nome e PV inteiro positivo', async () => {
+  it('exige nome', async () => {
     await expect(
-      validate(premadeCharacterSchema, { name: ' ', maxHp: '0' }),
+      validate(premadeCharacterSchema, { name: ' ' }),
     ).resolves.toEqual({
       ok: false,
-      fieldErrors: {
-        name: premade('name.errors.required'),
-        maxHp: premade('maxHp.errors.min'),
-      },
+      fieldErrors: { name: premade('name.errors.required') },
     });
+  });
+});
+
+describe('tableNameSchema', () => {
+  it('apara o apelido e limita a 50 caracteres', async () => {
     await expect(
-      validate(premadeCharacterSchema, { name: 'Harvey', maxHp: 'abc' }),
-    ).resolves.toMatchObject({
-      fieldErrors: { maxHp: premade('maxHp.errors.type') },
+      validate(tableNameSchema, { name: ' Lena ' }),
+    ).resolves.toEqual({ ok: true, data: { name: 'Lena' } });
+    await expect(
+      validate(tableNameSchema, { name: 'a'.repeat(51) }),
+    ).resolves.toEqual({
+      ok: false,
+      fieldErrors: { name: 'campaign.tableName.form.errors.max' },
+    });
+  });
+
+  it('recusa apelido vazio', async () => {
+    await expect(validate(tableNameSchema, { name: '  ' })).resolves.toEqual({
+      ok: false,
+      fieldErrors: { name: 'campaign.tableName.form.errors.required' },
     });
   });
 });

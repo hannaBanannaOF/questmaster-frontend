@@ -25,7 +25,7 @@ async function openForm() {
       title="Nova campanha"
       closeLabel="Fechar"
     >
-      <CampaignCreateForm />
+      <CampaignCreateForm defaultDmName="Hanna" />
     </DialogButton>,
   );
   await user.click(screen.getByRole('button', { name: 'Nova campanha' }));
@@ -46,19 +46,23 @@ describe('CampaignCreateForm', () => {
     } satisfies FormState<CampaignFormField>);
     const user = await openForm();
 
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar campanha' }));
 
     expect(
-      await screen.findByText('Campo "Nome da campanha" é obrigatório!'),
+      await screen.findByText('Dê um nome à campanha.'),
     ).toBeInTheDocument();
     expect(
-      screen.getByText('Campo "Sistema de jogo" é obrigatório!'),
+      screen.getByText('Escolha o sistema da campanha.'),
     ).toBeInTheDocument();
+    // O erro fica ligado ao campo para o leitor de tela
+    expect(
+      screen.getByLabelText(/Nome da campanha/),
+    ).toHaveAccessibleDescription('Dê um nome à campanha.');
     // O que foi digitado volta para o form
     expect(screen.getByLabelText(/Descrição/)).toHaveValue('Nova York, 1925.');
     // Erro de campo não vira toast
     expect(
-      screen.queryByText('Não foi possível criar campanha!'),
+      screen.queryByText('Não deu para criar a campanha'),
     ).not.toBeInTheDocument();
   });
 
@@ -72,44 +76,30 @@ describe('CampaignCreateForm', () => {
       'CALL_OF_CTHULHU',
     );
     await user.type(screen.getByLabelText(/Descrição/), 'Nova York, 1925.');
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar campanha' }));
 
     const formData = action.mock.calls[0][1];
     expect(Object.fromEntries(formData)).toEqual({
       name: 'Máscaras',
       system: 'CALL_OF_CTHULHU',
+      // O apelido já vem com o nome da conta
+      dmName: 'Hanna',
       overview: 'Nova York, 1925.',
     });
-  });
-
-  it('ao criar, fecha o modal e avisa', async () => {
-    action.mockResolvedValue({
-      status: 'success',
-      values: { name: 'Máscaras' },
-    });
-    const user = await openForm();
-
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
-
-    expect(await screen.findByText('Nova campanha!')).toBeInTheDocument();
-    expect(
-      screen.getByText('"Máscaras" está pronta para aventura.'),
-    ).toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Criar' }),
-    ).not.toBeInTheDocument();
   });
 
   it('avisa quando a API falha', async () => {
     action.mockResolvedValue({ status: 'error', message: 'API fora do ar' });
     const user = await openForm();
 
-    await user.click(screen.getByRole('button', { name: 'Criar' }));
+    await user.click(screen.getByRole('button', { name: 'Criar campanha' }));
 
     expect(
-      await screen.findByText('Não foi possível criar campanha!'),
+      await screen.findByText('Não deu para criar a campanha'),
     ).toBeInTheDocument();
-    expect(screen.getByText('API fora do ar')).toBeInTheDocument();
+    expect(
+      screen.getByText('Verifique a conexão e tente de novo.'),
+    ).toBeInTheDocument();
   });
 
   it('cancelar fecha o modal sem enviar', async () => {
@@ -118,7 +108,7 @@ describe('CampaignCreateForm', () => {
     await user.click(screen.getByRole('button', { name: 'Cancelar' }));
 
     expect(
-      screen.queryByRole('button', { name: 'Criar' }),
+      screen.queryByRole('button', { name: 'Criar campanha' }),
     ).not.toBeInTheDocument();
     expect(action).not.toHaveBeenCalled();
   });

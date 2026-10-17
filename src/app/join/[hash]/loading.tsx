@@ -1,8 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { InviteSkeleton } from '@/src/modules/invite';
 
-import { Loader } from '@/src/design';
-
-export default async function JoinLoading() {
-  const t = await getTranslations('character.list');
-  return <Loader size="lg" message={t('loading')} />;
+export default function JoinLoading() {
+  return <InviteSkeleton />;
 }

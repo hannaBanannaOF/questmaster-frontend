@@ -1,39 +1,90 @@
+/* Celular: acima da barra inferior; o mais novo fica mais perto da borda de baixo */
 .region {
   position: fixed;
-  right: var(--spacing-md);
-  /* No celular, largura da tela e acima da barra inferior */
-  bottom: calc(var(--bottom-nav-height) + var(--spacing-sm));
-  left: var(--spacing-md);
+  right: 1rem;
+  bottom: calc(var(--bottom-nav-height) + 1rem);
+  left: 1rem;
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
   pointer-events: none;
 }
 
+/* Página com barra de botão presa no rodapé (ex.: convite): sobe acima dela */
+:global(body:has([data-action-bar])) .region {
+  bottom: calc(var(--bottom-nav-height) + var(--action-bar-height, 6.5rem));
+}
+
+/* Dentro de um modal (folha presa embaixo no celular): em cima, sem cobrir os botões */
+:global(dialog) .region {
+  top: 1rem;
+  bottom: auto;
+  flex-direction: column-reverse;
+}
+
 .toast {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xxs);
-  max-width: none;
-  padding: var(--spacing-md);
-  border: 1px solid var(--color-card-border);
-  border-left-width: 2px;
-  border-radius: var(--radius-md);
-  background-color: var(--color-card-bg);
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.875rem 0.5rem 0.875rem 1rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface-tertiary);
+  box-shadow:
+    0 16px 32px hsl(30 40% 3% / 0.45),
+    var(--surface-shadow);
+  color: var(--foreground);
   pointer-events: auto;
-  animation: slide-in var(--duration-normal) var(--ease-standard);
+  animation: slide-in 200ms var(--ease-smooth);
 }
 
-.toast[data-type='error'] {
-  border-left-color: var(--color-destructive);
+.toast:not([data-type='error']) {
+  padding-right: 1rem;
 }
 
-.toast[data-type='success'] {
-  border-left-color: var(--color-constructive);
+.icon {
+  display: flex;
+  padding-top: 2px;
+  color: var(--muted);
+}
+
+.icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.toast[data-type='success'] .icon {
+  color: var(--success-soft-foreground);
+}
+
+.toast[data-type='error'] .icon {
+  color: var(--danger-soft-foreground);
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.content p {
+  margin: 0;
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
 @keyframes slide-in {
@@ -47,14 +98,21 @@
   }
 }
 
-@media (min-width: 48rem) {
-  .region {
-    right: 20px;
-    bottom: 20px;
-    left: auto;
-  }
-
+@media (prefers-reduced-motion: reduce) {
   .toast {
-    max-width: 360px;
+    animation: none;
+  }
+}
+
+/* Tablet e desktop: canto superior direito, abaixo do cabeçalho; o mais novo em cima */
+@media (min-width: 48rem) {
+  .region,
+  :global(body:has([data-action-bar])) .region {
+    top: 5rem;
+    right: 1.5rem;
+    bottom: auto;
+    left: auto;
+    flex-direction: column-reverse;
+    width: min(400px, calc(100% - 2rem));
   }
 }

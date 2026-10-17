@@ -1,5 +1,5 @@
-import { DetailPageSkeleton } from '@/src/modules/shared/presentation';
+import { CampaignDetailSkeleton } from '@/src/modules/campaign';
 
 export default function CampaignLoading() {
-  return <DetailPageSkeleton />;
+  return <CampaignDetailSkeleton />;
 }

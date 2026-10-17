@@ -13,7 +13,8 @@ import { getInvitePath } from '../../../domain';
 interface InviteLinkControlProps {
   hash?: string;
   /** Server Action já vinculada ao id da campanha. */
-  createInvite: () => Promise<ActionResult<string>>;
+  /** Ausente quando o convite já existe e só se copia o link. */
+  createInvite?: () => Promise<ActionResult<string>>;
 }
 
 /** Gera o link de convite da campanha ou, se já existe, permite copiá-lo. */
@@ -34,12 +35,14 @@ export function InviteLinkControl({
         value={() => new URL(path, window.location.origin).toString()}
         copyLabel={t('copy')}
         copiedLabel={t('copied')}
+        valueLabel={t('block.link')}
       />
     );
   }
 
   const handleCreate = () =>
     startTransition(async () => {
+      if (!createInvite) return;
       const result = await createInvite();
       toast(
         result.ok
@@ -58,8 +61,8 @@ export function InviteLinkControl({
 
   return (
     <Button
-      variant="outline"
-      icon={<Link2 size={12} />}
+      variant="primary"
+      icon={<Link2 size={18} />}
       loading={isPending}
       onClick={handleCreate}
     >

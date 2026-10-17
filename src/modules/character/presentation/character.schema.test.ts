@@ -8,55 +8,33 @@ import { characterCreateSchema, characterEditSchema } from './character.schema';
 const key = (path: string) => `character.create.form.${path}`;
 
 describe('characterCreateSchema', () => {
-  it('aceita um personagem válido e converte o PV', async () => {
+  it('aceita um personagem válido, sem PV', async () => {
     await expect(
       validate(characterCreateSchema, {
         name: '  Harvey  ',
-        hp: '12',
         system: GameSystem.CALL_OF_CTHULHU,
       }),
     ).resolves.toEqual({
       ok: true,
-      data: { name: 'Harvey', hp: 12, system: GameSystem.CALL_OF_CTHULHU },
+      data: { name: 'Harvey', system: GameSystem.CALL_OF_CTHULHU },
     });
   });
 
   it('aponta todos os campos inválidos de uma vez', async () => {
     await expect(
-      validate(characterCreateSchema, { name: '   ', hp: '0', system: '' }),
+      validate(characterCreateSchema, { name: '   ', system: '' }),
     ).resolves.toEqual({
       ok: false,
       fieldErrors: {
         name: key('name.errors.required'),
-        hp: key('hp.errors.min'),
         system: key('game_system.errors.required'),
       },
-    });
-  });
-
-  it.each([
-    ['abc', 'hp.errors.type'],
-    ['1.5', 'hp.errors.type'],
-    ['', 'hp.errors.required'],
-    ['   ', 'hp.errors.required'],
-    [undefined, 'hp.errors.required'],
-  ])('recusa PV %j', async (hp, error) => {
-    const result = await validate(characterCreateSchema, {
-      name: 'Harvey',
-      hp,
-      system: GameSystem.CALL_OF_CTHULHU,
-    });
-
-    expect(result).toMatchObject({
-      ok: false,
-      fieldErrors: { hp: key(error) },
     });
   });
 
   it('limita o nome a 255 caracteres', async () => {
     const result = await validate(characterCreateSchema, {
       name: 'a'.repeat(256),
-      hp: '12',
       system: GameSystem.CALL_OF_CTHULHU,
     });
 
@@ -69,7 +47,6 @@ describe('characterCreateSchema', () => {
   it('recusa sistema desconhecido', async () => {
     const result = await validate(characterCreateSchema, {
       name: 'Harvey',
-      hp: '12',
       system: 'DND',
     });
 
@@ -83,24 +60,16 @@ describe('characterCreateSchema', () => {
 describe('characterEditSchema', () => {
   const key = (path: string) => `character.edit.form.${path}`;
 
-  it('aceita nome com e sem PV máximo', async () => {
+  it('aceita só o nome, aparado', async () => {
     await expect(
-      validate(characterEditSchema, { name: ' Jão ', maxHp: '8' }),
-    ).resolves.toEqual({ ok: true, data: { name: 'Jão', maxHp: 8 } });
-    await expect(
-      validate(characterEditSchema, { name: 'Jão', maxHp: '' }),
+      validate(characterEditSchema, { name: ' Jão ' }),
     ).resolves.toEqual({ ok: true, data: { name: 'Jão' } });
   });
 
-  it('exige nome e PV inteiro positivo', async () => {
-    await expect(
-      validate(characterEditSchema, { name: '', maxHp: '0' }),
-    ).resolves.toEqual({
+  it('exige nome', async () => {
+    await expect(validate(characterEditSchema, { name: '' })).resolves.toEqual({
       ok: false,
-      fieldErrors: {
-        name: key('name.errors.required'),
-        maxHp: key('maxHp.errors.min'),
-      },
+      fieldErrors: { name: key('name.errors.required') },
     });
   });
 });

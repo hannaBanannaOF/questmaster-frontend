@@ -11,8 +11,10 @@ import {
 } from '@/src/lib/actions';
 import { toErrorMessage } from '@/src/lib/actions/action-error';
 import { setFlash } from '@/src/lib/flash/set-flash';
+import { toPageRequest } from '@/src/lib/pagination';
 
 import { characterUseCases } from '../character.container';
+import type { CharacterSummary } from '../domain';
 import {
   CHARACTER_EDIT_FORM_FIELDS,
   CHARACTER_FORM_FIELDS,
@@ -21,6 +23,12 @@ import {
   characterEditSchema,
   type CharacterFormField,
 } from './character.schema';
+import {
+  CHARACTER_PAGE_SIZE,
+  parseCharacterListParams,
+  type SearchParams,
+} from './character-list.params';
+import { safeReturnTo } from './return-to';
 
 // Server Actions são endpoints públicos: todo argumento é validado aqui
 
@@ -34,15 +42,45 @@ export async function createCharacterAction(
     return { status: 'error', fieldErrors: input.fieldErrors, values };
   }
 
+  let slug: string;
   try {
-    await characterUseCases.createCharacter(input.data);
+    slug = await characterUseCases.createCharacter(input.data);
   } catch (error) {
     return { status: 'error', message: toErrorMessage(error), values };
   }
 
-  // A lista atualizada volta na mesma resposta; o form fecha o modal e avisa
+  // Vai direto para a ficha nova (ou de volta ao convite); o toast chega como flash
   revalidatePath('/characters');
-  return { status: 'success', values: { name: input.data.name } };
+  revalidatePath('/join', 'layout');
+  await setFlash({
+    type: 'success',
+    title: 'character.toast.success.create.title',
+    message: 'character.toast.success.create.message',
+    values: { name: input.data.name },
+  });
+  redirect(
+    safeReturnTo(formData.get('returnTo')) ??
+      `/characters/${encodeURIComponent(slug)}`,
+  );
+}
+
+/**
+ * Próxima página para o "Mostrar mais" do celular. Recebe os parâmetros
+ * crus da URL e passa pelo mesmo parser da página (entrada pública).
+ */
+export async function loadMoreCharactersAction(
+  searchParams: SearchParams,
+): Promise<ActionResult<CharacterSummary[]>> {
+  const { page, withoutCampaign, q } = parseCharacterListParams(searchParams);
+  try {
+    const { items } = await characterUseCases.listCharacters(
+      { withoutCampaign: withoutCampaign || undefined, q, sort: 'recent' },
+      toPageRequest(page, CHARACTER_PAGE_SIZE),
+    );
+    return { ok: true, data: items };
+  } catch (error) {
+    return { ok: false, message: toErrorMessage(error) };
+  }
 }
 
 export async function deleteCharacterAction(
@@ -69,26 +107,6 @@ export async function deleteCharacterAction(
     values: { name },
   });
   redirect('/characters', RedirectType.replace);
-}
-
-export async function updateCharacterHpAction(
-  characterId: number,
-  hp: unknown,
-): Promise<ActionResult<number>> {
-  if (!Number.isInteger(characterId) || typeof hp !== 'number') {
-    return { ok: false };
-  }
-
-  try {
-    const currentHp = await characterUseCases.updateCharacterHp(
-      characterId,
-      hp,
-    );
-    revalidatePath('/characters', 'layout');
-    return { ok: true, data: currentHp };
-  } catch (error) {
-    return { ok: false, message: toErrorMessage(error) };
-  }
 }
 
 export async function editCharacterAction(

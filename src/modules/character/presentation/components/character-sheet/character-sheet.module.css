@@ -1,0 +1,116 @@
+/* Ficha: o que é só dela (a página e o destaque vêm do DetailPage). */
+
+.muted {
+  color: var(--muted);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.identityText {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.375rem;
+  font-size: var(--font-size-sm);
+}
+
+.help {
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+.rowActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Sem campanha: o caminho até uma mesa, tracejado como os "novo" */
+.freeCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  border: 1px dashed color-mix(in oklab, var(--muted) 80%, transparent);
+  border-radius: var(--radius-3xl);
+  font-size: var(--font-size-sm);
+}
+
+.freeTitle {
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+
+.indicator {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--accent-soft);
+  color: var(--accent-soft-foreground);
+}
+
+.indicator svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Sistema na edição: só leitura, com o rótulo no estilo dos campos */
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+.readonly {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--touch-target);
+  color: var(--color-system-coc-fg);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+/* ===== Esqueleto ===== */
+.skeleton {
+  composes: skeleton from '../../../../../design/templates/collection/collection.module.css';
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sk {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.5rem;
+  background-color: color-mix(
+    in oklab,
+    var(--surface-tertiary) 70%,
+    transparent
+  );
+}
+
+.skHero {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 9rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+}
+
+.skStack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+}
