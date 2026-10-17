@@ -1,0 +1,79 @@
+.field {
+  flex: 1 1 100%;
+}
+
+/* A borda é sombra interna: o input ocupa os 44px inteiros */
+.group {
+  display: flex;
+  align-items: center;
+  height: var(--touch-target);
+  border-radius: 0.75rem;
+  background-color: var(--default);
+  box-shadow: inset 0 0 0 2px transparent;
+  transition: box-shadow 150ms var(--ease-smooth);
+}
+
+.group:focus-within {
+  box-shadow: inset 0 0 0 2px var(--focus);
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: 0.75rem;
+  color: var(--muted);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+/* O X do navegador duplicaria o nosso */
+.input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+.clear {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  color: var(--muted);
+}
+
+.clear svg {
+  width: 16px;
+  height: 16px;
+}
+
+.clear:hover {
+  color: var(--foreground);
+}
+
+.clear:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+  border-radius: 0.75rem;
+}
+
+@media (min-width: 64rem) {
+  .field {
+    flex: 1 1 17.5rem;
+    max-width: 22.5rem;
+  }
+}

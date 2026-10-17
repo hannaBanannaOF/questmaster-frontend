@@ -1,30 +1,54 @@
 {
   "list": {
     "title": "Campanhas",
-    "loading": "Buscando campanhas...",
-    "empty": {
-      "title": "Sem missões ainda",
-      "message": "Seu livro de aventuras está vazio. Crie sua primeira campanha para começar a sua jornada.",
-      "create": "Criar campanha"
-    },
+    "loading": "Carregando campanhas…",
+    "count": "{count, plural, one {# campanha} other {# campanhas}}",
     "new": "Nova campanha",
+    "page": "Campanhas, página {page, number} de {pages, number}",
+    "search": {
+      "label": "Buscar campanha",
+      "placeholder": "Buscar pelo nome",
+      "clear": "Limpar busca"
+    },
     "filters": {
       "role": "Filtrar por papel",
       "all": "Todas",
       "dm": "Mestrando",
       "player": "Jogando",
-      "status": "Status",
-      "anyStatus": "Todos os status",
-      "apply": "Filtrar"
+      "status": "Filtrar por status",
+      "anyStatus": "Todos"
     },
-    "filtered": {
-      "empty": {
-        "title": "Nenhuma campanha encontrada",
-        "message": "Nenhuma das suas campanhas bate com esses filtros.",
-        "clear": "Limpar filtros"
+    "empty": {
+      "title": "Nenhuma campanha ainda",
+      "message": "Crie uma campanha para mestrar, ou entre na de alguém pelo link de convite.",
+      "create": "Criar campanha"
+    },
+    "noResults": {
+      "title": "Nenhuma campanha{hasQ, select, yes { com “{q}”} other {}}{status, select, ACTIVE { em andamento} DRAFT { em rascunho} PAUSED { pausada} ARCHIVED { arquivada} other {}}{role, select, dm { que você mestra} player { em que você joga} other {}}",
+      "message": {
+        "search": "Confira a grafia ou procure por outra parte do nome.",
+        "filters": "Nenhuma das suas campanhas bate com esses filtros.",
+        "both": "Tente outra parte do nome ou tire algum filtro."
+      },
+      "clear": {
+        "search": "Limpar busca",
+        "filters": "Limpar filtros",
+        "both": "Limpar busca e filtros"
       }
     },
-    "range": "Mostrando {from, number}–{to, number} de {total, number} campanhas"
+    "error": {
+      "title": "Não conseguimos carregar suas campanhas",
+      "message": "A conexão com o servidor falhou. Suas campanhas continuam salvas.",
+      "back": "Voltar ao dashboard"
+    },
+    "range": "Mostrando {from, number}–{to, number} de {total, number}",
+    "more": {
+      "action": "Mostrar mais",
+      "loading": "Carregando…",
+      "progress": "{shown, number} de {total, number} campanhas",
+      "all": "Todas as {total, number} campanhas",
+      "error": "Não foi possível carregar mais campanhas."
+    }
   },
   "dm": "DM",
   "status": {
@@ -36,74 +60,91 @@
   "actions": {
     "start": "Iniciar",
     "pause": "Pausar",
-    "resume": "Resumir",
+    "resume": "Retomar",
     "end": "Encerrar",
-    "archive": "Arquivar",
+    "archive": "Encerrar",
     "delete": "Excluir"
   },
   "characters": "Personagens",
   "mine": "Sua ficha",
-  "emptyParty": {
-    "title": "Ninguém entrou ainda",
-    "message": "Mande o convite para os jogadores entrarem com as fichas."
-  },
   "create": {
     "title": "Nova campanha",
-    "subtitle": "Comece uma nova jornada. Preencha os detalhes abaixo.",
+    "subtitle": "Você vai mestrar esta campanha. Depois de criar, é só mandar o link de convite para a party.",
     "form": {
       "name": {
         "label": "Nome da campanha",
-        "placeholder": "Ex.: As Máscaras de Nyarlathotep",
+        "placeholder": "Ex.: O Chamado de Cthulhu",
         "errors": {
-          "required": "Campo \"Nome da campanha\" é obrigatório!",
+          "required": "Dê um nome à campanha.",
           "max": "O nome deve ter no máximo 255 caracteres."
         }
       },
       "overview": {
         "label": "Descrição",
-        "placeholder": "Uma breve descrição da sua campanha..."
+        "placeholder": "Sobre o que é a aventura?",
+        "description": "Opcional. Aparece no convite."
       },
       "game_system": {
         "label": "Sistema de jogo",
+        "placeholder": "Escolha o sistema",
         "errors": {
-          "required": "Campo \"Sistema de jogo\" é obrigatório!"
-        }
+          "required": "Escolha o sistema da campanha."
+        },
+        "description": "Define as regras e o modelo de ficha dos personagens."
       },
-      "submit": "Criar",
-      "cancel": "Cancelar"
+      "submit": "Criar campanha",
+      "cancel": "Cancelar",
+      "dm_name": {
+        "label": "Seu apelido na campanha",
+        "description": "Como a party vai te ver nesta campanha. Dá para mudar depois.",
+        "errors": {
+          "required": "Escolha um apelido.",
+          "max": "O apelido deve ter no máximo 50 caracteres."
+        }
+      }
     }
   },
   "delete": {
-    "title": "Excluir campanha",
-    "confirm": "Isso removerá permanentemente <bold>{name}</bold> e todos os seus dados. Essa ação não pode ser desfeita.",
+    "title": "Excluir {name}?",
+    "confirm": "A campanha, a party e o convite somem para todos. As fichas continuam com quem joga. Não dá para desfazer.",
     "cancel": "Cancelar",
     "submit": "Excluir campanha"
   },
   "toast": {
     "error": {
-      "list": "Não foi possível buscar campanhas!",
-      "create": "Não foi possível criar campanha!",
-      "delete": "Não foi possível excluir campanha!",
-      "update": "Não foi possível atualizar campanha!",
-      "detail": "Não foi possível acessar campanha!"
+      "list": "Não deu para buscar as campanhas",
+      "create": "Não deu para criar a campanha",
+      "delete": "Não deu para excluir a campanha",
+      "update": "Não deu para atualizar a campanha",
+      "detail": "Não deu para abrir a campanha"
     },
     "success": {
       "create": {
-        "title": "Nova campanha!",
-        "message": "\"{name}\" está pronta para aventura."
+        "title": "Campanha criada",
+        "message": "\"{name}\" está pronta para a aventura."
       },
       "delete": {
-        "title": "Campanha excluida!",
+        "title": "Campanha excluída",
         "message": "\"{name}\" foi excluída com sucesso."
       }
     }
   },
   "detail": {
+    "back": "Campanhas",
+    "youDm": "Você mestra como <strong>{name}</strong>",
+    "youPlay": "Você joga como <strong>{name}</strong>",
+    "players": "{count, plural, =0 {ninguém entrou} one {# jogador} other {# jogadores}}",
+    "dmBy": "mestrada por {name}",
+    "statusActions": "Status da campanha",
+    "archivedNote": "Encerrada: dá para consultar, mas ninguém mais entra.",
+    "loading": "Carregando campanha…",
     "notFound": {
       "title": "Campanha não encontrada",
-      "message": "Ela pode ter sido excluída ou você não tem acesso a ela.",
-      "back": "Voltar para campanhas"
-    }
+      "message": "O link pode estar errado, a campanha pode ter sido excluída, ou você não faz parte dela.",
+      "back": "Ver minhas campanhas"
+    },
+    "youDmNoName": "Você mestra",
+    "youPlayNoName": "Você joga"
   },
   "errors": {
     "invalidTransition": "Essa mudança de status não é permitida.",
@@ -117,71 +158,67 @@
     "new": "Nova ficha pronta",
     "create": {
       "title": "Nova ficha pronta",
-      "subtitle": "Os jogadores podem escolher esta ficha ao aceitar o convite."
+      "subtitle": "Quem entrar pelo convite pode escolher esta ficha."
     },
     "form": {
       "name": {
         "label": "Nome do personagem",
-        "placeholder": "Ex.: Harvey Walters",
+        "placeholder": "Ex.: Daisy Walker",
         "errors": {
-          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "required": "Dê um nome à ficha.",
           "max": "O nome deve ter no máximo 255 caracteres."
         }
       },
-      "maxHp": {
-        "label": "PV máximo (opcional)",
-        "placeholder": "Ex.: 12",
-        "errors": {
-          "type": "O PV deve ser um número inteiro.",
-          "min": "O PV deve ser maior que zero."
-        }
-      },
-      "submit": "Criar",
+      "system": "Ficha de {system}, o sistema da campanha",
+      "submit": "Criar ficha",
       "cancel": "Cancelar"
     },
     "delete": {
-      "trigger": "Excluir",
-      "title": "Excluir ficha pronta",
-      "confirm": "Isso removerá permanentemente <bold>{name}</bold>. Essa ação não pode ser desfeita.",
+      "menu": "Excluir ficha pronta",
+      "title": "Excluir {name}?",
+      "confirm": "A ficha pronta some da campanha e ninguém mais pode escolhê-la. Não dá para desfazer.",
       "cancel": "Cancelar",
-      "submit": "Excluir ficha"
+      "submit": "Excluir ficha pronta"
     },
     "toast": {
       "error": {
-        "create": "Não foi possível criar a ficha pronta!",
-        "delete": "Não foi possível excluir a ficha pronta!"
+        "create": "Não deu para criar a ficha pronta",
+        "delete": "Não deu para excluir a ficha pronta"
       },
       "success": {
         "create": {
-          "title": "Ficha pronta criada!",
+          "title": "Ficha pronta criada",
           "message": "\"{name}\" já pode ser escolhida no convite."
         },
         "delete": {
-          "title": "Ficha pronta excluída!",
+          "title": "Ficha pronta excluída",
           "message": "A ficha foi removida da campanha."
         }
       }
-    }
+    },
+    "help": "Quem entrar pelo convite pode escolher uma delas. Só você vê esta seção.",
+    "unclaimed": "Ninguém escolheu ainda",
+    "actions": "Ações da ficha pronta {name}"
   },
   "party": {
     "leave": {
-      "trigger": "Sair da campanha",
-      "title": "Sair da campanha",
-      "confirm": "<bold>{name}</bold> sai da campanha e continua com você, sem campanha. Para voltar, use o convite.",
+      "menu": "Sair da campanha",
+      "title": "Sair de {campaign}?",
+      "confirm": "{name} continua com você, sem campanha. Para voltar, você vai precisar de um convite novo.",
       "cancel": "Cancelar",
       "submit": "Sair da campanha"
     },
     "remove": {
-      "trigger": "Remover",
-      "title": "Remover da campanha",
-      "confirm": "<bold>{name}</bold> sai da party e continua com o jogador. Ele pode voltar pelo convite.",
+      "menu": "Remover da campanha",
+      "title": "Remover {name} da campanha?",
+      "confirm": "A ficha continua com quem joga, que pode voltar pelo convite.",
       "cancel": "Cancelar",
-      "submit": "Remover"
+      "submit": "Remover da campanha"
     },
     "toast": {
       "error": {
-        "leave": "Não foi possível sair da campanha!",
-        "remove": "Não foi possível remover da campanha!"
+        "leave": "Não deu para sair da campanha",
+        "remove": "Não deu para remover da campanha"
       },
       "success": {
         "leave": {
@@ -193,6 +230,51 @@
           "message": "Ela continua com o jogador."
         }
       }
+    },
+    "title": "Party",
+    "count": "{count, plural, one {# personagem} other {# personagens}}",
+    "owner": "de {name}",
+    "actions": "Ações de {name}",
+    "open": "Abrir ficha",
+    "empty": {
+      "title": "Ninguém entrou ainda",
+      "message": "Crie o link de convite e mande para a party. Cada pessoa escolhe uma ficha e entra.",
+      "withInvite": "Mande o link de convite acima para a party. Cada pessoa escolhe uma ficha e entra."
+    }
+  },
+  "row": {
+    "role": {
+      "dm": "Você mestra:",
+      "player": "Você joga:",
+      "needsInvite": "Precisa de convite:"
+    },
+    "as": "como {names}",
+    "players": "{count, plural, =0 {nenhum jogador} one {# jogador} other {# jogadores}}",
+    "nobodyJoined": "ninguém entrou · Convidar"
+  },
+  "end": {
+    "title": "Encerrar {name}?",
+    "message": "A campanha vira histórico: a party e as fichas ficam para consulta, mas ninguém mais entra pelo convite. Não dá para reabrir.",
+    "submit": "Encerrar campanha",
+    "cancel": "Cancelar"
+  },
+  "tableName": {
+    "edit": "Editar seu apelido nesta campanha",
+    "title": "Seu apelido",
+    "subtitle": "Vale só em {campaign}. Não muda o seu nome nas outras campanhas nem o nome das suas fichas.",
+    "form": {
+      "label": "Apelido",
+      "description": "É como a party vê você nesta campanha.",
+      "submit": "Salvar",
+      "cancel": "Cancelar",
+      "errors": {
+        "required": "Escolha um apelido.",
+        "max": "O apelido deve ter no máximo 50 caracteres."
+      }
+    },
+    "toast": {
+      "success": "Apelido atualizado",
+      "error": "Não deu para salvar o apelido"
     }
   }
 }

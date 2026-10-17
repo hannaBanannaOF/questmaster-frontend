@@ -1,0 +1,320 @@
+/* Detalhe da campanha: o que é só dela (a página e o destaque vêm do DetailPage). */
+
+.muted {
+  color: var(--muted);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--font-size-sm);
+}
+
+.nickLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.strong {
+  color: var(--foreground);
+}
+
+/* Lápis de 44px; a margem negativa mantém a linha na altura do texto */
+.nickEdit {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  margin: -0.625rem 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-3xl);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 100ms var(--ease-out);
+}
+
+.nickEdit:hover {
+  background-color: var(--default);
+  color: var(--foreground);
+}
+
+.nickEdit:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.nickEdit svg {
+  width: 16px;
+  height: 16px;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.party {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+.party svg {
+  width: 16px;
+  height: 16px;
+}
+
+.description {
+  max-width: 62ch;
+  color: var(--muted);
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+.note svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.help {
+  margin-top: -0.375rem;
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Grade de 220px+: 2 no celular, 3 no tablet, 4 no desktop */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid > li {
+  display: flex;
+}
+
+.grid > li > * {
+  flex: 1;
+}
+
+/* ===== Card da party ===== */
+.member {
+  gap: 0.625rem;
+  padding: 0.875rem;
+  transition: background-color 150ms var(--ease-smooth);
+}
+
+.member:hover {
+  background-color: var(--surface-secondary);
+}
+
+/* Sem marca d'água: o menu "⋯" pode sair do card e ficar acima dos vizinhos */
+.member {
+  overflow: visible;
+}
+
+.member:has([aria-expanded='true']) {
+  z-index: 5;
+}
+
+.member:has(.stretched:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.member[data-menu] .who {
+  padding-right: 1.75rem;
+}
+
+.memberName {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  letter-spacing: normal;
+  line-height: 1.3;
+}
+
+/* O card inteiro abre a ficha; o menu fica por cima, fora do link */
+.stretched::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.stretched:focus-visible {
+  outline: none;
+}
+
+.menu {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+}
+
+.footer {
+  min-height: 20px;
+  font-size: 0.8125rem;
+}
+
+/* ===== Vazio da party ===== */
+.empty {
+  align-items: center;
+  gap: 0.625rem;
+  padding: 2rem 1.25rem;
+  text-align: center;
+}
+
+.empty h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.empty p {
+  max-width: 44ch;
+}
+
+.emptyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background-color: var(--default);
+  color: var(--muted);
+}
+
+.emptyIcon svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* ===== "Nova ficha pronta" ===== */
+.addCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 7.5rem;
+  border: 2px dashed color-mix(in oklab, var(--muted) 80%, transparent);
+  border-radius: var(--radius-3xl);
+  background: transparent;
+  color: var(--accent-soft-foreground);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 150ms var(--ease-smooth);
+}
+
+.addCard:hover {
+  background-color: var(--default);
+}
+
+.addCard:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.addCard svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ===== Esqueleto: o mesmo brilho único das listas ===== */
+.skeleton {
+  composes: skeleton from '../../../../../design/templates/collection/collection.module.css';
+}
+
+.sk {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.5rem;
+  background-color: color-mix(
+    in oklab,
+    var(--surface-tertiary) 70%,
+    transparent
+  );
+}
+
+.skCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+}
+
+.skPage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.skHero {
+  min-height: 11rem;
+}
+
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(13.75rem, 1fr));
+    gap: 0.75rem;
+  }
+
+  .member {
+    padding: 1rem;
+  }
+
+  .who {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .member[data-menu] .who {
+    padding-right: 2.25rem;
+  }
+}

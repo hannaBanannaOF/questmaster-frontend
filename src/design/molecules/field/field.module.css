@@ -1,0 +1,25 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--danger-soft-foreground);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+
+.error svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}

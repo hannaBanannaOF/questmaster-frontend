@@ -2,64 +2,85 @@
   "list": {
     "title": "Personagens",
     "new": "Novo personagem",
-    "loading": "Carregando personagens...",
-    "hp": "{value} PV",
-    "hpOf": "{value} / {max} PV",
-    "empty": {
-      "title": "Ainda sem heróis",
-      "message": "Sua party está vazia. Crie seu primeiro personagem para começar a aventura",
-      "create": "Criar personagem"
+    "loading": "Carregando personagens…",
+    "count": "{count, plural, one {# personagem} other {# personagens}}",
+    "page": "Personagens, página {page, number} de {pages, number}",
+    "search": {
+      "label": "Buscar personagem",
+      "placeholder": "Buscar pelo nome",
+      "clear": "Limpar busca"
     },
     "filters": {
       "label": "Filtrar personagens",
       "all": "Todos",
       "withoutCampaign": "Sem campanha"
     },
-    "filtered": {
-      "empty": {
-        "title": "Todos na mesa",
-        "message": "Todos os seus personagens já estão em alguma campanha.",
+    "empty": {
+      "title": "Nenhum personagem ainda",
+      "message": "Crie sua primeira ficha. Depois é só abrir o convite de quem mestra para entrar na campanha com ela.",
+      "create": "Criar personagem"
+    },
+    "noResults": {
+      "filter": {
+        "title": "Todas as suas fichas estão em campanhas",
+        "message": "Fichas sem campanha aparecem aqui, prontas para entrar numa mesa pelo convite.",
         "clear": "Ver todos"
+      },
+      "search": {
+        "title": "Nenhum personagem com “{q}”",
+        "message": "Confira a grafia ou procure por outra parte do nome.",
+        "clear": "Limpar busca"
+      },
+      "both": {
+        "title": "Nenhum personagem sem campanha com “{q}”",
+        "message": "Tente outra parte do nome ou veja todas as fichas.",
+        "clear": "Limpar busca e filtro"
       }
     },
-    "range": "Mostrando {from, number}–{to, number} de {total, number} personagens"
+    "error": {
+      "title": "Não conseguimos carregar seus personagens",
+      "message": "A conexão com o servidor falhou. Suas fichas continuam salvas.",
+      "back": "Voltar ao dashboard"
+    },
+    "range": "Mostrando {from, number}–{to, number} de {total, number}",
+    "more": {
+      "action": "Mostrar mais",
+      "loading": "Carregando…",
+      "progress": "{shown, number} de {total, number} personagens",
+      "all": "Todos os {total, number} personagens",
+      "error": "Não foi possível carregar mais personagens."
+    }
   },
   "create": {
     "title": "Novo personagem",
-    "subtitle": "Dê vida a um novo herói. Preencha os detalhes abaixo.",
+    "subtitle": "Crie a ficha agora e escolha a campanha quando receber um convite.",
     "form": {
       "name": {
         "label": "Nome do personagem",
-        "placeholder": "Ex.: Aelar Windwalker",
+        "placeholder": "Ex.: Eleanor Vance",
         "errors": {
-          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "required": "Dê um nome ao personagem.",
           "max": "O nome deve ter no máximo 255 caracteres."
-        }
-      },
-      "hp": {
-        "label": "Pontos de vida (PV)",
-        "placeholder": "Ex.: 45",
-        "errors": {
-          "required": "Campo \"Pontos de vida (PV)\" é obrigatório!",
-          "type": "O valor informado deve ser um número!",
-          "min": "O valor informado deve ser maior que 0!"
         }
       },
       "game_system": {
         "label": "Sistema de jogo",
+        "placeholder": "Escolha o sistema",
+        "description": "A ficha só entra em campanhas do mesmo sistema.",
         "errors": {
-          "required": "Campo \"Sistema de jogo\" é obrigatório!"
+          "required": "Escolha o sistema do personagem."
         }
       },
-      "submit": "Criar",
+      "submit": "Criar personagem",
       "cancel": "Cancelar"
     }
   },
   "delete": {
-    "title": "Excluir personagem",
-    "confirm": "Isso removerá permanentemente <bold>{name}</bold> e todos os seus dados. Essa ação não pode ser desfeita.",
-    "cancel": "Cancelar",
-    "submit": "Excluir personagem"
+    "title": "Excluir {name}?",
+    "confirm": "A ficha é apagada para sempre. Não dá para desfazer.",
+    "confirmInCampaign": "A ficha é apagada para sempre. Ela está em {campaign}: a campanha continua, só sem esta ficha na party. Não dá para desfazer.",
+    "submit": "Excluir personagem",
+    "cancel": "Cancelar"
   },
   "controls": {
     "hp": "Pontos de vida (PV)",
@@ -67,41 +88,60 @@
     "increase": "Aumentar PV"
   },
   "actions": {
-    "delete": "Excluir",
-    "edit": "Editar"
+    "edit": "Editar",
+    "delete": "Excluir"
   },
   "toast": {
     "error": {
-      "list": "Não foi possível buscar personagens!",
-      "create": "Não foi possível criar personagem!",
-      "delete": "Não foi possível excluir personagem!",
-      "update": "Não foi possível atualizar personagem!",
-      "detail": "Não foi possível acessar personagem!"
+      "list": "Não deu para buscar os personagens",
+      "create": "Não deu para criar o personagem",
+      "delete": "Não deu para excluir o personagem",
+      "update": "Não deu para salvar a ficha",
+      "detail": "Não deu para abrir o personagem"
     },
     "success": {
       "create": {
-        "title": "Novo personagem!",
-        "message": "\"{name}\" se junta a aventura."
+        "title": "Personagem criado",
+        "message": "\"{name}\" está pronto para a aventura."
       },
       "delete": {
-        "title": "Personagem excluido!",
-        "message": "\"{name}\" foi excluído com sucesso."
+        "title": "Personagem excluído",
+        "message": "\"{name}\" foi excluído."
       },
       "edit": {
-        "title": "Ficha atualizada!",
+        "title": "Ficha atualizada",
         "message": "\"{name}\" foi salva."
       }
     }
   },
   "detail": {
+    "back": "Personagens",
+    "actions": "Ações da ficha",
+    "mine": "Sua ficha",
+    "ownedBy": "Ficha de {name}",
+    "premade": "Ficha pronta · ninguém escolheu ainda",
+    "loading": "Carregando ficha…",
+    "campaign": {
+      "title": "Campanha",
+      "role": {
+        "dm": "Você mestra:",
+        "mine": "Você joga:",
+        "other": "Joga em:"
+      },
+      "premadeHelp": "Fica disponível no convite até alguém escolher. Quando escolhida, passa a ser da pessoa e entra na party.",
+      "none": {
+        "title": "Sem campanha",
+        "message": "Para entrar numa mesa, abra o link de convite de quem mestra e escolha esta ficha. Ela só entra em campanhas de {system}."
+      },
+      "leave": "Sair da campanha"
+    },
     "notFound": {
       "title": "Personagem não encontrado",
-      "message": "Ele pode ter sido excluído ou você não tem acesso a ele.",
-      "back": "Voltar para personagens"
+      "message": "A ficha pode ter sido excluída, ou o link é de uma ficha que você não pode ver.",
+      "back": "Ver meus personagens"
     }
   },
   "errors": {
-    "invalidHp": "O valor de PV informado é inválido.",
     "notEditable": "Só o dono da ficha pode alterá-la."
   },
   "edit": {
@@ -110,20 +150,20 @@
       "name": {
         "label": "Nome do personagem",
         "errors": {
-          "required": "Campo \"Nome do personagem\" é obrigatório!",
+          "required": "Dê um nome ao personagem.",
           "max": "O nome deve ter no máximo 255 caracteres."
         }
       },
-      "maxHp": {
-        "label": "PV máximo",
-        "placeholder": "Ex.: 12",
-        "errors": {
-          "type": "O PV deve ser um número inteiro.",
-          "min": "O PV deve ser maior que zero."
-        }
+      "system": {
+        "label": "Sistema de jogo",
+        "description": "O sistema não muda depois que a ficha é criada."
       },
       "submit": "Salvar",
       "cancel": "Cancelar"
     }
+  },
+  "tile": {
+    "campaign": "Campanha:",
+    "noCampaign": "Sem campanha"
   }
 }

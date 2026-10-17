@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { GameSystem } from '@/src/modules/rpg/domain';
 import { aCharacter, aCharacterDetails } from '@/src/test/fixtures';
 
-import { CharacterNotEditableError, InvalidHpError } from '../domain';
+import { CharacterNotEditableError } from '../domain';
 import type { CharacterRepository } from './character.repository';
 import {
   makeCreateCharacter,
@@ -11,7 +11,6 @@ import {
   makeEditCharacter,
   makeGetCharacterBySlug,
   makeListCharacters,
-  makeUpdateCharacterHp,
 } from './use-cases';
 
 function fakeRepository(
@@ -23,7 +22,6 @@ function fakeRepository(
     resolveSlug: vi.fn().mockResolvedValue(1),
     create: vi.fn().mockResolvedValue(undefined),
     delete: vi.fn().mockResolvedValue(undefined),
-    updateHp: vi.fn(async (_id, hp) => hp),
     edit: vi.fn().mockResolvedValue('jao'),
     ...overrides,
   };
@@ -98,31 +96,13 @@ describe('makeDeleteCharacter', () => {
   });
 });
 
-describe('makeUpdateCharacterHp', () => {
-  it.each([0, 12])('salva PV %d', async (hp) => {
-    const repository = fakeRepository();
-
-    await expect(makeUpdateCharacterHp(repository)(1, hp)).resolves.toBe(hp);
-    expect(repository.updateHp).toHaveBeenCalledWith(1, hp);
-  });
-
-  it.each([-1, 2.5])('recusa PV %d sem chamar a API', async (hp) => {
-    const repository = fakeRepository();
-
-    await expect(
-      makeUpdateCharacterHp(repository)(1, hp),
-    ).rejects.toBeInstanceOf(InvalidHpError);
-    expect(repository.updateHp).not.toHaveBeenCalled();
-  });
-});
-
 describe('makeEditCharacter', () => {
   it('edita e devolve o slug novo', async () => {
     const repository = fakeRepository();
 
     await expect(
-      makeEditCharacter(repository)(1, { name: 'Jão', maxHp: 8 }),
+      makeEditCharacter(repository)(1, { name: 'Jão' }),
     ).resolves.toBe('jao');
-    expect(repository.edit).toHaveBeenCalledWith(1, { name: 'Jão', maxHp: 8 });
+    expect(repository.edit).toHaveBeenCalledWith(1, { name: 'Jão' });
   });
 });

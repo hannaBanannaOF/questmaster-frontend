@@ -22,10 +22,14 @@ interface DialogButtonProps {
   label: string;
   /** Estilo do botão que abre o diálogo; padrão sólido. */
   variant?: ComponentProps<typeof Button>['variant'];
+  /** Só o ícone no celular (o rótulo vira nome acessível). */
+  compactLabel?: boolean;
   icon?: ReactNode;
   title: string;
   description?: string;
   closeLabel: string;
+  /** Gatilho próprio no lugar do Button (ex.: o card tracejado de "novo"). */
+  renderTrigger?: (open: () => void) => ReactNode;
   /** Conteúdo do diálogo; montado só enquanto aberto (sempre começa limpo). */
   children: ReactNode;
 }
@@ -34,10 +38,12 @@ interface DialogButtonProps {
 export function DialogButton({
   label,
   variant,
+  compactLabel,
   icon,
   title,
   description,
   closeLabel,
+  renderTrigger,
   children,
 }: DialogButtonProps) {
   const [open, setOpen] = useState(false);
@@ -45,9 +51,18 @@ export function DialogButton({
 
   return (
     <>
-      <Button variant={variant} icon={icon} onClick={() => setOpen(true)}>
-        {label}
-      </Button>
+      {renderTrigger ? (
+        renderTrigger(() => setOpen(true))
+      ) : (
+        <Button
+          variant={variant}
+          compactLabel={compactLabel}
+          icon={icon}
+          onClick={() => setOpen(true)}
+        >
+          {label}
+        </Button>
+      )}
       <Dialog
         open={open}
         onClose={close}

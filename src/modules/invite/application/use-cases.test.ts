@@ -61,10 +61,10 @@ describe('makeAcceptInvite', () => {
   it('aceita com a ficha escolhida e devolve o convite', async () => {
     const repository = fakeRepository();
 
-    await expect(makeAcceptInvite(repository)(HASH, 'harvey')).resolves.toBe(
-      invite,
-    );
-    expect(repository.accept).toHaveBeenCalledWith(HASH, 'harvey');
+    await expect(
+      makeAcceptInvite(repository)(HASH, 'harvey', 'Lena'),
+    ).resolves.toBe(invite);
+    expect(repository.accept).toHaveBeenCalledWith(HASH, 'harvey', 'Lena');
   });
 
   it('não aceita um convite que não existe', async () => {
@@ -73,7 +73,7 @@ describe('makeAcceptInvite', () => {
     });
 
     await expect(
-      makeAcceptInvite(repository)(HASH, 'harvey'),
+      makeAcceptInvite(repository)(HASH, 'harvey', 'Lena'),
     ).rejects.toBeInstanceOf(NotFoundError);
     expect(repository.accept).not.toHaveBeenCalled();
   });
@@ -82,7 +82,7 @@ describe('makeAcceptInvite', () => {
     const repository = fakeRepository();
 
     await expect(
-      makeAcceptInvite(repository)('nope', 'harvey'),
+      makeAcceptInvite(repository)('nope', 'harvey', 'Lena'),
     ).rejects.toBeInstanceOf(NotFoundError);
     expect(repository.findByHash).not.toHaveBeenCalled();
     expect(repository.accept).not.toHaveBeenCalled();

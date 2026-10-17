@@ -38,6 +38,7 @@ function fakeRepository(
     create: vi.fn().mockResolvedValue(undefined),
     delete: vi.fn().mockResolvedValue(undefined),
     updateStatus: vi.fn(async (_id, status) => status),
+    updateTableName: vi.fn(async (_id, name) => name),
     createPremadeCharacter: vi.fn().mockResolvedValue(undefined),
     deletePremadeCharacter: vi.fn().mockResolvedValue(undefined),
     removeCharacter: vi.fn().mockResolvedValue(undefined),
@@ -90,7 +91,11 @@ describe('makeGetCampaignBySlug', () => {
 describe('makeCreateCampaign', () => {
   it('repassa o input ao repositório', async () => {
     const repository = fakeRepository();
-    const input = { name: 'Nova', system: GameSystem.CALL_OF_CTHULHU };
+    const input = {
+      name: 'Nova',
+      system: GameSystem.CALL_OF_CTHULHU,
+      dmName: 'Hanna',
+    };
 
     await makeCreateCampaign(repository)(input);
 
@@ -181,14 +186,10 @@ describe('makeCreatePremadeCharacter', () => {
   it('cria a ficha pronta na campanha', async () => {
     const repository = fakeRepository();
 
-    await makeCreatePremadeCharacter(repository)(7, {
-      name: 'Harvey',
-      maxHp: 12,
-    });
+    await makeCreatePremadeCharacter(repository)(7, { name: 'Harvey' });
 
     expect(repository.createPremadeCharacter).toHaveBeenCalledWith(7, {
       name: 'Harvey',
-      maxHp: 12,
     });
   });
 });

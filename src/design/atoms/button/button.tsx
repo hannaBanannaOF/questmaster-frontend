@@ -5,7 +5,18 @@ import { cx } from '../../utils';
 import { Spinner } from '../spinner/spinner';
 import styles from './button.module.css';
 
-export type ButtonVariant = 'solid' | 'outline' | 'muted' | 'text';
+// solid/outline/muted/text: telas legadas. primary/secondary/tertiary/ghost: HeroUI v3
+export type ButtonVariant =
+  | 'solid'
+  | 'outline'
+  | 'muted'
+  | 'text'
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'ghost'
+  | 'danger'
+  | 'danger-soft';
 export type ButtonColor = 'primary' | 'danger';
 export type ButtonSize = 'md' | 'lg';
 
@@ -14,6 +25,8 @@ interface ButtonStyleProps {
   color?: ButtonColor;
   size?: ButtonSize;
   icon?: ReactNode;
+  /** Abaixo de 48rem mostra só o ícone; o texto continua como nome acessível. */
+  compactLabel?: boolean;
 }
 
 export interface ButtonProps
@@ -26,6 +39,7 @@ export function Button({
   color = 'primary',
   size = 'md',
   icon,
+  compactLabel,
   loading,
   disabled,
   type = 'button',
@@ -47,7 +61,7 @@ export function Button({
       {...props}
     >
       {loading ? <Spinner size={16} /> : icon}
-      {children}
+      <Label compact={compactLabel}>{children}</Label>
     </button>
   );
 }
@@ -60,6 +74,7 @@ export function ButtonLink({
   color = 'primary',
   size = 'md',
   icon,
+  compactLabel,
   className,
   children,
   ...props
@@ -73,7 +88,21 @@ export function ButtonLink({
       {...props}
     >
       {icon}
-      {children}
+      <Label compact={compactLabel}>{children}</Label>
     </Link>
+  );
+}
+
+function Label({
+  compact,
+  children,
+}: {
+  compact?: boolean;
+  children: ReactNode;
+}) {
+  return compact ? (
+    <span className={styles.compactLabel}>{children}</span>
+  ) : (
+    children
   );
 }

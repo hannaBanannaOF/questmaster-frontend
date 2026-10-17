@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { CampaignStatus } from '@/src/modules/campaign/domain';
 import { GameSystem } from '@/src/modules/rpg/domain';
 
 import {
@@ -16,15 +17,11 @@ describe('toCharacterSummary', () => {
         slug: 'harvey',
         name: 'Harvey',
         system: 'CALL_OF_CTHULHU',
-        current_hp: 8,
-        max_hp: 12,
       }),
     ).toEqual({
       slug: 'harvey',
       name: 'Harvey',
       system: GameSystem.CALL_OF_CTHULHU,
-      currentHp: 8,
-      maxHp: 12,
     });
   });
 });
@@ -46,6 +43,22 @@ describe('toCharacterSummary · último acesso', () => {
   });
 });
 
+describe('toCharacterSummary · campanha', () => {
+  const base = { slug: 'harvey', name: 'Harvey', system: 'CALL_OF_CTHULHU' };
+
+  it('mantém a campanha da ficha', () => {
+    const campaign = { slug: 'innsmouth', name: 'Horror em Innsmouth' };
+    expect(toCharacterSummary({ ...base, campaign }).campaign).toEqual(
+      campaign,
+    );
+  });
+
+  it('distingue sem campanha (null) de API que não informa (ausente)', () => {
+    expect(toCharacterSummary({ ...base, campaign: null }).campaign).toBeNull();
+    expect(toCharacterSummary(base).campaign).toBeUndefined();
+  });
+});
+
 describe('toCharacterDetails', () => {
   it('inclui id e se o usuário é o dono', () => {
     expect(
@@ -56,7 +69,52 @@ describe('toCharacterDetails', () => {
         name: 'Harvey',
         system: 'CALL_OF_CTHULHU',
       }),
-    ).toMatchObject({ id: 3, isPlayer: true, maxHp: undefined });
+    ).toMatchObject({ id: 3, isPlayer: true, campaign: undefined });
+  });
+
+  it('traz a campanha com o papel de quem vê, o apelido e a ficha pronta', () => {
+    expect(
+      toCharacterDetails({
+        id: 4,
+        is_player: false,
+        slug: 'daisy',
+        name: 'Daisy',
+        system: 'CALL_OF_CTHULHU',
+        campaign: {
+          id: 9,
+          slug: 'mascaras',
+          name: 'Máscaras',
+          status: 'ACTIVE',
+          is_dm: true,
+          dm_name: 'Hanna',
+        },
+        player_name: null,
+        is_premade: true,
+      }),
+    ).toMatchObject({
+      campaign: {
+        id: 9,
+        slug: 'mascaras',
+        status: CampaignStatus.ACTIVE,
+        isDm: true,
+        dmName: 'Hanna',
+      },
+      playerName: undefined,
+      isPremade: true,
+    });
+  });
+
+  it('sem campanha, null', () => {
+    expect(
+      toCharacterDetails({
+        id: 3,
+        is_player: true,
+        slug: 'jack',
+        name: 'Jack',
+        system: 'CALL_OF_CTHULHU',
+        campaign: null,
+      }).campaign,
+    ).toBeNull();
   });
 });
 
@@ -98,9 +156,8 @@ describe('toCharacterCreateRequest', () => {
     expect(
       toCharacterCreateRequest({
         name: 'Harvey',
-        hp: 12,
         system: GameSystem.CALL_OF_CTHULHU,
       }),
-    ).toEqual({ name: 'Harvey', hp: 12, system: 'CALL_OF_CTHULHU' });
+    ).toEqual({ name: 'Harvey', system: 'CALL_OF_CTHULHU' });
   });
 });

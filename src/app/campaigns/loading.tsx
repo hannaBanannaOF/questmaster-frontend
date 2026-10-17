@@ -1,8 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { CampaignListLoading } from '@/src/modules/campaign';
 
-import { Loader } from '@/src/design';
-
-export default async function Loading() {
-  const t = await getTranslations('campaign.list');
-  return <Loader size="lg" message={t('loading')} />;
+export default function Loading() {
+  return <CampaignListLoading />;
 }

@@ -29,9 +29,8 @@ const toCampaignCharacter = (
   id: character.id,
   name: character.name,
   slug: character.slug,
-  currentHp: character.current_hp ?? undefined,
-  maxHp: character.max_hp ?? undefined,
   isMine: character.is_mine ?? false,
+  playerName: character.player_name ?? undefined,
 });
 
 export const toCampaignSummary = (
@@ -59,6 +58,7 @@ export const toCampaignDetails = (
   status: response.status as CampaignStatus,
   isDm: response.is_dm,
   overview: response.overview,
+  dmName: response.dm_name ?? undefined,
   characters: response.characters.map(toCampaignCharacter),
   premadeCharacters: (response.premade_characters ?? []).map(
     toCampaignCharacter,
@@ -73,6 +73,8 @@ export const toCampaignListQuery = (
 ): CampaignListQuery => ({
   role: filters.role,
   status: filters.status,
+  q: filters.q,
+  without_players: filters.withoutPlayers || undefined,
   sort: filters.sort,
   limit: page.limit,
   offset: page.offset,
@@ -93,6 +95,7 @@ export const toCampaignCreateRequest = (
 ): CampaignCreateRequest => ({
   name: input.name,
   system: input.system,
+  dm_name: input.dmName,
   overview: input.overview,
 });
 
@@ -100,5 +103,4 @@ export const toPremadeCharacterCreateRequest = (
   input: CreatePremadeCharacterInput,
 ): PremadeCharacterCreateRequest => ({
   name: input.name,
-  max_hp: input.maxHp,
 });

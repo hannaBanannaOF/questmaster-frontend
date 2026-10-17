@@ -1,0 +1,228 @@
+/* Telas de coleção no padrão HeroUI v3. Mobile first: 48rem tablet, 64rem desktop. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 99px;
+  background-color: var(--default);
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Filtros ===== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.search {
+  display: flex;
+  flex: 1 1 100%;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Linhas: 2 colunas só quando cada uma tem pelo menos 440px */
+.rows,
+.cards {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rows {
+  grid-template-columns: repeat(auto-fill, minmax(min(440px, 100%), 1fr));
+}
+
+/* Cards: 2 no celular; 220px+ depois (3 no tablet, 4 no desktop) */
+.cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rows > li,
+.cards > li {
+  display: flex;
+  /* O card decide o arranjo pela largura que tem, não pelo aparelho */
+  container-type: inline-size;
+}
+
+.rows > li > *,
+.cards > li > * {
+  flex: 1;
+}
+
+/* Celular: "Mostrar mais"; a paginação só a partir de 48rem */
+.pagination {
+  display: none;
+}
+
+.loadMore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loadMoreButton {
+  width: 100%;
+}
+
+.summary {
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.loadMoreError {
+  color: var(--danger-soft-foreground);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+/* ===== Esqueleto das linhas: a mesma altura das reais ===== */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(40 30% 100% / 0.06) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: sweep 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::before {
+    animation: none;
+  }
+}
+
+.skRow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-height: 4.75rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+}
+
+.skCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 9.5rem;
+  padding: 1rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+}
+
+.skRow > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sk {
+  display: block;
+  max-width: 100%;
+  border-radius: 0.5rem;
+  background-color: color-mix(
+    in oklab,
+    var(--surface-tertiary) 70%,
+    transparent
+  );
+}
+
+@media (min-width: 48rem) {
+  .page {
+    gap: 2rem;
+  }
+
+  .title h1 {
+    font-size: 1.9rem;
+  }
+
+  .pagination {
+    display: block;
+  }
+
+  .loadMore {
+    display: none;
+  }
+
+  .cards {
+    grid-template-columns: repeat(auto-fill, minmax(13.75rem, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .search {
+    flex: 1 1 17.5rem;
+    max-width: 22.5rem;
+  }
+}
+
+/* O form GET da busca ocupa o espaço do wrapper */
+.search > form {
+  display: flex;
+  flex: 1;
+}

@@ -29,7 +29,7 @@ function setup(
   return { action, user: userEvent.setup() };
 }
 
-const dialog = () => screen.getByRole('dialog', { hidden: true });
+const dialog = () => screen.getByRole('alertdialog', { hidden: true });
 
 describe('ConfirmDeleteButton', () => {
   it('não exclui sem confirmação', async () => {
@@ -79,8 +79,10 @@ describe('ConfirmDeleteButton', () => {
     );
 
     expect(
-      await screen.findByText('Não foi possível excluir personagem!'),
+      await screen.findByText('Não deu para excluir o personagem'),
     ).toBeInTheDocument();
-    expect(screen.getByText('A ficha está numa campanha')).toBeInTheDocument();
+    expect(
+      screen.getByText('Verifique a conexão e tente de novo.'),
+    ).toBeInTheDocument();
   });
 });

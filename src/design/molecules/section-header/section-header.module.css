@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: var(--touch-target);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.title h2 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 99px;
+  background-color: var(--default);
+  color: var(--muted);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

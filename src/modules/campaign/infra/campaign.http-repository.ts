@@ -5,6 +5,7 @@ import type { CampaignRepository } from '../application';
 import type { CampaignStatus } from '../domain';
 import type {
   CampaignCreateRequest,
+  CampaignCreateResponse,
   CampaignDetailsResponse,
   CampaignListPageResponse,
   CampaignStatusCountsResponse,
@@ -12,6 +13,8 @@ import type {
   CampaignStatusResponse,
   PremadeCharacterCreateRequest,
   SlugResolveResponse,
+  TableNameRequest,
+  TableNameResponse,
 } from './campaign.dto';
 import {
   toCampaignCreateRequest,
@@ -55,10 +58,19 @@ export const createCampaignHttpRepository = (
   },
 
   async create(input) {
-    await http.post<void>(
+    const response = await http.post<CampaignCreateResponse>(
       'campaign',
       toCampaignCreateRequest(input) satisfies CampaignCreateRequest,
     );
+    return response.slug;
+  },
+
+  async updateTableName(id, name) {
+    const response = await http.patch<TableNameResponse>(
+      `campaign/${id}/table-name`,
+      { name } satisfies TableNameRequest,
+    );
+    return response.name;
   },
 
   async delete(id) {

@@ -53,10 +53,10 @@ export interface CampaignCharacter {
   name: string;
   /** Ausente enquanto o core não publica o link da ficha. */
   slug?: string;
-  currentHp?: number;
-  maxHp?: number;
   /** A ficha é do usuário logado. */
   isMine: boolean;
+  /** Apelido de quem joga nesta campanha; ausente em ficha pronta ou sem apelido. */
+  playerName?: string;
 }
 
 // O detalhe não traz as fichas do usuário: isso só vem na lista
@@ -66,6 +66,8 @@ export interface CampaignDetails extends Omit<
 > {
   id: number;
   overview?: string;
+  /** Apelido de quem mestra nesta campanha. */
+  dmName?: string;
   characters: CampaignCharacter[];
   /** Fichas prontas que ninguém escolheu; o core só manda para o mestre. */
   premadeCharacters: CampaignCharacter[];

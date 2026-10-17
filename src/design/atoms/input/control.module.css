@@ -1,28 +1,33 @@
-/* Estilo base compartilhado por input, select e textarea */
+/* Campos do HeroUI v3, compartilhados por input, select e textarea */
 .control {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-xs);
-  border: 1px solid var(--color-card-border);
-  border-radius: var(--radius-sm);
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  min-height: var(--touch-target);
+  padding: 0 0.875rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background-color: var(--default);
+  color: var(--foreground);
+  font-size: 0.9375rem;
+  transition: border-color 150ms var(--ease-smooth);
 }
 
 .control::placeholder {
-  color: var(--color-text-muted);
+  color: var(--muted);
 }
 
 .control:focus,
 .control:focus-visible {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow:
-    0 0 0 2px var(--color-bg-primary),
-    0 0 0 4px var(--color-primary);
+  border-color: var(--focus);
+  outline: none;
 }
 
 .control[aria-invalid='true'] {
-  border-color: var(--color-destructive);
+  border-color: var(--danger);
+  background-color: var(--danger-soft);
+}
+
+.control[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--danger) 30%, transparent);
 }
 
 .control:disabled {

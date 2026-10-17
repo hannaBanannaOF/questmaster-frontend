@@ -95,3 +95,134 @@
   min-width: var(--touch-target);
   padding: var(--spacing-xs);
 }
+
+/* ===== Variantes HeroUI v3 ===== */
+.button:is(
+  [data-variant='primary'],
+  [data-variant='secondary'],
+  [data-variant='tertiary'],
+  [data-variant='ghost'],
+  [data-variant='danger'],
+  [data-variant='danger-soft']
+) {
+  --button-bg: transparent;
+  --button-bg-hover: var(--button-bg);
+  --button-fg: currentColor;
+
+  position: relative;
+  padding: 0 1.125rem;
+  border: 0;
+  border-radius: var(--radius-3xl);
+  box-shadow: none;
+  background-color: var(--button-bg);
+  color: var(--button-fg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  transition:
+    transform 250ms var(--ease-smooth),
+    background-color 100ms var(--ease-out);
+}
+
+.button[data-variant='primary'] {
+  --button-bg: var(--accent);
+  --button-bg-hover: var(--accent-hover);
+  --button-fg: var(--accent-foreground);
+}
+
+.button[data-variant='secondary'] {
+  --button-bg: var(--default);
+  --button-bg-hover: var(--default-hover);
+  --button-fg: var(--accent-soft-foreground);
+}
+
+.button[data-variant='tertiary'] {
+  --button-bg: var(--default);
+  --button-bg-hover: var(--default-hover);
+  --button-fg: var(--foreground);
+}
+
+.button[data-variant='ghost'] {
+  --button-bg-hover: var(--default);
+  --button-fg: var(--accent-soft-foreground);
+}
+
+.button:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='tertiary'],
+    [data-variant='ghost'],
+    [data-variant='danger'],
+    [data-variant='danger-soft']
+  ):not(:disabled):hover {
+  background-color: var(--button-bg-hover);
+  filter: none;
+}
+
+.button:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='tertiary'],
+    [data-variant='ghost'],
+    [data-variant='danger'],
+    [data-variant='danger-soft']
+  ):not(:disabled):active {
+  transform: scale(0.97);
+  filter: none;
+}
+
+.button:is(
+    [data-variant='primary'],
+    [data-variant='secondary'],
+    [data-variant='tertiary'],
+    [data-variant='ghost'],
+    [data-variant='danger'],
+    [data-variant='danger-soft']
+  ):focus-visible {
+  outline-color: var(--focus);
+}
+
+.button:is(
+    [data-variant='primary'],
+    [data-variant='secondary']
+  )[data-size='lg'] {
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  font-family: inherit;
+  font-size: var(--font-size-md);
+}
+
+/* aria-disabled: continua focável e enviável, só parece inativo */
+.button[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Destrutivo: suave para abrir a confirmação, cheio para confirmar */
+.button[data-variant='danger'] {
+  --button-bg: var(--danger-btn);
+  --button-bg-hover: color-mix(in oklab, var(--danger-btn) 88%, #000);
+  --button-fg: #fff;
+}
+
+.button[data-variant='danger-soft'] {
+  --button-bg: var(--danger-soft);
+  --button-bg-hover: color-mix(in oklab, var(--danger) 22%, transparent);
+  --button-fg: var(--danger-soft-foreground);
+}
+
+/* Só ícone no celular: o texto vira nome acessível (visually hidden) */
+@media (max-width: 47.99rem) {
+  .button:has(.compactLabel) {
+    min-width: var(--touch-target);
+    padding: 0;
+  }
+
+  .compactLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}

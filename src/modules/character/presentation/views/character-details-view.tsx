@@ -1,102 +1,25 @@
-import { Pencil } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { Breadcrumb, Card, DetailPage, Stack, Text, Title } from '@/src/design';
-import { GameSystemIcon, getGameSystemMeta } from '@/src/modules/rpg';
-import {
-  ConfirmDeleteButton,
-  DialogButton,
-} from '@/src/modules/shared/presentation';
+import { DetailPage } from '@/src/design';
 
-import { canEditCharacter, getMaxHp } from '../../domain';
-import {
-  deleteCharacterAction,
-  editCharacterAction,
-  updateCharacterHpAction,
-} from '../character.actions';
 import { getCharacterBySlug } from '../character.loaders';
-import { CharacterEditForm } from '../components/character-edit-form/character-edit-form';
-import { HpControl } from '../components/hp-control/hp-control';
+import { CharacterCampaignSection } from '../components/character-sheet/character-campaign-section';
+import { CharacterSheetHeader } from '../components/character-sheet/character-sheet-header';
 
-const TITLE_ID = 'character-title';
-
+/** Uma coluna, como a campanha: voltar → cabeçalho → campanha. */
 export async function CharacterDetailsView({ slug }: { slug: string }) {
-  const [character, t, tCommon] = await Promise.all([
+  const [character, t] = await Promise.all([
     getCharacterBySlug(slug),
-    getTranslations('character'),
-    getTranslations('common'),
+    getTranslations('character.detail'),
   ]);
 
-  const { label: systemLabel } = getGameSystemMeta(character.system);
-  const editable = canEditCharacter(character);
-
   return (
-    <DetailPage
-      breadcrumb={
-        <Breadcrumb
-          label={tCommon('breadcrumb')}
-          segments={[
-            { label: t('list.title'), href: '/characters' },
-            { label: character.name },
-          ]}
-        />
-      }
-      hero={
-        <Card as="article" hero aria-labelledby={TITLE_ID}>
-          <Stack direction="column" align="stretch">
-            <Stack align="start" justify="space-between" wrap>
-              <Stack align="center">
-                <GameSystemIcon system={character.system} />
-                <Stack direction="column" gap="xxs">
-                  <Title order={3} id={TITLE_ID}>
-                    {character.name}
-                  </Title>
-                  <Text tone="muted">{systemLabel}</Text>
-                </Stack>
-              </Stack>
-              {editable && (
-                <Stack align="center" wrap>
-                  <DialogButton
-                    label={t('actions.edit')}
-                    variant="outline"
-                    icon={<Pencil size={12} />}
-                    title={t('edit.title')}
-                    closeLabel={tCommon('actions.close')}
-                  >
-                    <CharacterEditForm
-                      action={editCharacterAction.bind(null, character.id)}
-                      name={character.name}
-                      maxHp={character.maxHp}
-                    />
-                  </DialogButton>
-                  <ConfirmDeleteButton
-                    // id vinculado aqui; a permissão é checada no use case/API
-                    action={deleteCharacterAction.bind(null, character.id)}
-                    errorTitleKey="character.toast.error.delete"
-                    labels={{
-                      trigger: t('actions.delete'),
-                      title: t('delete.title'),
-                      confirm: t('delete.submit'),
-                      cancel: t('delete.cancel'),
-                      close: tCommon('actions.close'),
-                    }}
-                    description={t.rich('delete.confirm', {
-                      name: character.name,
-                      bold: (chunks) => <strong>{chunks}</strong>,
-                    })}
-                  />
-                </Stack>
-              )}
-            </Stack>
-            <HpControl
-              current={character.currentHp ?? 0}
-              max={getMaxHp(character)}
-              editable={editable}
-              updateHp={updateCharacterHpAction.bind(null, character.id)}
-            />
-          </Stack>
-        </Card>
-      }
-    />
+    <DetailPage back={{ href: '/characters', label: t('back') }}>
+      <CharacterSheetHeader character={character} />
+      {/* Ausente: core anterior a character-details-context, sem como saber */}
+      {character.campaign !== undefined && (
+        <CharacterCampaignSection character={character} />
+      )}
+    </DetailPage>
   );
 }

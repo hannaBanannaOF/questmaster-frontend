@@ -11,9 +11,14 @@ import {
 } from '@/src/lib/actions';
 import { toErrorMessage } from '@/src/lib/actions/action-error';
 import { setFlash } from '@/src/lib/flash/set-flash';
+import { toPageRequest } from '@/src/lib/pagination';
 
 import { campaignUseCases } from '../campaign.container';
-import { isCampaignStatus } from '../domain';
+import {
+  CampaignStatus,
+  type CampaignSummary,
+  isCampaignStatus,
+} from '../domain';
 import {
   CAMPAIGN_FORM_FIELDS,
   campaignCreateSchema,
@@ -21,7 +26,15 @@ import {
   PREMADE_CHARACTER_FORM_FIELDS,
   type PremadeCharacterFormField,
   premadeCharacterSchema,
+  TABLE_NAME_FORM_FIELDS,
+  type TableNameFormField,
+  tableNameSchema,
 } from './campaign.schema';
+import {
+  CAMPAIGN_PAGE_SIZE,
+  parseCampaignListParams,
+  type SearchParams,
+} from './campaign-list.params';
 
 // Server Actions são endpoints públicos: todo argumento é validado aqui
 
@@ -35,15 +48,41 @@ export async function createCampaignAction(
     return { status: 'error', fieldErrors: input.fieldErrors, values };
   }
 
+  let slug: string;
   try {
-    await campaignUseCases.createCampaign(input.data);
+    slug = await campaignUseCases.createCampaign(input.data);
   } catch (error) {
     return { status: 'error', message: toErrorMessage(error), values };
   }
 
-  // A lista atualizada volta na mesma resposta; o form fecha o modal e avisa
+  // Vai direto para a campanha nova; o toast chega como flash
   revalidatePath('/campaigns');
-  return { status: 'success', values: { name: input.data.name } };
+  await setFlash({
+    type: 'success',
+    title: 'campaign.toast.success.create.title',
+    message: 'campaign.toast.success.create.message',
+    values: { name: input.data.name },
+  });
+  redirect(`/campaigns/${encodeURIComponent(slug)}`);
+}
+
+/**
+ * Próxima página para o "Mostrar mais" do celular. Recebe os parâmetros
+ * crus da URL e passa pelo mesmo parser da página (entrada pública).
+ */
+export async function loadMoreCampaignsAction(
+  searchParams: SearchParams,
+): Promise<ActionResult<CampaignSummary[]>> {
+  const { page, role, status, q } = parseCampaignListParams(searchParams);
+  try {
+    const { items } = await campaignUseCases.listCampaigns(
+      { role, status, q, sort: 'recent' },
+      toPageRequest(page, CAMPAIGN_PAGE_SIZE),
+    );
+    return { ok: true, data: items };
+  } catch (error) {
+    return { ok: false, message: toErrorMessage(error) };
+  }
 }
 
 export async function deleteCampaignAction(
@@ -86,6 +125,46 @@ export async function updateCampaignStatusAction(
 
   revalidatePath('/campaigns', 'layout');
   return { ok: true, data: undefined };
+}
+
+/** O usuário muda o próprio apelido nesta campanha (mestre ou jogador). */
+export async function updateTableNameAction(
+  campaignId: number,
+  _state: FormState<TableNameFormField>,
+  formData: FormData,
+): Promise<FormState<TableNameFormField>> {
+  if (!Number.isInteger(campaignId)) return { status: 'error' };
+
+  const values = formValues(formData, TABLE_NAME_FORM_FIELDS);
+  const input = await validate(tableNameSchema, values);
+  if (!input.ok) {
+    return { status: 'error', fieldErrors: input.fieldErrors, values };
+  }
+
+  let name: string;
+  try {
+    name = await campaignUseCases.updateTableName(campaignId, input.data.name);
+  } catch (error) {
+    return { status: 'error', message: toErrorMessage(error), values };
+  }
+
+  revalidatePath('/campaigns', 'layout');
+  return { status: 'success', values: { name } };
+}
+
+/** "Encerrar" confirmado no AlertDialog: arquiva a campanha. */
+export async function archiveCampaignAction(
+  campaignId: number,
+  _state: FormState,
+  _formData: FormData,
+): Promise<FormState> {
+  const result = await updateCampaignStatusAction(
+    campaignId,
+    CampaignStatus.ARCHIVED,
+  );
+  return result.ok
+    ? { status: 'success' }
+    : { status: 'error', message: result.message };
 }
 
 export async function createPremadeCharacterAction(

@@ -20,7 +20,7 @@ describe('InviteLinkControl', () => {
     await user.click(screen.getByRole('button', { name: 'Criar convite' }));
 
     expect(created).toHaveBeenCalledOnce();
-    expect(await screen.findByText('Convite criado!')).toBeInTheDocument();
+    expect(await screen.findByText('Convite criado')).toBeInTheDocument();
   });
 
   it('avisa quando não consegue criar', async () => {
@@ -34,9 +34,11 @@ describe('InviteLinkControl', () => {
     await user.click(screen.getByRole('button', { name: 'Criar convite' }));
 
     expect(
-      await screen.findByText('Não foi possível criar o convite!'),
+      await screen.findByText('Não deu para criar o convite'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Sem permissão')).toBeInTheDocument();
+    expect(
+      screen.getByText('Verifique a conexão e tente de novo.'),
+    ).toBeInTheDocument();
   });
 
   it('com convite, mostra o link e copia a URL completa', async () => {
@@ -50,13 +52,11 @@ describe('InviteLinkControl', () => {
       screen.queryByRole('button', { name: 'Criar convite' }),
     ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'Copiar' }));
+    await user.click(screen.getByRole('button', { name: 'Copiar link' }));
 
     await expect(navigator.clipboard.readText()).resolves.toBe(
       `${window.location.origin}/join/abc123`,
     );
-    expect(
-      screen.getByRole('button', { name: 'Copiado!' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Copiado' })).toBeInTheDocument();
   });
 });

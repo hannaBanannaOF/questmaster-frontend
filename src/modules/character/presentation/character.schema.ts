@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import { GameSystem } from '@/src/modules/rpg/domain';
 
-export const CHARACTER_FORM_FIELDS = ['name', 'hp', 'system'] as const;
+export const CHARACTER_FORM_FIELDS = ['name', 'system'] as const;
 export type CharacterFormField = (typeof CHARACTER_FORM_FIELDS)[number];
 
 // Mensagens são chaves de tradução (traduzidas no form)
@@ -14,25 +14,13 @@ export const characterCreateSchema = yup.object({
     .trim()
     .required(key('name.errors.required'))
     .max(255, key('name.errors.max')),
-  hp: yup
-    .number()
-    // Campo vazio é "obrigatório", não "não é número"
-    .transform((value, original) =>
-      typeof original === 'string' && original.trim() === ''
-        ? undefined
-        : value,
-    )
-    .typeError(key('hp.errors.type'))
-    .required(key('hp.errors.required'))
-    .integer(key('hp.errors.type'))
-    .min(1, key('hp.errors.min')),
   system: yup
     .mixed<GameSystem>()
     .required(key('game_system.errors.required'))
     .oneOf(Object.values(GameSystem), key('game_system.errors.required')),
 });
 
-export const CHARACTER_EDIT_FORM_FIELDS = ['name', 'maxHp'] as const;
+export const CHARACTER_EDIT_FORM_FIELDS = ['name'] as const;
 export type CharacterEditFormField =
   (typeof CHARACTER_EDIT_FORM_FIELDS)[number];
 
@@ -44,16 +32,4 @@ export const characterEditSchema = yup.object({
     .trim()
     .required(editKey('name.errors.required'))
     .max(255, editKey('name.errors.max')),
-  maxHp: yup
-    .number()
-    // Campo vazio mantém o PV máximo, não é "não é número"
-    .transform((value, original) =>
-      typeof original === 'string' && original.trim() === ''
-        ? undefined
-        : value,
-    )
-    .typeError(editKey('maxHp.errors.type'))
-    .integer(editKey('maxHp.errors.type'))
-    .min(1, editKey('maxHp.errors.min'))
-    .optional(),
 });

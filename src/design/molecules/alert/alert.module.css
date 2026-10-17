@@ -1,0 +1,75 @@
+.alert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--surface);
+  box-shadow: var(--surface-shadow);
+}
+
+.indicator {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.75rem;
+  background-color: var(--accent-soft);
+  color: var(--accent-soft-foreground);
+}
+
+.indicator svg {
+  width: 18px;
+  height: 18px;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  min-width: 12rem;
+  flex-direction: column;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+  line-height: 1.4rem;
+}
+
+.description {
+  color: var(--muted);
+  font-size: var(--font-size-sm);
+}
+
+.action {
+  flex-basis: 100%;
+}
+
+.action > * {
+  width: 100%;
+}
+
+.alert[data-tone='danger'] .indicator {
+  background-color: var(--danger-soft);
+  color: var(--danger-soft-foreground);
+}
+
+.alert[data-tone='danger'] .title {
+  color: var(--danger-soft-foreground);
+}
+
+/* Continua quebrando: numa coluna estreita a ação desce em vez de vazar */
+@media (min-width: 48rem) {
+  .action {
+    flex-basis: auto;
+    flex-shrink: 0;
+  }
+
+  .action > * {
+    width: auto;
+  }
+}

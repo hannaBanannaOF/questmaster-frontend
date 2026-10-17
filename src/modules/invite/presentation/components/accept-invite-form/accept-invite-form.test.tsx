@@ -6,51 +6,74 @@ import type { FormState } from '@/src/lib/actions';
 import { aCharacter } from '@/src/test/fixtures';
 import { renderWithProviders } from '@/src/test/render';
 
+import type { AcceptInviteField } from '../../invite.schema';
 import { AcceptInviteForm } from './accept-invite-form';
 
-type State = FormState<'character'>;
+type State = FormState<AcceptInviteField>;
 
-function setup(action: (state: State, formData: FormData) => Promise<State>) {
+const jack = aCharacter({ slug: 'jack', name: 'Jack Brady' });
+const roland = aCharacter({ slug: 'roland', name: 'Roland Banks' });
+
+function setup(
+  action: (state: State, formData: FormData) => Promise<State> = vi.fn(
+    async (): Promise<State> => ({ status: 'idle' }),
+  ),
+  props: Partial<Parameters<typeof AcceptInviteForm>[0]> = {},
+) {
   renderWithProviders(
     <AcceptInviteForm
       action={action}
-      groups={[
-        {
-          legend: 'Suas fichas',
-          characters: [aCharacter({ slug: 'harvey', name: 'Harvey Walters' })],
-        },
-        {
-          legend: 'Fichas prontas do mestre',
-          characters: [aCharacter({ slug: 'jenny', name: 'Jenny Barnes' })],
-        },
-      ]}
+      campaignName="Sombras de Yuggoth"
+      defaultPlayerName="Hanna"
+      mine={[jack]}
+      premade={[roland]}
+      {...props}
     />,
   );
   return userEvent.setup();
 }
 
-const join = () => screen.getByRole('button', { name: 'Juntar-se a campanha' });
+const join = () => screen.getByRole('button', { name: /Juntar-se à campanha/ });
 const radio = (name: RegExp) => screen.getByRole('radio', { name });
 
 describe('AcceptInviteForm', () => {
-  it('mostra cada grupo com a legenda, numa escolha só', async () => {
-    const user = setup(vi.fn());
+  it('mostra os dois grupos numa escolha só, sem nada marcado', async () => {
+    const user = setup();
 
     expect(screen.getByRole('group', { name: 'Suas fichas' })).toContainElement(
-      radio(/Harvey Walters/),
+      radio(/Jack Brady/),
     );
     expect(
       screen.getByRole('group', { name: 'Fichas prontas do mestre' }),
-    ).toContainElement(radio(/Jenny Barnes/));
+    ).toContainElement(radio(/Roland Banks/));
+    expect(radio(/Jack Brady/)).not.toBeChecked();
+    expect(radio(/Roland Banks/)).not.toBeChecked();
 
-    await user.click(radio(/Harvey Walters/));
-    await user.click(radio(/Jenny Barnes/));
+    await user.click(radio(/Jack Brady/));
+    await user.click(radio(/Roland Banks/));
 
-    expect(radio(/Harvey Walters/)).not.toBeChecked();
-    expect(radio(/Jenny Barnes/)).toBeChecked();
+    expect(radio(/Jack Brady/)).not.toBeChecked();
+    expect(radio(/Roland Banks/)).toBeChecked();
   });
 
-  it('lista as fichas como rádios e envia a escolhida', async () => {
+  it('o resumo diz quem entra e com qual ficha', async () => {
+    const user = setup();
+
+    expect(screen.getByText('Escolha uma ficha para continuar')).toBeVisible();
+    expect(join()).toHaveAttribute('aria-disabled', 'true');
+
+    await user.click(radio(/Jack Brady/));
+
+    expect(
+      screen.getByText(
+        (_, node) =>
+          node?.textContent === 'Você entra como Hanna, com Jack Brady',
+      ),
+    ).toBeInTheDocument();
+    expect(join()).not.toHaveAttribute('aria-disabled');
+  });
+
+  it('envia a ficha e o apelido, já preenchido com o nome da conta', async () => {
     const action = vi.fn(
       async (_state: State, _formData: FormData): Promise<State> => ({
         status: 'idle',
@@ -58,51 +81,87 @@ describe('AcceptInviteForm', () => {
     );
     const user = setup(action);
 
-    expect(screen.getAllByRole('radio')).toHaveLength(2);
-    await user.click(radio(/Jenny Barnes/));
+    await user.click(radio(/Roland Banks/));
     await user.click(join());
 
-    expect(action.mock.calls[0][1].get('character')).toBe('jenny');
+    expect(Object.fromEntries(action.mock.calls[0][1])).toEqual({
+      character: 'roland',
+      playerName: 'Hanna',
+    });
   });
 
-  it('sem escolha, envia e mostra a mensagem do app', async () => {
-    const action = vi.fn(async (): Promise<State> => ({
-      status: 'error',
-      fieldErrors: { character: 'invite.character.required' },
-    }));
-    const user = setup(action);
-
-    // Sem o balão nativo do navegador: a action valida
-    await user.click(join());
-
-    expect(action).toHaveBeenCalledOnce();
-    const alert = await screen.findByRole('alert');
-    expect(alert).toHaveTextContent(
-      'Escolha um personagem para entrar na campanha.',
+  it('sem escolha, mostra a mensagem acima das fichas e leva o foco a elas', async () => {
+    const user = setup(
+      vi.fn(async (): Promise<State> => ({
+        status: 'error',
+        fieldErrors: { character: 'invite.character.required' },
+        values: { playerName: 'Hanna' },
+      })),
     );
-    for (const group of screen.getAllByRole('group')) {
-      expect(group).toHaveAttribute('aria-describedby', alert.id);
-    }
-    expect(
-      screen.queryByText('Não foi possível se juntar a campanha!'),
-    ).not.toBeInTheDocument();
+
+    await user.click(join());
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Escolha uma ficha para entrar na campanha.',
+    );
+    expect(screen.getByRole('radiogroup')).toHaveFocus();
   });
 
-  it('avisa quando a API recusa e mantém a ficha escolhida', async () => {
-    const user = setup(async (_state, formData) => ({
-      status: 'error',
-      message: 'Convite expirado',
-      values: { character: String(formData.get('character')) },
-    }));
+  it('sem apelido, mostra o erro no campo e leva o foco a ele', async () => {
+    const user = setup(
+      vi.fn(async (): Promise<State> => ({
+        status: 'error',
+        fieldErrors: { playerName: 'invite.playerName.errors.required' },
+        values: { character: 'jack', playerName: '' },
+      })),
+    );
 
-    await user.click(radio(/Jenny Barnes/));
+    await user.click(join());
+
+    expect(await screen.findByText('Escolha um apelido.')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Seu apelido na campanha/)).toHaveFocus();
+    // A escolha continua marcada
+    expect(radio(/Jack Brady/)).toBeChecked();
+  });
+
+  it('ficha pronta pega: avisa pelo nome e limpa a escolha', async () => {
+    const user = setup(
+      vi.fn(async (): Promise<State> => ({
+        status: 'error',
+        fieldErrors: { character: 'invite.character.taken' },
+        values: { character: 'roland', playerName: 'Hanna' },
+      })),
+    );
+
+    await user.click(radio(/Roland Banks/));
     await user.click(join());
 
     expect(
-      await screen.findByText('Não foi possível se juntar a campanha!'),
+      await screen.findByText(
+        'Outra pessoa entrou com Roland Banks. Escolha outra ficha.',
+      ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Convite expirado')).toBeInTheDocument();
-    expect(radio(/Jenny Barnes/)).toBeChecked();
-    expect(radio(/Harvey Walters/)).not.toBeChecked();
+    expect(radio(/Roland Banks/)).not.toBeChecked();
+    expect(
+      screen.queryByRole('alert', { name: /Escolha uma ficha/ }),
+    ).toBeNull();
+  });
+
+  it('sem fichas próprias, as prontas vêm com a linha de criar personagem', () => {
+    setup(undefined, {
+      mine: [],
+      noneMine: {
+        message: 'Você ainda não tem fichas de Call of Cthulhu 7e.',
+        action: <a href="#novo">Criar personagem</a>,
+      },
+    });
+
+    expect(screen.queryByRole('group', { name: 'Suas fichas' })).toBeNull();
+    expect(
+      screen.getByText(/Você ainda não tem fichas de Call of Cthulhu 7e/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Criar personagem' }),
+    ).toBeVisible();
   });
 });

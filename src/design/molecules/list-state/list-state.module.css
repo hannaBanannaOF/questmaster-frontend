@@ -1,0 +1,43 @@
+.state {
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.state :is(h1, h2) {
+  margin: 0;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.message {
+  max-width: 46ch;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.25rem;
+  background-color: var(--default);
+  color: var(--muted);
+}
+
+.icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}

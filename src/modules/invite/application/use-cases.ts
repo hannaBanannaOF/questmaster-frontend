@@ -18,11 +18,11 @@ const findInvite = (invites: InviteRepository, hash: string) => {
 export const makeGetInvite = (invites: InviteRepository) => (hash: string) =>
   findInvite(invites, hash);
 
-/** Aceita o convite com a ficha escolhida; devolve o convite para navegação. */
+/** Aceita o convite com a ficha e o apelido; devolve o convite para navegação. */
 export const makeAcceptInvite =
   (invites: InviteRepository) =>
-  async (hash: string, characterSlug: string) => {
+  async (hash: string, characterSlug: string, playerName: string) => {
     const invite = await findInvite(invites, hash);
-    await invites.accept(hash, characterSlug);
+    await invites.accept(hash, characterSlug, playerName);
     return invite;
   };

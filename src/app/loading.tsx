@@ -1,9 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { DashboardSkeleton } from '@/src/modules/dashboard';
 
-import { Loader } from '@/src/design';
-
-// O dashboard é feito de listas: tamanho imprevisível, então Loader em vez de skeleton
-export default async function HomeLoading() {
-  const t = await getTranslations('dashboard');
-  return <Loader size="lg" message={t('loading')} />;
+export default function HomeLoading() {
+  return <DashboardSkeleton />;
 }

@@ -18,24 +18,23 @@ describe('toInvite', () => {
     const invite = toInvite({
       ...response,
       premade_characters: [
-        { slug: 'harvey', name: 'Harvey', current_hp: 12, max_hp: 12 },
-        { slug: 'jenny', name: 'Jenny', current_hp: null, max_hp: null },
+        { slug: 'harvey', name: 'Harvey' },
+        { slug: 'jenny', name: 'Jenny' },
       ],
     });
 
     expect(invite.premadeCharacters).toEqual([
-      {
-        slug: 'harvey',
-        name: 'Harvey',
-        system: GameSystem.CALL_OF_CTHULHU,
-        currentHp: 12,
-        maxHp: 12,
-      },
+      { slug: 'harvey', name: 'Harvey', system: GameSystem.CALL_OF_CTHULHU },
       { slug: 'jenny', name: 'Jenny', system: GameSystem.CALL_OF_CTHULHU },
     ]);
   });
 
   it('sem fichas prontas, devolve lista vazia', () => {
     expect(toInvite(response).premadeCharacters).toEqual([]);
+  });
+
+  it('traz o apelido de quem mestra quando o core manda', () => {
+    expect(toInvite({ ...response, dm_name: 'Ana' }).dmName).toBe('Ana');
+    expect(toInvite(response).dmName).toBeUndefined();
   });
 });

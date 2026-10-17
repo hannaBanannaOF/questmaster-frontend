@@ -1,209 +1,130 @@
-import { Swords } from 'lucide-react';
-import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { TriangleAlert } from 'lucide-react';
+import { useFormatter, useTranslations } from 'next-intl';
+import type { ReactNode } from 'react';
 
-import { Card, List, ListItem, Stack, Text, Title } from '@/src/design';
-import type { Page } from '@/src/lib/pagination';
-import {
-  CampaignCard,
-  campaignListHref,
-  CreateCampaignButton,
-} from '@/src/modules/campaign';
-import {
-  CharacterCard,
-  type CharacterSummary,
-  CreateCharacterButton,
-} from '@/src/modules/character';
+import { Alert, Avatar, SectionHeader, TextLink } from '@/src/design';
+import { campaignListHref, CampaignRow } from '@/src/modules/campaign';
+import { CharacterTile, CreateCharacterButton } from '@/src/modules/character';
+import { RetryButton } from '@/src/modules/shared/presentation';
 
-import type { DashboardCampaigns, Loaded } from '../../dashboard.loaders';
 import styles from '../../dashboard.module.css';
-import { ContinuePlayingCard } from '../continue-playing-card/continue-playing-card';
-import { CrossRoleBanner } from '../cross-role-banner/cross-role-banner';
-import { RoleEmptyState } from '../role-empty-state/role-empty-state';
-import { SectionError } from '../section-error/section-error';
+import type { PlayerPanelVM } from '../../dashboard.view-model';
+import { ContinueCard } from '../continue-card/continue-card';
+import { ReadyCard } from '../ready-card/ready-card';
 
-interface PlayerPanelProps {
-  /** Ausente quando a busca de campanhas falhou. */
-  campaigns?: DashboardCampaigns;
-  /** Prévia dos personagens, com o total. */
-  characters: Loaded<Page<CharacterSummary>>;
-  /** Prévia dos personagens sem campanha, com o total. */
-  idleCharacters: Loaded<Page<CharacterSummary>>;
-}
+/** Aba Jogando: destaque, personagens e campanhas em que o usuário joga. */
+export function PlayerPanel({ vm }: { vm: PlayerPanelVM }) {
+  const t = useTranslations('dashboard');
+  const tCommon = useTranslations('common');
+  const format = useFormatter();
+  const { hero, characters, campaigns } = vm;
 
-export async function PlayerPanel({
-  campaigns,
-  characters,
-  idleCharacters,
-}: PlayerPanelProps) {
-  const [t, tCharacter, tCampaign] = await Promise.all([
-    getTranslations('dashboard'),
-    getTranslations('character'),
-    getTranslations('campaign'),
-  ]);
-
-  const dmTotal = campaigns?.dmTotal ?? 0;
-  const playerTotal = campaigns?.playerTotal ?? 0;
-
-  const crossRole = dmTotal > 0 && (
-    <CrossRoleBanner
-      title={t('crossRole.toDm.title', { count: dmTotal })}
-      hint={t('crossRole.toDm.hint')}
-      href="/?view=dm"
-      action={t('crossRole.toDm.action')}
+  const sectionError = (title: string) => (
+    <Alert
+      tone="danger"
+      icon={<TriangleAlert />}
+      title={title}
+      description={t('player.error.hint')}
+      action={<RetryButton label={tCommon('actions.retry')} />}
     />
   );
 
-  if (!characters.ok) {
-    return (
-      <>
-        <SectionError title={tCharacter('toast.error.list')} />
-        {crossRole}
-      </>
-    );
-  }
-
-  const isEmpty = characters.data.total === 0 && playerTotal === 0;
-
-  if (isEmpty) {
-    return (
-      <>
-        <RoleEmptyState
-          icon={<Swords size={32} />}
-          title={t('player.empty.title')}
-          message={t('player.empty.message')}
-          stepsLabel={t('steps')}
-          steps={[
-            t('player.empty.steps.create'),
-            t('player.empty.steps.invite'),
-            t('player.empty.steps.join'),
-          ]}
-          action={<CreateCharacterButton label={t('player.empty.action')} />}
-        />
-        {crossRole}
-      </>
-    );
-  }
-
-  const continueCampaign = campaigns?.continueCampaign;
-  const recentCampaigns = campaigns?.playerPreview.items ?? [];
-  const idle = idleCharacters.ok
-    ? idleCharacters.data
-    : { items: [], total: 0 };
-  const allIdle =
-    campaigns !== undefined &&
-    playerTotal === 0 &&
-    idle.total === characters.data.total;
-  // Com todos parados, o destaque "pronto pra aventura" já explica o convite
-  const showIdle = !allIdle && idle.total > 0;
-  const hiddenIdle = idle.total - idle.items.length;
-  const showBecomeDm = campaigns !== undefined && dmTotal === 0;
-
   return (
     <>
-      {!campaigns && <SectionError title={tCampaign('toast.error.list')} />}
-      {continueCampaign && <ContinuePlayingCard campaign={continueCampaign} />}
-      {!continueCampaign && allIdle && (
-        <Card as="section" hero aria-labelledby="dashboard-ready">
-          <Stack direction="column" gap="xs">
-            <Text small bold uppercase tone="muted" className={styles.eyebrow}>
-              {t('eyebrow.ready')}
-            </Text>
-            <Title order={2} id="dashboard-ready">
-              {t('player.ready.title')}
-            </Title>
-            <Text tone="muted">{t('player.ready.message')}</Text>
-          </Stack>
-        </Card>
-      )}
-
-      <div className={styles.columns}>
-        <Stack
-          direction="column"
-          align="stretch"
-          gap="lg"
-          className={styles.main}
+      {hero?.kind === 'continue' && (
+        <ContinueCard
+          campaign={hero.campaign}
+          eyebrow={t('player.continue')}
+          action={t('player.openSession')}
         >
-          {recentCampaigns.length > 0 && (
-            <Stack as="section" direction="column" align="stretch">
-              <Stack align="center" justify="space-between">
-                <Title order={3}>{t('player.campaigns')}</Title>
-                {playerTotal > recentCampaigns.length && (
-                  <Link href={campaignListHref({ role: 'player' })}>
-                    {t('player.seeAllCampaigns', { count: playerTotal })}
-                  </Link>
-                )}
-              </Stack>
-              <List>
-                {recentCampaigns.map((campaign) => (
-                  <ListItem key={campaign.slug}>
-                    <CampaignCard campaign={campaign} />
-                  </ListItem>
-                ))}
-              </List>
-            </Stack>
+          {hero.campaign.myCharacters.length > 0 && (
+            <>
+              <Avatar name={hero.campaign.myCharacters[0].name} size="sm" />
+              <span className={styles.muted}>
+                {t.rich('player.as', {
+                  names: format.list(
+                    hero.campaign.myCharacters.map(({ name }) => name),
+                  ),
+                  strong: (chunks: ReactNode) => (
+                    <strong className={styles.strong}>{chunks}</strong>
+                  ),
+                })}
+              </span>
+            </>
           )}
+        </ContinueCard>
+      )}
+      {hero?.kind === 'ready' && <ReadyCard />}
 
-          <Stack as="section" direction="column" align="stretch">
-            <Stack align="center" justify="space-between">
-              <Title order={3}>{t('player.characters')}</Title>
-              {characters.data.total > characters.data.items.length && (
-                <Link href="/characters">
-                  {t('player.seeAll', { count: characters.data.total })}
-                </Link>
-              )}
-            </Stack>
-            <List>
-              {characters.data.items.map((character) => (
-                <ListItem key={character.slug}>
-                  <CharacterCard character={character} />
-                </ListItem>
+      <div className={campaigns ? styles.columns : undefined}>
+        <section className={styles.section} aria-labelledby="dash-characters">
+          <SectionHeader
+            id="dash-characters"
+            title={t('player.characters')}
+            count={characters.ok ? characters.total : undefined}
+            countLabel={
+              characters.ok ? t('count', { count: characters.total }) : ''
+            }
+            actions={
+              <>
+                <CreateCharacterButton
+                  label={t('player.newCharacter')}
+                  variant="ghost"
+                  compactLabel
+                />
+                {characters.ok && characters.total > 0 && (
+                  <TextLink href="/characters">{t('seeAll')}</TextLink>
+                )}
+              </>
+            }
+          />
+          {characters.ok ? (
+            <ul
+              className={styles.characters}
+              aria-label={t('player.characters')}
+            >
+              {characters.items.map((character) => (
+                <li key={character.slug}>
+                  <CharacterTile character={character} />
+                </li>
               ))}
-            </List>
-          </Stack>
-        </Stack>
+            </ul>
+          ) : (
+            sectionError(t('player.error.characters'))
+          )}
+        </section>
 
-        {(showIdle || showBecomeDm) && (
-          <Stack
-            as="section"
-            direction="column"
-            align="stretch"
-            className={styles.aside}
-          >
-            <Title order={3}>{t('player.nextSteps')}</Title>
-            {showIdle && (
-              <Card compact>
-                <Stack direction="column" gap="xs">
-                  <Text bold>
-                    {t('player.idle.title', { count: idle.total })}
-                  </Text>
-                  <Text tone="muted" small>
-                    {idle.items.map((character) => character.name).join(', ')}
-                    {hiddenIdle > 0 &&
-                      ` ${t('player.idle.more', { count: hiddenIdle })}`}
-                  </Text>
-                  <Text tone="muted" small>
-                    {t('player.idle.message')}
-                  </Text>
-                </Stack>
-              </Card>
+        {campaigns && (
+          <section className={styles.section} aria-labelledby="dash-campaigns">
+            <SectionHeader
+              id="dash-campaigns"
+              title={t('player.campaigns')}
+              count={campaigns.ok ? campaigns.total : undefined}
+              countLabel={
+                campaigns.ok ? t('count', { count: campaigns.total }) : ''
+              }
+              actions={
+                campaigns.ok && (
+                  <TextLink href={campaignListHref({ role: 'player' })}>
+                    {t('seeAllFem')}
+                  </TextLink>
+                )
+              }
+            />
+            {campaigns.ok ? (
+              <ul className={styles.rows} aria-label={t('player.campaigns')}>
+                {campaigns.items.map((campaign) => (
+                  <li key={campaign.slug}>
+                    <CampaignRow campaign={campaign} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              sectionError(t('player.error.campaigns'))
             )}
-            {showBecomeDm && (
-              <Card compact>
-                <Stack direction="column" gap="xs">
-                  <Text bold>{t('player.becomeDm.title')}</Text>
-                  <Text tone="muted" small>
-                    {t('player.becomeDm.message')}
-                  </Text>
-                  <CreateCampaignButton label={t('player.becomeDm.action')} />
-                </Stack>
-              </Card>
-            )}
-          </Stack>
+          </section>
         )}
       </div>
-
-      {crossRole}
     </>
   );
 }

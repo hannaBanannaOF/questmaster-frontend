@@ -16,8 +16,13 @@ describe('getPageWindow', () => {
     expect(getPageWindow(6, 1502)).toEqual([1, 'gap', 5, 6, 7, 'gap', 1502]);
   });
 
-  it('sem reticências quando o buraco seria de uma página só', () => {
-    expect(getPageWindow(3, 5)).toEqual([1, 2, 3, 4, 5]);
+  it('até 7 páginas, todas aparecem', () => {
+    expect(getPageWindow(1, 4)).toEqual([1, 2, 3, 4]);
+    expect(getPageWindow(1, 7)).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it('acima de 7, reticências dos dois lados da atual', () => {
+    expect(getPageWindow(5, 12)).toEqual([1, 'gap', 4, 5, 6, 'gap', 12]);
   });
 
   it('nas pontas', () => {

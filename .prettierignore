@@ -3,3 +3,5 @@ node_modules
 dist
 build
 coverage
+# Gerado pelo favicon generator; manter minificado
+src/app/site.webmanifest

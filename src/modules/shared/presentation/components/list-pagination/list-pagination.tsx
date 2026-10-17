@@ -9,6 +9,8 @@ interface ListPaginationProps {
   page: number;
   total: number;
   hrefFor: (page: number) => string;
+  /** Itens por página; padrão o das listas ainda não redesenhadas. */
+  pageSize?: number;
   /** Texto do resumo a partir da faixa exibida ("Mostrando 21–30 de 47 campanhas"). */
   summary: (range: { from: number; to: number; total: number }) => string;
 }
@@ -18,6 +20,7 @@ export function ListPagination({
   page,
   total,
   hrefFor,
+  pageSize = PAGE_SIZE,
   summary,
 }: ListPaginationProps) {
   const t = useTranslations('common.pagination');
@@ -26,9 +29,9 @@ export function ListPagination({
   return (
     <Pagination
       page={page}
-      pageCount={countPages(total, PAGE_SIZE)}
+      pageCount={countPages(total, pageSize)}
       hrefFor={hrefFor}
-      summary={summary({ ...pageRange(page, total, PAGE_SIZE), total })}
+      summary={summary({ ...pageRange(page, total, pageSize), total })}
       formatNumber={(value) => format.number(value)}
       labels={{
         nav: t('label'),

@@ -1,4 +1,5 @@
 .textarea {
-  min-height: 6rem;
+  min-height: 5.5rem;
+  padding: 0.625rem 0.875rem;
   resize: vertical;
 }

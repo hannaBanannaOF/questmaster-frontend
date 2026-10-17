@@ -45,15 +45,15 @@ export const aCharacter = (
   slug: 'harvey-walters',
   name: 'Harvey Walters',
   system: GameSystem.CALL_OF_CTHULHU,
-  currentHp: 10,
-  maxHp: 12,
   ...overrides,
 });
 
 export const aCharacterDetails = (
   overrides: Partial<CharacterDetails> = {},
 ): CharacterDetails => ({
-  ...aCharacter(),
+  slug: 'harvey-walters',
+  name: 'Harvey Walters',
+  system: GameSystem.CALL_OF_CTHULHU,
   id: 1,
   isPlayer: true,
   ...overrides,

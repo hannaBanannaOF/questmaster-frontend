@@ -1,10 +1,10 @@
 'use client';
 
-import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
-import { Button, EmptyState } from '@/src/design';
+import { ButtonLink } from '@/src/design';
+import { CriticalFailure } from '@/src/modules/shared/presentation';
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -20,18 +20,15 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
   }, [error]);
 
   return (
-    <EmptyState
+    <CriticalFailure
+      headingLevel={1}
       title={t('errors.page.title')}
       message={t('errors.page.message')}
-      icon={<TriangleAlert size={48} />}
-      action={
-        <Button
-          variant="outline"
-          icon={<RotateCcw size={16} />}
-          onClick={reset}
-        >
-          {t('actions.retry')}
-        </Button>
+      onRetry={reset}
+      secondaryAction={
+        <ButtonLink href="/" variant="tertiary">
+          {t('actions.goDashboard')}
+        </ButtonLink>
       }
     />
   );

@@ -7,19 +7,18 @@ export interface CharacterFilters {
   gameSystem?: GameSystem;
   /** Só personagens que ainda não estão em nenhuma campanha. */
   withoutCampaign?: boolean;
+  /** Parte do nome; o core ignora até ter a change character-list-search. */
+  q?: string;
   sort?: ListSort;
 }
 
 export interface CreateCharacterInput {
   name: string;
-  hp: number;
   system: GameSystem;
 }
 
 export interface EditCharacterInput {
   name: string;
-  /** Ausente: não muda o PV máximo. */
-  maxHp?: number;
 }
 
 export interface CharacterRepository {
@@ -29,9 +28,9 @@ export interface CharacterRepository {
   ): Promise<Page<CharacterSummary>>;
   findById(id: number): Promise<CharacterDetails>;
   resolveSlug(slug: string): Promise<number>;
-  create(input: CreateCharacterInput): Promise<void>;
+  /** Devolve o slug da ficha nova. */
+  create(input: CreateCharacterInput): Promise<string>;
   delete(id: number): Promise<void>;
-  updateHp(id: number, hp: number): Promise<number>;
-  /** Edita nome e PV máximo; devolve o slug, que acompanha o nome. */
+  /** Renomeia; devolve o slug, que acompanha o nome. */
   edit(id: number, input: EditCharacterInput): Promise<string>;
 }

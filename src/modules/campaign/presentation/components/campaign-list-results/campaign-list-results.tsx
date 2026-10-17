@@ -1,71 +1,107 @@
-import { Scroll, SearchX } from 'lucide-react';
+import { ArrowLeft, SearchX } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-import { ButtonLink, EmptyState } from '@/src/design';
+import { ButtonLink, CollectionResults, ListState } from '@/src/design';
 import { countPages } from '@/src/lib/pagination';
-import {
-  ListPagination,
-  PageOutOfRange,
-} from '@/src/modules/shared/presentation';
+import { ListPagination } from '@/src/modules/shared/presentation';
 
 import { getCampaigns } from '../../campaign.loaders';
 import {
+  CAMPAIGN_PAGE_SIZE,
   campaignListHref,
   type CampaignListParams,
-  hasCampaignFilters,
+  getHiddenBy,
 } from '../../campaign-list.params';
-import { CampaignList } from '../campaign-list/campaign-list';
-import { CreateCampaignButton } from '../create-campaign-button/create-campaign-button';
+import { CampaignResultsList } from './campaign-results-list';
 
-/** A página pedida da lista, com o paginador; os filtros ficam fora e não piscam. */
+/** A página pedida da lista; cabeçalho e filtros ficam fora e não piscam. */
 export async function CampaignListResults(params: CampaignListParams) {
-  const { page, role, status } = params;
+  const { page, role, status, q } = params;
   const [{ items, total }, t] = await Promise.all([
-    getCampaigns({ role, status }, page),
+    getCampaigns({ role, status, q, sort: 'recent' }, page, CAMPAIGN_PAGE_SIZE),
     getTranslations('campaign.list'),
   ]);
+  const pages = countPages(total, CAMPAIGN_PAGE_SIZE);
 
-  if (total === 0) {
-    return hasCampaignFilters(params) ? (
-      <EmptyState
-        title={t('filtered.empty.title')}
-        message={t('filtered.empty.message')}
-        icon={<SearchX size={48} />}
-        action={
-          <ButtonLink href={campaignListHref({})} variant="outline">
-            {t('filtered.empty.clear')}
+  // A view só chega aqui com campanhas: zero é a busca ou o filtro
+  const hiddenBy = total === 0 ? getHiddenBy(params) : null;
+  if (hiddenBy) {
+    const clearHref =
+      hiddenBy === 'search'
+        ? campaignListHref({ role, status })
+        : hiddenBy === 'filters'
+          ? campaignListHref({ q })
+          : campaignListHref({});
+    return (
+      <ListState
+        id="campaigns-no-results"
+        live
+        icon={<SearchX />}
+        title={t('noResults.title', {
+          hasQ: q ? 'yes' : 'no',
+          q: q ?? '',
+          status: status ?? 'none',
+          role: role ?? 'none',
+        })}
+        message={t(`noResults.message.${hiddenBy}`)}
+        actions={
+          <ButtonLink href={clearHref} variant="secondary">
+            {t(`noResults.clear.${hiddenBy}`)}
           </ButtonLink>
         }
-      />
-    ) : (
-      <EmptyState
-        title={t('empty.title')}
-        message={t('empty.message')}
-        icon={<Scroll size={48} />}
-        action={<CreateCampaignButton label={t('empty.create')} />}
       />
     );
   }
 
   // Há campanhas, mas não nessa página: o link aponta além do fim
   if (items.length === 0) {
+    const tPagination = await getTranslations('common.pagination.outOfRange');
     return (
-      <PageOutOfRange
-        pageCount={countPages(total)}
-        firstPageHref={campaignListHref({ role, status })}
+      <ListState
+        id="campaigns-out-of-range"
+        icon={<SearchX />}
+        title={tPagination('title')}
+        message={tPagination('message', { count: pages })}
+        actions={
+          <ButtonLink
+            href={campaignListHref({ q, role, status })}
+            variant="secondary"
+          >
+            <ArrowLeft size={18} aria-hidden />
+            {tPagination('action')}
+          </ButtonLink>
+        }
       />
     );
   }
 
+  const nextParams = Object.fromEntries(
+    Object.entries({ q, role, status }).filter(([, value]) => value),
+  ) as Record<string, string>;
+
   return (
-    <>
-      <CampaignList campaigns={items} />
-      <ListPagination
-        page={page}
+    <CollectionResults
+      heading={t('page', { page, pages })}
+      pagination={
+        <ListPagination
+          page={page}
+          total={total}
+          pageSize={CAMPAIGN_PAGE_SIZE}
+          hrefFor={(target) =>
+            campaignListHref({ q, role, status, page: target })
+          }
+          summary={(range) => t('range', range)}
+        />
+      }
+    >
+      <CampaignResultsList
+        key={`${q}-${role}-${status}-${page}`}
+        initialItems={items}
         total={total}
-        hrefFor={(target) => campaignListHref({ role, status, page: target })}
-        summary={(range) => t('range', range)}
+        firstShown={(page - 1) * CAMPAIGN_PAGE_SIZE}
+        page={page}
+        params={nextParams}
       />
-    </>
+    </CollectionResults>
   );
 }

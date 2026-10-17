@@ -1,0 +1,42 @@
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-3xl);
+  background-color: var(--default);
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.avatar[data-size='sm'] {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
+}
+
+.avatar[data-size='lg'] {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+
+.avatar[data-size='xl'] {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+}
+
+.avatar[data-ring] {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 3px color-mix(in oklab, var(--accent) 45%, transparent);
+}

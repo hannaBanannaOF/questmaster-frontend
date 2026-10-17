@@ -8,14 +8,15 @@ import type { FormState } from '@/src/lib/actions';
 
 /**
  * Traduz a mensagem de erro de uma action: erros de domínio vêm como chave
- * de tradução, erros da API vêm como texto, e sem mensagem cai no genérico.
+ * de tradução; o texto da API (em inglês) nunca vai para a tela e cai no genérico.
  */
 export function useErrorMessage() {
   const t = useTranslations();
   return useCallback(
     (message?: string) => {
-      if (message && t.has(message)) return t(message);
-      return message ?? t('common.errors.unexpected');
+      return message && t.has(message)
+        ? t(message)
+        : t('common.errors.unexpected');
     },
     [t],
   );

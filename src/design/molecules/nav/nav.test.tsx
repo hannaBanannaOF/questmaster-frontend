@@ -36,10 +36,10 @@ describe('Nav', () => {
     );
   });
 
-  it('no cabeçalho mostra só o rótulo', () => {
+  it('no cabeçalho mostra ícone e rótulo', () => {
     render(<Nav label="Navegação principal" items={items} />);
 
-    expect(screen.queryByTestId('icon')).not.toBeInTheDocument();
+    expect(screen.getAllByTestId('icon')).toHaveLength(3);
     expect(
       screen.getByRole('link', { name: 'Personagens' }),
     ).toBeInTheDocument();

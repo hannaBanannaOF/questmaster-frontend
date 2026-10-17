@@ -14,7 +14,7 @@ const messages = { common, campaign, character, invite, dashboard };
 function Providers({ children }: PropsWithChildren) {
   return (
     <NextIntlClientProvider locale="pt-BR" messages={messages}>
-      <ToastProvider>{children}</ToastProvider>
+      <ToastProvider dismissLabel="Fechar aviso">{children}</ToastProvider>
     </NextIntlClientProvider>
   );
 }
